@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="WesternDss">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Western Dss</title>
+
+    <link rel="stylesheet" href="assets/libs/bootstrap/3.3.6/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/libs/kendo/2016.1.112/Content/kendo.common-bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/libs/kendo/2016.1.112/Content/kendo.bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <link rel="stylesheet" href="assets/libs/sb-admin-2/1.0.8/css/sb-admin-2.css"/>
+    <link rel="stylesheet" href="assets/libs/metismenu/2.4.0/css/metisMenu.min.css">
+
+    <link rel="stylesheet" href="assets/css/app.css"/>
+
+    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+    <script src="assets/libs/html5shiv/3.7.3/html5shiv.min.js"></script>
+    <script src="assets/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+    <script src="assets/libs/response/0.9.1/response.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+
+<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand">WORLD Stock</a>
+    </div>
+    <!-- /.navbar-header -->
+
+    <!--<ul class="nav navbar-top-links navbar-right" ng-controller="indexController">-->
+        <!--<li ng-repeat="role in user.roles">-->
+            <!--<a href="#/{{role.ROLENAME}}"> {{role.ROLENAME}}</a>-->
+        <!--</li>-->
+        <!--<li>-->
+            <!--<a href="" ng-click="logOut()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>-->
+        <!--</li>-->
+    <!--</ul>-->
+    <!-- /.navbar-top-links -->
+</nav>
+
+<div ng-view="">
+</div>
+
+<!-- jQuery -->
+<script src="assets/libs/jquery/2.2.0/jquery-2.2.0.min.js"></script>
+
+<!-- Bootstrap -->
+<script src="assets/libs/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+
+<!-- SB Admin 2 -->
+<script src="assets/libs/sb-admin-2/1.0.8/js/sb-admin-2.js"></script>
+
+<!-- metis Menu -->
+<script src="assets/libs/metismenu/2.4.0/js/metisMenu.min.js"></script>
+
+
+<!-- Angular JS -->
+<script src="assets/libs/angular/1.4.9/angular.min.js"></script>
+<script src="assets/libs/angular/1.4.9/angular-route.min.js"></script>
+<script src="assets/libs/angular/1.4.9/angular-touch.min.js"></script>
+<script src="assets/libs/angular/1.4.9/angular-sanitize.min.js"></script>
+<script src="assets/libs/angular-local-storage/0.2.3/angular-local-storage.min.js"></script>
+
+<script src="assets/libs/angular-ui/ui-bootstrap-tpls.min.js"></script>
+
+<!-- Kendo Ui -->
+<script src="assets/libs/kendo/2016.1.112/Scripts/jszip.min.js"></script>
+<script src="assets/libs/kendo/2016.1.112/Scripts/kendo.all.min.js"></script>
+
+<!-- Angular JS App, Route-->
+<script src="app/app.js"></script>
+<script src="app/app.routes.js"></script>
+
+<!-- App Directive Lib -->
+<script src="app/directive/onFinishRender.js"></script>
+
+<!-- App Filter Lib -->
+
+
+<!-- App Services Lib -->
+<script src="app/shared/ui-template/notification/notificationService.js"></script>
+<script src="app/shared/utility/handlerService.js"></script>
+<script src="app/shared/utility/utilityService.js"></script>
+
+
+
+<script src="app/shared/video/videolengthService.js"></script>
+<script src="app/shared/report/reportService.js"></script>
+
+<!-- App Controller Lib -->
+
+
+<script src="app/components/index/indexController.js"></script>
+
+<script src="app/components/video/videoController.js"></script>
+
+<script src="app/components/report/reportController.js"></script>
+
+</body>
+</html>
