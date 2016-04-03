@@ -10,10 +10,15 @@ app.config(function ($routeProvider) {
     //  System Page
     //
     //==================================================
-    /* $routeProvider.when("/login", {
-     controller: "loginController",
-     templateUrl: "app/components/security/login.html"
-     });*/
+    $routeProvider.when("/login", {
+        controller: "loginController",
+        templateUrl: "app/components/security/login.html"
+    });
+
+    $routeProvider.when("/notauth", {
+        controller: "notauthController",
+        templateUrl: "app/components/notauth/notauth.html"
+    });
 
     $routeProvider.when("/video/report", {
         controller: "videolengthController",
@@ -41,7 +46,6 @@ app.config(function ($routeProvider) {
     });
 
 
-
     //==================================================
     //
     //  Admin Page
@@ -61,5 +65,6 @@ app.config(function ($routeProvider) {
     //  Default Page
     //
     //==================================================
-    $routeProvider.otherwise({redirectTo: "/video/report/subject"});
+    $routeProvider.otherwise({redirectTo: "/login"});
+    //$routeProvider.otherwise({redirectTo: "/video/report/subject"});
 });

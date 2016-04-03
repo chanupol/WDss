@@ -1,0 +1,14 @@
+<div class="row">
+    <div class="col-md-12">
+        <a href="#/admin/port">Port</a>
+        <a href="#/admin/bank">Bank Account</a>
+        <button class="btn btn-primary" ng-click="btnGenerateTokenClicked()">Generate Token</button>
+        <button class="btn btn-primary" ng-click="btnCreateNewUserClicked()">Create New User</button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div id="grdUser" kendo-grid="grdUser" k-options="grdUserOptions"></div>
+    </div>
+</div>
+<span kendo-notification="notificationCenter" k-options="notificationCenterOptions"></span>

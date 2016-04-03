@@ -40,12 +40,26 @@ app.controller("indexController", function ($scope, $rootScope, $location, local
         //
         // Render menu
         $scope.user = $rootScope.user;
+        $scope.groupMenu = {};
+        var distinct = [];
 
-        var roles = $rootScope.user.roles.filter(function (obj) {
-            return obj.ROLENAME == currentPage;
+        $rootScope.user.menu.forEach(function (menu) {
+            if (menu.DEFAULTGROUPMENU == "Y") {
+                if (!$scope.groupMenu[menu.GROUPNAME]) {
+                    distinct.push(menu.GROUPNAME);
+                    $scope.groupMenu[menu.GROUPNAME] = {
+                        name: menu.GROUPNAME,
+                        path: menu.PATH
+                    };
+                }
+            }
+        });
+
+        var groupMenu = $scope.user.menu.filter(function (obj) {
+            return obj.PATH.indexOf(currentPage) === 0;
         })[0];
 
-        if (roles == undefined || roles == null) {
+        if (groupMenu == undefined || groupMenu == null) {
             //
             // If user not authority route user to not authorization page
             $location.path("/notauth");

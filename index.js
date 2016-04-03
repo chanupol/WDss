@@ -24,6 +24,9 @@ var plugins = [
         register: require("inert")
     },
     {
+        register: require("./server/routes/security/security.js")
+    },
+    {
         register: require("./server/routes/index.js")
     },
     {
