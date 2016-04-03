@@ -26,6 +26,62 @@ exports.register = function (server, options, next) {
         },
         {
             method: "GET",
+            path: "/api/report/subject/list/{periodcode}",
+            config: {
+                handler: reportController.getSubjectByPeriod,
+                validate: {
+                    params: {
+                        periodcode: Joi.string().required()
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/teacher/list/{subjectCode}/{periodCode}",
+            config: {
+                handler: reportController.getTeacherBySubject,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required(),
+                        periodCode: Joi.string().required()
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/unit/list/{subjectCode}/{periodCode}/{tchCode}",
+            config: {
+                handler: reportController.getUnitBySubjectPeriodTeacher,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required(),
+                        periodCode: Joi.string().required(),
+                        tchCode: Joi.string().required(),
+
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/topic/list/{subjectCode}/{periodCode}/{tchCode}/{unitId}",
+            config: {
+                handler: reportController.getTopicBySubjectPeriodTeacher,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required(),
+                        periodCode: Joi.string().required(),
+                        tchCode: Joi.string().required(),
+                        unitId: Joi.string().required(),
+
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
             path: "/api/report/subject/period/list",
             handler: reportController.getPeriod,
         }

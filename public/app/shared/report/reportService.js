@@ -20,7 +20,43 @@ app.factory("reportService", function ($http, $q, handlerService) {
     //
     //--------------------------------------------------------------------------------
 
+    //--------------------------------------------------------------------------------
+    //
+    // Period data
+    //
+    //--------------------------------------------------------------------------------
+    function getPeriod() {
+        var request = $http.get(uri + "/subject/period/list");
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
 
+    function getPeriodDs() {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/subject/period/list",
+                    dataType: "json"
+                }
+            },
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "Period",
+                    fields: {
+                        Period: {type: "string"}
+                    }
+                }
+            }
+        });
+    }
+
+
+    //--------------------------------------------------------------------------------
+    //
+    // Subject data
+    //
+    //--------------------------------------------------------------------------------
     function getSubjectAll() {
         var request = $http.get(uri + "/subject/list");
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
@@ -52,32 +88,182 @@ app.factory("reportService", function ($http, $q, handlerService) {
         });
     }
 
-    function getPeriod() {
-        var request = $http.get(uri + "/subject/period/list");
+
+    function getSubjectListByPeriodCode(periodcode) {
+        var request = $http.get(uri + "/subject/list/" + periodcode);
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 
-    function getPeriodDs() {
+    function getSubjectListByPeriodCodeDs(periodcode) {
         return new kendo.data.DataSource({
             batch: true,
             transport: {
                 read: {
-                    url: uri + "/subject/period/list",
+                    url: uri + "/subject/list/" + periodcode,
                     dataType: "json"
                 }
             },
             pageSize: 20,
             schema: {
                 model: {
-                    id: "Period",
+                    id: "PERIODCODE",
                     fields: {
-                        Period: {type: "string"}
+                        FACULTYNAME: {type: "string"},
+                        PERIODCODE: {type: "string"},
+                        SUBJECTCODE: {type: "string"},
+                        SUBJECTNAME: {type: "string"},
+                        IMPORTDATE: {type: "string"},
+                        Percentage: {type: "number"}
                     }
                 }
             }
         });
     }
 
+
+    //--------------------------------------------------------------------------------
+    //
+    // Teacher data
+    //
+    //--------------------------------------------------------------------------------
+    function getTeacherBySubjectPeriod(subjectCode, periodCode) {
+        var request = $http.get(uri + "/subject/teacher/list/" + subjectCode + "/" + periodCode);
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
+    function getTeacherBySubjectPeriodDs(subjectCode, period) {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/subject/teacher/list/" + subjectCode + "/" + period,
+                    dataType: "json"
+                }
+            },
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "TCHCODE",
+                    fields: {
+                        FACULTYNAME: {type: "string"},
+                        PERIODCODE: {type: "string"},
+                        DEGREECODE: {type: "string"},
+                        DEGREENAME: {type: "string"},
+                        TCHCODE: {type: "string"},
+                        TCHNAME: {type: "string"},
+                        SUBJECTCODE: {type: "string"},
+                        SUBJECTNAME: {type: "string"},
+                        IMPORTDATE: {type: "string"}
+
+                    }
+                }
+            }
+        });
+    }
+
+
+    //--------------------------------------------------------------------------------
+    //
+    // Unit data
+    //
+    //--------------------------------------------------------------------------------
+    function getUnitBySubjectPeriodTeacher(subjectCode, periodCode, tchCode) {
+        var request = $http.get(uri + "/subject/unit/list/" + subjectCode + "/" + periodCode + "/" + tchCode);
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
+    function getUnitBySubjectPeriodTeacherDs(subjectCode, periodCode, tchCode) {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/subject/unit/list/" + subjectCode + "/" + periodCode + "/" + tchCode,
+                    dataType: "json"
+                }
+            },
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "SUBJECTCODE",
+                    fields: {
+                        FACULTYNAME: {type: "string"},
+                        PERIODCODE: {type: "string"},
+                        DEGREECODE: {type: "string"},
+                        DEGREENAME: {type: "string"},
+                        TCHCODE: {type: "string"},
+                        TCHNAME: {type: "string"},
+                        SUBJECTCODE: {type: "string"},
+                        SUBJECTNAME: {type: "string"},
+                        UNITID: {type: "string"},
+                        UNITNAME: {type: "string"},
+                        TOTALVIDEOINMINUTE: {type: "number"},
+                        TotalVDOInMinuteForPercentage: {type: "number"},
+                        TotalVDODeficitInMinute: {type: "number"},
+                        StandardTotalVideoInMinute: {type: "number"},
+                        Percentage: {type: "number"},
+                        IMPORTDATE: {type: "string"}
+
+                    }
+                }
+            },
+            aggregate: [
+                {field: "TOTALVIDEOINMINUTE", aggregate: "sum"},
+                {field: "TotalVDODeficitInMinute", aggregate: "sum"},
+                {field: "StandardTotalVideoInMinute", aggregate: "sum"}
+            ]
+        });
+    }
+
+
+    //--------------------------------------------------------------------------------
+    //
+    // Topic data
+    //
+    //--------------------------------------------------------------------------------
+    function getTopicBySubjectPeriodTeacherUnit(subjectCode, periodCode, tchCode, unitId) {
+        var request = $http.get(uri + "/subject/topic/list/" + subjectCode + "/" + periodCode + "/" + tchCode + "/" + unitId);
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
+    function getTopicBySubjectPeriodTeacherUnitDs(subjectCode, periodCode, tchCode, unitId) {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/subject/topic/list/" + subjectCode + "/" + periodCode + "/" + tchCode + "/" + unitId,
+                    dataType: "json"
+                }
+            },
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "TOPICNO",
+                    fields: {
+                        FACULTYNAME: {type: "string"},
+                        PERIODCODE: {type: "string"},
+                        DEGREECODE: {type: "string"},
+                        DEGREENAME: {type: "string"},
+                        TCHCODE: {type: "string"},
+                        TCHNAME: {type: "string"},
+                        SUBJECTCODE: {type: "string"},
+                        SUBJECTNAME: {type: "string"},
+                        UNITID: {type: "string"},
+                        UNITNAME: {type: "string"},
+                        TOPICNO: {type: "number"},
+                        TOPICNAME: {type: "string"},
+                        TotalVideoInMinute: {type: "number"},
+                        PERCENTAGE:{type:"number"},
+                        IMPORTDATE: {type: "string"}
+
+                    }
+                }
+            }
+            ,
+            aggregate: [
+                {field: "TotalVideoInMinute", aggregate: "sum"}
+            ]
+        });
+    }
 
 
     //--------------------------------------------------------------------------------
@@ -87,9 +273,17 @@ app.factory("reportService", function ($http, $q, handlerService) {
     //--------------------------------------------------------------------------------
 
     return ({
+        getPeriod: getPeriod,
+        getPeriodDs: getPeriodDs,
         getSubjectAll: getSubjectAll,
         getSubjectAllDs: getSubjectAllDs,
-        getPeriod:getPeriod,
-        getPeriodDs:getPeriodDs
+        getSubjectListByPeriodCode: getSubjectListByPeriodCode,
+        getSubjectListByPeriodCodeDs: getSubjectListByPeriodCodeDs,
+        getTeacherBySubjectPeriod: getTeacherBySubjectPeriod,
+        getTeacherBySubjectPeriodDs: getTeacherBySubjectPeriodDs,
+        getUnitBySubjectPeriodTeacher: getUnitBySubjectPeriodTeacher,
+        getUnitBySubjectPeriodTeacherDs: getUnitBySubjectPeriodTeacherDs,
+        getTopicBySubjectPeriodTeacherUnit: getTopicBySubjectPeriodTeacherUnit,
+        getTopicBySubjectPeriodTeacherUnitDs: getTopicBySubjectPeriodTeacherUnitDs
     });
 });

@@ -1,14 +1,32 @@
-<div class="row">
+<div class="row" ng-controller="reportSubjectByPeriodController">
     <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
-                <h3 class="panel-title align-center">Subject Information</h3>
+                <h3 class="panel-title align-center">Period Subject Information</h3>
             </div>
             <div class="panel-body">
+                <br/>
                 <div class="row">
                     <div class="col-md-12">
-                        <div id="grdSubjectInPeriod" kendo-grid="grdSubjectInPeriod"
-                             k-options="grdSubjectInPeriodOptions"></div>
+                        <div id="grdSubjectByPeriod" kendo-grid="grdSubjectByPeriod"
+                             k-options="grdSubjectByPeriodOptions"></div>
+
+                        <script type="text/x-kendo-template" id="periodTemplate">
+                            <div class="toolbar">
+                                <div class="form-inline">
+                                    <div class="form-group pull-right">
+                                        <label for="ddlPeriodCode">Period</label>
+                                        <select class="form-control"
+                                                style="width: 140px;"
+                                                id="ddlPeriodCode" ng-model="PeriodCode"
+                                                name="ddlPeriodCode" required
+                                                kendo-drop-down-list="ddlPeriodCode"
+                                                k-options="ddlPeriodCodeOptions"></select>
+                                    </div>
+                                </div>
+                            </div>
+                        </script>
+
                     </div>
                 </div>
             </div>
@@ -16,7 +34,7 @@
     </div>
 </div>
 <br/>
-<div class="row">
+<div class="row" ng-controller="reportSubjectAllController">
     <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
