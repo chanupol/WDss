@@ -46,13 +46,27 @@ ReportController.prototype.getPeriod = function (request, reply) {
     });
 };
 
-ReportController.prototype.getTeacherBySubject = function (request, reply) {
+ReportController.prototype.getTeacherBySubjectPeriod = function (request, reply) {
 
     var subjectCode = request.params.subjectCode;
     var periodCode = decodeURIComponent(request.params.periodCode);
 
 
-    reportModel.getTeacherBySubject(subjectCode, periodCode, function (err, result) {
+    reportModel.getTeacherBySubjectPeriod(subjectCode, periodCode, function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get teacher list information", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
+ReportController.prototype.getTeacherBySubject = function (request, reply) {
+
+    var subjectCode = request.params.subjectCode;
+
+
+    reportModel.getTeacherBySubject(subjectCode, function (err, result) {
         if (err) {
             reply(Boom.internal("Cannot get teacher list information", err));
         } else {
@@ -78,6 +92,25 @@ ReportController.prototype.getUnitBySubjectPeriodTeacher = function (request, re
     });
 };
 
+
+ReportController.prototype.getUnitBySubjectTeacher = function (request, reply) {
+
+    var subjectCode = request.params.subjectCode;
+    var tchCode = request.params.tchCode;
+
+
+
+    reportModel.getUnitBySubjectTeacher(subjectCode, tchCode, function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get unit list information", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
+
+
 ReportController.prototype.getTopicBySubjectPeriodTeacher = function (request, reply) {
 
     var subjectCode = request.params.subjectCode;
@@ -95,5 +128,23 @@ ReportController.prototype.getTopicBySubjectPeriodTeacher = function (request, r
     });
 };
 
+
+
+ReportController.prototype.getTopicBySubjectTeacher = function (request, reply) {
+
+    var subjectCode = request.params.subjectCode;
+    var tchCode = request.params.tchCode;
+
+    var unitId = request.params.unitId;
+
+
+    reportModel.getTopicBySubjectTeacher(subjectCode, tchCode, unitId, function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get unit list information", err));
+        } else {
+            reply(result);
+        }
+    });
+};
 
 module.exports = ReportController;

@@ -90,7 +90,7 @@ ReportModel.prototype.getPeriod = function (callback) {
     });
 };
 
-ReportModel.prototype.getTeacherBySubject = function (subjectCode, periodCode, callback) {
+ReportModel.prototype.getTeacherBySubjectPeriod = function (subjectCode, periodCode, callback) {
     var database = new Database();
 
     oracledb.outFormat = oracledb.OBJECT;
@@ -116,6 +116,37 @@ ReportModel.prototype.getTeacherBySubject = function (subjectCode, periodCode, c
         });
     });
 };
+
+
+
+
+ReportModel.prototype.getTeacherBySubject = function (subjectCode, callback) {
+    var database = new Database();
+
+    oracledb.outFormat = oracledb.OBJECT;
+
+    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+        if (err) {
+            console.error(err.message);
+            database.DoRelease(connection);
+            callback(err, null);
+        }
+
+        connection.execute("SELECT * FROM VGETVDOLENGTHFORTEACHER " +
+            "Where SubjectCode ='" + subjectCode + "'  ", function (err, result) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            } else {
+                database.DoRelease(connection);
+                callback(err, result.rows);
+            }
+        });
+    });
+};
+
+
 
 ReportModel.prototype.getUnitBySubjectPeriodTeacher = function (subjectCode, periodCode, tchCode, callback) {
     var database = new Database();
@@ -145,7 +176,7 @@ ReportModel.prototype.getUnitBySubjectPeriodTeacher = function (subjectCode, per
     });
 };
 
-/*ReportModel.prototype.getUnitBySubjectPeriodTeacher = function (subjectCode, periodCode, tchCode, callback) {
+ReportModel.prototype.getUnitBySubjectTeacher = function (subjectCode, tchCode, callback) {
     var database = new Database();
 
     oracledb.outFormat = oracledb.OBJECT;
@@ -160,7 +191,7 @@ ReportModel.prototype.getUnitBySubjectPeriodTeacher = function (subjectCode, per
         connection.execute("SELECT * FROM vUnit " +
             "Where SubjectCode ='" + subjectCode + "'" +
             " and TchCode =  '" + tchCode + "'" +
-            " and PeriodCode like '%" + periodCode + "%' order by SubjectCode,UnitId", function (err, result) {
+            " order by SubjectCode,UnitId", function (err, result) {
             if (err) {
                 console.error(err.message);
                 database.DoRelease(connection);
@@ -171,7 +202,7 @@ ReportModel.prototype.getUnitBySubjectPeriodTeacher = function (subjectCode, per
             }
         });
     });
-};*/
+};
 
 ReportModel.prototype.getTopicBySubjectPeriodTeacher = function (subjectCode, periodCode, tchCode, unitId, callback) {
     var database = new Database();
@@ -190,6 +221,35 @@ ReportModel.prototype.getTopicBySubjectPeriodTeacher = function (subjectCode, pe
             " and TchCode =  '" + tchCode + "'" +
             " and UnitId =  '" + unitId + "'" +
             " and PeriodCode like '%" + periodCode + "%' order by unitId,topicno", function (err, result) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            } else {
+                database.DoRelease(connection);
+                callback(err, result.rows);
+            }
+        });
+    });
+};
+
+ReportModel.prototype.getTopicBySubjectTeacher = function (subjectCode, tchCode, unitId, callback) {
+    var database = new Database();
+
+    oracledb.outFormat = oracledb.OBJECT;
+
+    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+        if (err) {
+            console.error(err.message);
+            database.DoRelease(connection);
+            callback(err, null);
+        }
+
+        connection.execute("SELECT * FROM vSumTopic " +
+            "Where SubjectCode ='" + subjectCode + "'" +
+            " and TchCode =  '" + tchCode + "'" +
+            " and UnitId =  '" + unitId + "'" +
+            "  order by unitId,topicno", function (err, result) {
             if (err) {
                 console.error(err.message);
                 database.DoRelease(connection);

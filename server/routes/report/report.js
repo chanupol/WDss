@@ -40,11 +40,23 @@ exports.register = function (server, options, next) {
             method: "GET",
             path: "/api/report/subject/teacher/list/{subjectCode}/{periodCode}",
             config: {
-                handler: reportController.getTeacherBySubject,
+                handler: reportController.getTeacherBySubjectPeriod,
                 validate: {
                     params: {
                         subjectCode: Joi.string().required(),
                         periodCode: Joi.string().required()
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/teacher/{subjectCode}",
+            config: {
+                handler: reportController.getTeacherBySubject,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required()
                     }
                 }
             }
@@ -66,6 +78,20 @@ exports.register = function (server, options, next) {
         },
         {
             method: "GET",
+            path: "/api/report/subject/unit/{subjectCode}/{tchCode}",
+            config: {
+                handler: reportController.getUnitBySubjectTeacher,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required(),
+                        tchCode: Joi.string().required(),
+
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
             path: "/api/report/subject/topic/list/{subjectCode}/{periodCode}/{tchCode}/{unitId}",
             config: {
                 handler: reportController.getTopicBySubjectPeriodTeacher,
@@ -73,6 +99,21 @@ exports.register = function (server, options, next) {
                     params: {
                         subjectCode: Joi.string().required(),
                         periodCode: Joi.string().required(),
+                        tchCode: Joi.string().required(),
+                        unitId: Joi.string().required(),
+
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/topic/{subjectCode}/{tchCode}/{unitId}",
+            config: {
+                handler: reportController.getTopicBySubjectTeacher,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required(),
                         tchCode: Joi.string().required(),
                         unitId: Joi.string().required(),
 

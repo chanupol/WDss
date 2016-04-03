@@ -32,16 +32,33 @@ app.config(function ($routeProvider) {
 
     $routeProvider.when("/video/report/subject/teacher/:subjectCode/:periodCode", {
         controller: "reportTeacherBySubjectPeriodController",
+        templateUrl: "app/components/report/teacherbysubjectperiod.html"
+    });
+
+
+    $routeProvider.when("/video/report/subject/list/teacher/:subjectCode", {
+        controller: "reportTeacherBySubjectAPeriodController",
         templateUrl: "app/components/report/teacherbysubject.html"
     });
+
 
     $routeProvider.when("/video/report/subject/unit/:subjectCode/:periodCode/:tchCode", {
         controller: "reportUnitBySubjectPeriodTchCodeController",
         templateUrl: "app/components/report/unit.html"
     });
 
+    $routeProvider.when("/video/report/subject/list/unit/:subjectCode/:tchCode", {
+        controller: "reportUnitBySubjectTchCodeController",
+        templateUrl: "app/components/report/unit.html"
+    });
+
     $routeProvider.when("/video/report/subject/topic/:subjectCode/:periodCode/:tchCode/:unitId", {
         controller: "reportTopicBySubjectPeriodTchCodeUnitController",
+        templateUrl: "app/components/report/topic.html"
+    });
+
+    $routeProvider.when("/video/report/subject/list/topic/:subjectCode/:tchCode/:unitId", {
+        controller: "reportTopicBySubjectTchCodeUnitController",
         templateUrl: "app/components/report/topic.html"
     });
 
@@ -65,6 +82,6 @@ app.config(function ($routeProvider) {
     //  Default Page
     //
     //==================================================
-    $routeProvider.otherwise({redirectTo: "/login"});
-    //$routeProvider.otherwise({redirectTo: "/video/report/subject"});
+    //$routeProvider.otherwise({redirectTo: "/login"});
+    $routeProvider.otherwise({redirectTo: "/video/report/subject"});
 });
