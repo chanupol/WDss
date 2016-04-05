@@ -21,30 +21,45 @@ exports.register = function (server, options, next) {
     server.route([
         {
             method: "GET",
-            path: "/api/report/subject/list",
-            handler: reportController.getAllSubject,
-        },
-        {
-            method: "GET",
-            path: "/api/report/subject/list/{periodcode}",
+            path: "/api/report/subject/list/{roleId}/{userName}",
+
             config: {
-                handler: reportController.getSubjectByPeriod,
+                handler: reportController.getAllSubject,
                 validate: {
                     params: {
-                        periodcode: Joi.string().required()
+                        roleId: Joi.number().required(),
+                        userName: Joi.string().required()
                     }
                 }
             }
         },
         {
             method: "GET",
-            path: "/api/report/subject/teacher/list/{subjectCode}/{periodCode}",
+            path: "/api/report/subject/list/{periodcode}/{token}/{roleId}/{userName}",
+            config: {
+                handler: reportController.getSubjectByPeriod,
+                validate: {
+                    params: {
+                        periodcode: Joi.string().required(),
+                        token: Joi.string().required(),
+                        roleId: Joi.number().required(),
+                        userName: Joi.string().required()
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/teacher/list/{subjectCode}/{periodCode}/{token}/{roleId}/{userName}",
             config: {
                 handler: reportController.getTeacherBySubjectPeriod,
                 validate: {
                     params: {
                         subjectCode: Joi.string().required(),
-                        periodCode: Joi.string().required()
+                        periodCode: Joi.string().required(),
+                        token: Joi.string().required(),
+                        roleId: Joi.number().required(),
+                        userName: Joi.string().required()
                     }
                 }
             }

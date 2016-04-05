@@ -4,7 +4,7 @@
 'use strict';
 
 var Joi = require("joi");
-var VideoController = require("../../controllers/video/video");
+var VideoController = require("../../controllers/import/video");
 var Nipple = require('nipple');
 exports.register = function (server, options, next) {
 
@@ -70,7 +70,7 @@ exports.register = function (server, options, next) {
         },
         {
             method: "POST",
-            path: "/api/video/import/new",
+            path: "/api/import/import/new",
             config: {
                 handler: videoController.ImportVDOFromCyberU,
                 validate: {
@@ -122,6 +122,6 @@ exports.register = function (server, options, next) {
 };
 
 exports.register.attributes = {
-    name: "routes-video",
+    name: "routes-import",
     version: "1.0.0"
 };

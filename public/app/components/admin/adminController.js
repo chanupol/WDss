@@ -15,13 +15,13 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
     $scope.notificationCenterOptions = notificationService.options;
 
     $scope.grdUserOptions = {
-        //dataSource: orderDs,
+        dataSource: securityService.getUsersDs(),
         //height: 500,
         sortable: true,
         selectable: "row",
         scrollable: true,
         // change: onGridMasterOrderChange,
-        dataBound: function(e) {
+        dataBound: function (e) {
             //
             // Set defautl first row selected
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
@@ -29,54 +29,25 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
         },
         columns: [
             {
-                field: "Time",
-                title: "Time",
+                field: "ID",
+                title: "Id",
                 width: 50,
-                headerAttributes: { style: "text-align:center" },
+                headerAttributes: {style: "text-align:center"},
             }, {
-                field: "Order",
-                title: "Order",
-                width: 20,
-                headerAttributes: { style: "text-align:center" },
-            }, {
-                field: "Volume",
-                title: "Volume",
-                width: 50,
-                headerAttributes: { style: "text-align:center" },
-            }, {
-                field: "Price",
-                title: "Price",
-                width: 50,
-                headerAttributes: { style: "text-align:center" },
-                attributes: { "class": "text-center" },
-                format: "{0:#,###.000}"
-            }, {
-                field: "Value",
-                title: "Value",
-                width: 50,
-                headerAttributes: { style: "text-align:center" },
-                attributes: { "class": "text-center" },
-                format: "{0:#,###}"
-            }, {
-                field: "Status",
+                field: "USERNAME",
+                title: "Username",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "STATUS",
                 title: "Status",
-                width: 50,
-                headerAttributes: { style: "text-align:center" },
-                attributes: { "class": "text-center" }
-            },{
-                field: "Matched",
-                title: "Matched",
-                width: 50,
-                headerAttributes: { style: "text-align:center" },
-                attributes: { "class": "text-center" },
-                format: "{0:#,###}"
-            }, {
-                field: "Unmatched",
-                title: "Unmatched",
-                width: 50,
-                headerAttributes: { style: "text-align:center" },
-                attributes: { "class": "text-center" },
-                format: "{0:#,###}"
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
             }
         ]
     };
@@ -86,12 +57,14 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
     // Even Handler
     //
     //------------------------------------------------
-    $scope.btnCreateNewUserClicked = function() {
+    $scope.btnCreateNewUserClicked = function () {
         var user = {
-            userName: "command",
-            password: "command",
-            firstName: "Command1",
-            lastName: "Command"
+            userName: "489000608",
+            password: "489000608",
+            tchChiefId: "489000608",
+            tchHenchManId: "489000608",
+            roleId: 2,
+
         };
 
         //
@@ -107,7 +80,7 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
         });
     };
 
-    $scope.btnGenerateTokenClicked = function() {
+    $scope.btnGenerateTokenClicked = function () {
         //
         // Create new user
         securityService.generateToken().then(function (result) {

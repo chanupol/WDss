@@ -17,6 +17,8 @@ function SecurityModel() {
 // User function
 //
 //--------------------------------------------------------------------------------
+
+
 SecurityModel.prototype.GetUser = function (callback) {
     var database = new Database();
 
@@ -53,7 +55,7 @@ SecurityModel.prototype.GetUserByToken = function (token, callback) {
             console.error(err.message);
             callback(err, null);
         } else {
-            connection.execute("BEGIN SP_GET_USER_BY_TOKEN(:p_token, :token, :userId, :userName, :status, :roleId, :roleName, :cursorBroke, :cursorPort, :cursorMenu); END;", {
+            connection.execute("BEGIN SP_GET_USER_BY_TOKEN(:p_token, :token, :userId, :userName, :status, :roleId, :roleName,:cursorMenu); END;", {
                 p_token: token,
                 token: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
                 userId: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
@@ -106,10 +108,13 @@ SecurityModel.prototype.CreateNewUser = function (user, callback) {
             console.error(err.message);
             callback(err, null);
         } else {
-            connection.execute("BEGIN SP_INSERT_USER(:username, :password); END;",
+            connection.execute("BEGIN SP_INSERT_USER(:username, :password,:tchChiefId,:tchHenchManId,:roleId); END;",
                 {
                     userName: user.userName,
                     password: encryption.Encrypt(user.password),
+                    tchChiefId:user.tchChiefId,
+                    tchHenchManId:user.tchHenchManId,
+                    roleId:user.roleId
                 },
                 function (err, result) {
                     if (err) {

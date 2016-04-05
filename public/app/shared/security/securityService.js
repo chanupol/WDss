@@ -14,6 +14,13 @@ app.factory("securityService", function ($http, $q, $location, $rootScope, local
 
     //--------------------------------------------------------------------------------
     //
+    // Get Data
+    //
+    //--------------------------------------------------------------------------------
+
+
+    //--------------------------------------------------------------------------------
+    //
     // Login
     //
     //--------------------------------------------------------------------------------
@@ -56,13 +63,17 @@ app.factory("securityService", function ($http, $q, $location, $rootScope, local
                 //
                 // Assign user data to global variable
                 $rootScope.user = result;
+                localStorageService.set("RoleId", $rootScope.user.roleId);
+                localStorageService.set("RoleName", $rootScope.user.roleName);
+                localStorageService.set("UserName", $rootScope.user.userName);
+
 
                 //
                 // User already login, route user to default page of user role.
                 var defaultPage = $rootScope.user.menu.filter(function (obj) {
                     return obj.DEFAULTROLEMENU == "Y";
                 })[0];
-                
+
                 $location.path("/" + defaultPage.PATH);
             }, function (err) {
                 console.log(err);
@@ -82,11 +93,11 @@ app.factory("securityService", function ($http, $q, $location, $rootScope, local
                 //
                 // Assign user data to global variable
                 $rootScope.user = result;
-                
+
                 callback(null, result);
             }, function (err) {
                 console.log(err);
-                
+
                 //
                 // If user not authority route user to not authorization page
                 $location.path("/notauth");
@@ -99,6 +110,34 @@ app.factory("securityService", function ($http, $q, $location, $rootScope, local
     function getUserByToken() {
         var request = $http.get(uri + "/user/" + getToken());
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
+    function getUsers() {
+        var request = $http.get(uri + "/user/list");
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
+    function getUsersDs() {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/user/list",
+                    dataType: "json"
+                }
+            },
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "PERIODCODE",
+                    fields: {
+                        ID: {type: "number"},
+                        USERNAME: {type: "string"},
+                        STATUS: {type: "string"}
+                    }
+                }
+            }
+        });
     }
 
     function getToken() {
@@ -138,6 +177,8 @@ app.factory("securityService", function ($http, $q, $location, $rootScope, local
         getCurrentUser: getCurrentUser,
         getToken: getToken,
         addUser: addUser,
-        generateToken: generateToken
+        generateToken: generateToken,
+        getUsers: getUsers,
+        getUsersDs: getUsersDs
     });
 });

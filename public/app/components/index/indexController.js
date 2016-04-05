@@ -40,6 +40,7 @@ app.controller("indexController", function ($scope, $rootScope, $location, local
         //
         // Render menu
         $scope.user = $rootScope.user;
+        console.log($scope.user);
         $scope.groupMenu = {};
         var distinct = [];
 

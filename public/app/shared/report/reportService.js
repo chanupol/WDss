@@ -4,8 +4,9 @@
 
 "use strict";
 
-app.factory("reportService", function ($http, $q, handlerService) {
+app.factory("reportService", function ($http, $q, $rootScope, localStorageService, handlerService) {
     var uri = serverApiUrl + "report";
+    var securityUri = serverApiUrl + "security";
 
     //--------------------------------------------------------------------------------
     //
@@ -67,7 +68,7 @@ app.factory("reportService", function ($http, $q, handlerService) {
             batch: true,
             transport: {
                 read: {
-                    url: uri + "/subject/list",
+                    url: uri + "/subject/list/" + localStorageService.get("RoleId") + "/" + localStorageService.get("UserName"),
                     dataType: "json"
                 }
             },
@@ -95,11 +96,14 @@ app.factory("reportService", function ($http, $q, handlerService) {
     }
 
     function getSubjectListByPeriodCodeDs(periodcode) {
+
         return new kendo.data.DataSource({
             batch: true,
             transport: {
                 read: {
-                    url: uri + "/subject/list/" + periodcode,
+                    url: uri + "/subject/list/" + periodcode + "/"
+                    + localStorageService.get("Token")
+                    + "/" + localStorageService.get("RoleId") + "/" + localStorageService.get("UserName"),
                     dataType: "json"
                 }
             },
@@ -132,11 +136,13 @@ app.factory("reportService", function ($http, $q, handlerService) {
     }
 
     function getTeacherBySubjectPeriodDs(subjectCode, period) {
+
         return new kendo.data.DataSource({
             batch: true,
             transport: {
                 read: {
-                    url: uri + "/subject/teacher/list/" + subjectCode + "/" + period,
+                    url: uri + "/subject/teacher/list/" + subjectCode + "/" + period + "/" + localStorageService.get("Token")
+                    + "/" + localStorageService.get("RoleId") + "/" + localStorageService.get("UserName"),
                     dataType: "json"
                 }
             },
@@ -251,7 +257,7 @@ app.factory("reportService", function ($http, $q, handlerService) {
 
 
     function getUnitBySubjectTeacher(subjectCode, tchCode) {
-        var request = $http.get(uri + "/subject/unit/" + subjectCode  + "/" + tchCode);
+        var request = $http.get(uri + "/subject/unit/" + subjectCode + "/" + tchCode);
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 
@@ -359,7 +365,7 @@ app.factory("reportService", function ($http, $q, handlerService) {
             batch: true,
             transport: {
                 read: {
-                    url: uri + "/subject/topic/" + subjectCode + "/" +  + tchCode + "/" + unitId,
+                    url: uri + "/subject/topic/" + subjectCode + "/" + +tchCode + "/" + unitId,
                     dataType: "json"
                 }
             },
@@ -414,11 +420,11 @@ app.factory("reportService", function ($http, $q, handlerService) {
         getTeacherBySubjectDs: getTeacherBySubjectDs,
         getUnitBySubjectPeriodTeacher: getUnitBySubjectPeriodTeacher,
         getUnitBySubjectPeriodTeacherDs: getUnitBySubjectPeriodTeacherDs,
-        getUnitBySubjectTeacher:getUnitBySubjectTeacher,
-        getUnitBySubjectTeacherDs:getUnitBySubjectTeacherDs,
+        getUnitBySubjectTeacher: getUnitBySubjectTeacher,
+        getUnitBySubjectTeacherDs: getUnitBySubjectTeacherDs,
         getTopicBySubjectPeriodTeacherUnit: getTopicBySubjectPeriodTeacherUnit,
         getTopicBySubjectPeriodTeacherUnitDs: getTopicBySubjectPeriodTeacherUnitDs,
-        getTopicBySubjectTeacherUnit:getTopicBySubjectTeacherUnit,
-        getTopicBySubjectTeacherUnitDs:getTopicBySubjectTeacherUnitDs
+        getTopicBySubjectTeacherUnit: getTopicBySubjectTeacherUnit,
+        getTopicBySubjectTeacherUnitDs: getTopicBySubjectTeacherUnitDs
     });
 });

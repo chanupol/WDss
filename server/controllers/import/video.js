@@ -4,7 +4,7 @@
 "use strict";
 
 var Boom = require("boom");
-var VideoLengthModel = require("../../models/video/video");
+var VideoLengthModel = require("../../models/import/video");
 
 var videoModel = new VideoLengthModel();
 

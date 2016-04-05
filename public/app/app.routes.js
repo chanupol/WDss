@@ -15,59 +15,70 @@ app.config(function ($routeProvider) {
         templateUrl: "app/components/security/login.html"
     });
 
-    $routeProvider.when("/notauth", {
-        controller: "notauthController",
-        templateUrl: "app/components/notauth/notauth.html"
-    });
-
-    $routeProvider.when("/video/report", {
-        controller: "videolengthController",
-        templateUrl: "app/components/video/list.html"
-    });
-
-    $routeProvider.when("/video/report/subject", {
-        //controller: "reportSubjectController",
-        templateUrl: "app/components/report/subjectlist.html"
-    });
-
-    $routeProvider.when("/video/report/subject/teacher/:subjectCode/:periodCode", {
-        controller: "reportTeacherBySubjectPeriodController",
-        templateUrl: "app/components/report/teacherbysubjectperiod.html"
-    });
-
-
-    $routeProvider.when("/video/report/subject/list/teacher/:subjectCode", {
-        controller: "reportTeacherBySubjectAPeriodController",
-        templateUrl: "app/components/report/teacherbysubject.html"
-    });
-
-
-    $routeProvider.when("/video/report/subject/unit/:subjectCode/:periodCode/:tchCode", {
-        controller: "reportUnitBySubjectPeriodTchCodeController",
-        templateUrl: "app/components/report/unit.html"
-    });
-
-    $routeProvider.when("/video/report/subject/list/unit/:subjectCode/:tchCode", {
-        controller: "reportUnitBySubjectTchCodeController",
-        templateUrl: "app/components/report/unit.html"
-    });
-
-    $routeProvider.when("/video/report/subject/topic/:subjectCode/:periodCode/:tchCode/:unitId", {
-        controller: "reportTopicBySubjectPeriodTchCodeUnitController",
-        templateUrl: "app/components/report/topic.html"
-    });
-
-    $routeProvider.when("/video/report/subject/list/topic/:subjectCode/:tchCode/:unitId", {
-        controller: "reportTopicBySubjectTchCodeUnitController",
-        templateUrl: "app/components/report/topic.html"
-    });
-
-
     //==================================================
     //
     //  Admin Page
     //
     //==================================================
+    $routeProvider.when("/" + routeAdmin, {
+        controller: "userController",
+        templateUrl: "app/components/admin/user.html"
+    });
+
+
+    //==================================================
+    //
+    //  Report Page
+    //
+    //==================================================
+    $routeProvider.when("/notauth", {
+        controller: "notauthController",
+        templateUrl: "app/components/notauth/notauth.html"
+    });
+
+    $routeProvider.when("/import", {
+        //controller: "videolengthController",
+        templateUrl: "app/components/import/import.html"
+    });
+
+    $routeProvider.when("/import/report/subject", {
+        //controller: "reportSubjectController",
+        templateUrl: "app/components/report/subjectlist.html"
+    });
+
+    $routeProvider.when("/import/report/subject/teacher/:subjectCode/:periodCode", {
+        controller: "reportTeacherBySubjectPeriodController",
+        templateUrl: "app/components/report/teacherbysubjectperiod.html"
+    });
+
+
+    $routeProvider.when("/import/report/subject/list/teacher/:subjectCode", {
+        controller: "reportTeacherBySubjectAPeriodController",
+        templateUrl: "app/components/report/teacherbysubject.html"
+    });
+
+
+    $routeProvider.when("/import/report/subject/unit/:subjectCode/:periodCode/:tchCode", {
+        controller: "reportUnitBySubjectPeriodTchCodeController",
+        templateUrl: "app/components/report/unit.html"
+    });
+
+    $routeProvider.when("/import/report/subject/list/unit/:subjectCode/:tchCode", {
+        controller: "reportUnitBySubjectTchCodeController",
+        templateUrl: "app/components/report/unit.html"
+    });
+
+    $routeProvider.when("/import/report/subject/topic/:subjectCode/:periodCode/:tchCode/:unitId", {
+        controller: "reportTopicBySubjectPeriodTchCodeUnitController",
+        templateUrl: "app/components/report/topic.html"
+    });
+
+    $routeProvider.when("/import/report/subject/list/topic/:subjectCode/:tchCode/:unitId", {
+        controller: "reportTopicBySubjectTchCodeUnitController",
+        templateUrl: "app/components/report/topic.html"
+    });
+
+
 
 
     //==================================================
@@ -82,6 +93,6 @@ app.config(function ($routeProvider) {
     //  Default Page
     //
     //==================================================
-    //$routeProvider.otherwise({redirectTo: "/login"});
-    $routeProvider.otherwise({redirectTo: "/video/report/subject"});
+    $routeProvider.otherwise({redirectTo: "/login"});
+    //$routeProvider.otherwise({redirectTo: "/import/report/subject"});
 });

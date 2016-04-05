@@ -15,54 +15,137 @@ function ReportModel() {
 // Get section
 //
 //--------------------------------------------------------------------------------
-ReportModel.prototype.getAllSubject = function (callback) {
+ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
     var database = new Database();
 
     oracledb.outFormat = oracledb.OBJECT;
 
-    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
-        if (err) {
-            console.error(err.message);
-            database.DoRelease(connection);
-            callback(err, null);
-        }
-
-        connection.execute("SELECT * FROM VSUBJECT", function (err, result) {
+    if (roleId === 1) {
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
                 console.error(err.message);
                 database.DoRelease(connection);
                 callback(err, null);
-            } else {
-                database.DoRelease(connection);
-                callback(err, result.rows);
             }
+
+            connection.execute("Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;", {
+                userName: userName,
+                curUserLevel: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
+            }, function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    var obj = result.outBinds;
+                    obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            var userData = {
+                                users: curUserLevel
+                            };
+
+
+                            database.DoRelease(connection);
+                            callback(err, curUserLevel);
+                        }
+                    );
+                }
+            });
         });
-    });
+    } else if(roleId === 2) {
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+            var strSql = "SELECT distinct VSUBJECT.* FROM VSUBJECT,Videolength " +
+                "where VSUBJECT.SubjectCode = Videolength.SubjectCode and TchCode='" + userName + "' " ;
+            connection.execute(strSql, function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    database.DoRelease(connection);
+                    callback(err, result.rows);
+                }
+            });
+        });
+    }
+
+
 };
 
-ReportModel.prototype.getSubjectByPeriod = function (periodCode, callback) {
+ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, userName, callback) {
     var database = new Database();
 
     oracledb.outFormat = oracledb.OBJECT;
 
-    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
-        if (err) {
-            console.error(err.message);
-            database.DoRelease(connection);
-            callback(err, null);
-        }
-
-        connection.execute("SELECT * FROM VSUBJECT Where PeriodCode like '%" + periodCode + "%'", function (err, result) {
+    if (roleId === 1) {
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
                 console.error(err.message);
                 database.DoRelease(connection);
                 callback(err, null);
-            } else {
-                database.DoRelease(connection);
-                callback(err, result.rows);
             }
+
+            connection.execute("Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;", {
+                userName: userName,
+                curUserLevel: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
+            }, function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    var obj = result.outBinds;
+                    obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            var userData = {
+                                users: curUserLevel
+                            };
+
+
+                            database.DoRelease(connection);
+                            callback(err, curUserLevel);
+                        }
+                    );
+                }
+            });
         });
-    });
+    } else if (roleId === 2) {
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+            var strSql = "SELECT distinct VSUBJECT.* FROM VSUBJECT,Videolength " +
+                "where VSUBJECT.SubjectCode = Videolength.SubjectCode and TchCode='" + userName + "' " +
+                "and VSUBJECT.PeriodCode like '%" + periodCode + "%'"
+            connection.execute(strSql, function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    database.DoRelease(connection);
+                    callback(err, result.rows);
+                }
+            });
+        });
+    }
+
+
 };
 
 ReportModel.prototype.getPeriod = function (callback) {
@@ -90,34 +173,56 @@ ReportModel.prototype.getPeriod = function (callback) {
     });
 };
 
-ReportModel.prototype.getTeacherBySubjectPeriod = function (subjectCode, periodCode, callback) {
+ReportModel.prototype.getTeacherBySubjectPeriod = function (subjectCode, periodCode, token, roleId, userName, callback) {
     var database = new Database();
 
     oracledb.outFormat = oracledb.OBJECT;
 
-    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
-        if (err) {
-            console.error(err.message);
-            database.DoRelease(connection);
-            callback(err, null);
-        }
-
-        connection.execute("SELECT * FROM VGETVDOLENGTHFORTEACHER " +
-            "Where SubjectCode ='" + subjectCode + "'  " +
-            "and PeriodCode like '%" + periodCode + "%'", function (err, result) {
+    if (roleId === 1) {
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
                 console.error(err.message);
                 database.DoRelease(connection);
                 callback(err, null);
-            } else {
-                database.DoRelease(connection);
-                callback(err, result.rows);
             }
+
+            connection.execute("SELECT * FROM VGETVDOLENGTHFORTEACHER " +
+                "Where SubjectCode ='" + subjectCode + "'  " +
+                "and PeriodCode like '%" + periodCode + "%'  ", function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    database.DoRelease(connection);
+                    callback(err, result.rows);
+                }
+            });
         });
-    });
+    } else if (roleId === 2) {
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+            connection.execute("SELECT * FROM VGETVDOLENGTHFORTEACHER " +
+                "Where SubjectCode ='" + subjectCode + "'  " +
+                "and PeriodCode like '%" + periodCode + "%' and TCHCODE='" + userName + "'", function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    database.DoRelease(connection);
+                    callback(err, result.rows);
+                }
+            });
+        });
+    }
+
 };
-
-
 
 
 ReportModel.prototype.getTeacherBySubject = function (subjectCode, callback) {
@@ -145,7 +250,6 @@ ReportModel.prototype.getTeacherBySubject = function (subjectCode, callback) {
         });
     });
 };
-
 
 
 ReportModel.prototype.getUnitBySubjectPeriodTeacher = function (subjectCode, periodCode, tchCode, callback) {

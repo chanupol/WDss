@@ -17,6 +17,17 @@ function SecurityController() {
 // User function
 //
 //--------------------------------------------------------------------------------
+SecurityController.prototype.GetUserList = function (request, reply) {
+
+    securityModel.GetUser(function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get user", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
 SecurityController.prototype.GetUser = function (request, reply) {
     var token = request.payload.token;
 

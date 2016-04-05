@@ -46,6 +46,11 @@ exports.register = function (server, options, next) {
         },
         {
             method: "GET",
+            path: "/api/security/user/list",
+            handler: securityController.GetUserList,
+        },
+        {
+            method: "GET",
             path: "/api/security/checktoken/{token}",
             config: {
                 handler: securityController.CheckToken,
@@ -80,8 +85,9 @@ exports.register = function (server, options, next) {
                     payload: {
                         userName: Joi.string().min(3).max(50).required(),
                         password: Joi.string().min(3).max(255).required(),
-                        firstName: Joi.string().regex(/[A-e-z ]/g).allow("").min(0).max(255),
-                        lastName: Joi.string().allow("").max(255)
+                        tchChiefId: Joi.string().max(10).required(),
+                        tchHenchManId: Joi.string().max(10).required(),
+                        roleId: Joi.number().required(),
                     }
                 }
             }

@@ -125,12 +125,12 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 field: null,
                 title: "Subject",
                 width: "250px",
-                template: "<a href='\\#/video/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
 
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
@@ -233,7 +233,7 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<a href='\\#/video/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
+                template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
             }
             , {
                 field: "DEGREECODE",
@@ -278,7 +278,7 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -418,7 +418,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"},
-                template: "<a href='\\#/video/report/subject/topic/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
+                template: "<a href='\\#/import/report/subject/topic/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
             },
             {
                 field: "TOTALVIDEOINMINUTE",
@@ -469,7 +469,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -639,7 +639,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -726,12 +726,12 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 field: null,
                 title: "Subject",
                 width: "250px",
-                template: "<a href='\\#/video/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
 
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
@@ -833,7 +833,7 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<a href='\\#/video/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
+                template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
             }
             , {
                 field: "DEGREECODE",
@@ -878,7 +878,7 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1019,7 +1019,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"},
-                template: "<a href='\\#/video/report/subject/list/topic/#=SUBJECTCODE#/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
+                template: "<a href='\\#/import/report/subject/list/topic/#=SUBJECTCODE#/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
             },
             {
                 field: "TOTALVIDEOINMINUTE",
@@ -1070,7 +1070,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1241,7 +1241,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             }
             , {
                 field: "IMPORTDATE",
-                title: "Import Date",
+                title: "import Date",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},

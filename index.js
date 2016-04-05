@@ -30,7 +30,10 @@ var plugins = [
         register: require("./server/routes/index.js")
     },
     {
-        register: require('./server/routes/video/video.js')
+        register: require('./server/routes/import/video.js')
+    },
+    {
+        register: require('./server/routes/import/teacher.js')
     },
     {
         register: require('./server/routes/report/report.js')

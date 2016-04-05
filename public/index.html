@@ -38,22 +38,59 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
         </button>
-        <a class="navbar-brand">WORLD Stock</a>
+        <a class="navbar-brand">Western University DSS System</a>
     </div>
     <!-- /.navbar-header -->
 
-    <!--<ul class="nav navbar-top-links navbar-right" ng-controller="indexController">-->
-        <!--<li ng-repeat="role in user.roles">-->
-            <!--<a href="#/{{role.ROLENAME}}"> {{role.ROLENAME}}</a>-->
-        <!--</li>-->
-        <!--<li>-->
-            <!--<a href="" ng-click="logOut()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>-->
-        <!--</li>-->
-    <!--</ul>-->
-    <!-- /.navbar-top-links -->
-</nav>
+    <!-- /.navbar-header -->
 
-<div ng-view="">
+    <ul class="nav navbar-top-links navbar-right" ng-controller="indexController">
+        Welcome : {{user.userName}}, {{user.roleName}}
+        <li ng-repeat="menu in groupMenu">
+
+            <a href="#/{{menu.path}}"> {{menu.name}}</a>
+
+        </li>
+        <li>
+            <a href="" ng-click="logOut()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+        </li>
+    </ul>
+    <!-- /.navbar-top-links -->
+    <!-- /.navbar-top-links -->
+
+    <div class="navbar-default sidebar" role="navigation">
+        <div class="sidebar-nav navbar-collapse">
+            <ul class="nav" id="side-menu">
+                <!--<li class="sidebar-search">
+                    <div class="input-group custom-search-form">
+                        <input type="text" class="form-control" placeholder="Search...">
+                        <span class="input-group-btn">
+                            <button class="btn btn-default" type="button">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </span>
+                    </div>
+                </li>-->
+                <li>
+                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> รายงาน<span class="fa arrow"></span></a>
+                    <ul class="nav nav-second-level">
+                        <li>
+                            <a id="navdefault" href="#/import/report/subject">สรุปรายชื่อวิชาอาจารย์และเวลาการสอน</a>
+                            <!--<a id="navimport" href="#/import">นำเข้าข้อมูล</a>-->
+                            <a id="navadmin" href="#/admin">Admin</a>
+                        </li>
+                    </ul>
+                    <!-- /.nav-second-level -->
+                </li>
+            </ul>
+        </div>
+        <!-- /.sidebar-collapse -->
+    </div>
+    <!-- /.navbar-static-side -->
+</nav>
+<div id="page-wrapper">
+    <div ng-view="">
+    </div>
 </div>
 
 <!-- jQuery -->
@@ -100,7 +137,8 @@
 
 <script src="app/shared/security/securityService.js"></script>
 
-<script src="app/shared/video/videolengthService.js"></script>
+<script src="app/shared/import/videolengthService.js"></script>
+<script src="app/shared/import/teacherService.js"></script>
 <script src="app/shared/report/reportService.js"></script>
 
 <!-- App Controller Lib -->
@@ -111,7 +149,8 @@
 
 <script src="app/components/admin/adminController.js"></script>
 
-<script src="app/components/video/videoController.js"></script>
+<script src="app/components/import/videoController.js"></script>
+<script src="app/components/import/teacherController.js"></script>
 
 <script src="app/components/report/reportController.js"></script>
 

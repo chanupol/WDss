@@ -14,12 +14,7 @@ function VideoLengthModel() {
 
 
 VideoLengthModel.prototype.GetVDOFromCyberU = function (clientImportDate, callback) {
-    /*var request = http.get(urlPath,function (response) {
-     console.log(response.statusCode);
-     });
-     return request;*/
-    //console.log(xxxx);
-    //console.dir(vdoLengthData);
+   
     var importDate = new Date(); //new Date(clientImportDate);
     var VdoData = [{}];
 
@@ -51,22 +46,7 @@ VideoLengthModel.prototype.GetVDOFromCyberU = function (clientImportDate, callba
         console.log("Got an error: ", e);
         callback(err, null);
     });
-
-    /* Nipple.get('http://western-cyberu.net:81/api/report/courseoutlineall/courseoutlinerptlist/', function (err, res, payload) {
-     VdoData = JSON.parse(payload);
-     });
-     //reply(err || JSON.parse(payload));
-     //console.log(JSON.parse(payload));
-     //console.log(res);
-     //reply('ok');
-
-     ImportCyberUVdoData(VdoData, importDate, function (err, response) {
-     if(err){
-     callback(err,null);
-     }else {
-     callback(null,response);
-     }
-     });*/
+    
 
 };
 
@@ -327,16 +307,16 @@ function ImportCyberUVdoData(vdoLengthData, importDate, callback) {
     };
 
     //
-    // todo: Begin Import VDO Data
+    // todo: Begin import VDO Data
     var insertVDOData = importVDO(vdoLengthData, importDate);
 
 
     /* //
-     // todo: Begin Import Period Config Data
+     // todo: Begin import Period Config Data
      var insertPeriod = importPeriod(database, importDate);
 
      //
-     // todo: Begin Import Teacher Data
+     // todo: Begin import Teacher Data
      var insertTeacher = importTeacher(database, importDate);*/
 
     return callback(runAsyncWaterFall(doconnect, insertVDOData, dorelease));
