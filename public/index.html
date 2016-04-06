@@ -46,11 +46,11 @@
 
     <ul class="nav navbar-top-links navbar-right" ng-controller="indexController">
         Welcome : {{user.userName}}, {{user.roleName}}
-        <li ng-repeat="menu in groupMenu">
+       <!-- <li ng-repeat="menu in groupMenu">
 
             <a href="#/{{menu.path}}"> {{menu.name}}</a>
 
-        </li>
+        </li>-->
         <li>
             <a href="" ng-click="logOut()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
         </li>
@@ -60,7 +60,11 @@
 
     <div class="navbar-default sidebar" role="navigation">
         <div class="sidebar-nav navbar-collapse">
+
             <ul class="nav" id="side-menu">
+                <li >
+                    <a id="navadmin" href="#/main">หน้าหลัก</a>
+                </li>
                 <!--<li class="sidebar-search">
                     <div class="input-group custom-search-form">
                         <input type="text" class="form-control" placeholder="Search...">
@@ -72,11 +76,14 @@
                     </div>
                 </li>-->
                 <li>
+
                     <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> รายงาน<span class="fa arrow"></span></a>
                     <ul class="nav nav-second-level">
+
                         <li>
+
                             <a id="navdefault" href="#/import/report/subject">สรุปรายชื่อวิชาอาจารย์และเวลาการสอน</a>
-                            <!--<a id="navimport" href="#/import">นำเข้าข้อมูล</a>-->
+
                             <a id="navadmin" href="#/admin">Admin</a>
                         </li>
                     </ul>

@@ -74,7 +74,8 @@ app.factory("securityService", function ($http, $q, $location, $rootScope, local
                     return obj.DEFAULTROLEMENU == "Y";
                 })[0];
 
-                $location.path("/" + defaultPage.PATH);
+                //$location.path("/" + defaultPage.PATH);
+                $location.path("/main");
             }, function (err) {
                 console.log(err);
 

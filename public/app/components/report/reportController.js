@@ -100,7 +100,8 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
-            }, {
+            },
+            {
                 field: "PERIODCODE",
                 title: "Period Code",
                 width: 120,
@@ -633,7 +634,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
 
             }, {
                 field: "PERCENTAGE",
-                title: "Percentage",
+                title: "การกระจายของหัวข้อ",
                 template: "<div kendo-progress-bar='progressBar' k-min='0' k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div>",
                 width: 150
             }
@@ -1235,7 +1236,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
 
             }, {
                 field: "PERCENTAGE",
-                title: "Percentage",
+                title: "การกระจายของหัวข้อ",
                 template: "<div kendo-progress-bar='progressBar' k-min='0' k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div>",
                 width: 150
             }

@@ -10,6 +10,10 @@ app.config(function ($routeProvider) {
     //  System Page
     //
     //==================================================
+    $routeProvider.when("/main", {
+        controller: "mainController",
+        templateUrl: "app/components/main/main.html"
+    });
     $routeProvider.when("/login", {
         controller: "loginController",
         templateUrl: "app/components/security/login.html"
