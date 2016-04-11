@@ -20,7 +20,8 @@ module.exports = function () {
             user          : process.env.NODE_ORACLEDB_USER || "WTUDSS",
             password      : process.env.NODE_ORACLEDB_PASSWORD || "WTUDSS12345678",
             //connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "wstock.dyndns.org/orcl.localdomain",
-            connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "10.1.10.16/orcl.localdomain"
+            //connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "10.1.10.16/orcl.localdomain",
+            connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "113.53.249.27/orcl.localdomain"
         };
 
         return oracleConfig;

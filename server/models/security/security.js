@@ -55,12 +55,20 @@ SecurityModel.prototype.GetUserByToken = function (token, callback) {
             console.error(err.message);
             callback(err, null);
         } else {
-            connection.execute("BEGIN SP_GET_USER_BY_TOKEN(:p_token, :token, :userId, :userName, :status, :roleId, :roleName,:cursorMenu); END;", {
+            connection.execute("BEGIN SP_GET_USER_BY_TOKEN(:p_token, :token, " +
+                ":userId, :userName, :status, :tchCode, :tchFullName , :tchEmail ,:facName, :facNameEng, " +
+
+                ":roleId, :roleName,:cursorMenu); END;", {
                 p_token: token,
                 token: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
                 userId: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
                 userName: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
                 status: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+                tchCode: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+                tchFullName: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+                tchEmail: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+                facName: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
+                facNameEng: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
                 roleId: {dir: oracledb.BIND_OUT, type: oracledb.NUMBER},
                 roleName: {dir: oracledb.BIND_OUT, type: oracledb.STRING},
                 cursorMenu: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
@@ -82,6 +90,11 @@ SecurityModel.prototype.GetUserByToken = function (token, callback) {
                                 userId: obj.userId,
                                 userName: obj.userName,
                                 status: obj.status,
+                                tchCode: obj.tchCode,
+                                tchFullName: obj.tchFullName,
+                                tchEmail: obj.tchEmail,
+                                facName: obj.facName,
+                                facNameEng: obj.facNameEng,
                                 roleId: obj.roleId,
                                 roleName: obj.roleName,
                                 menu: cursorMenu
@@ -112,9 +125,9 @@ SecurityModel.prototype.CreateNewUser = function (user, callback) {
                 {
                     userName: user.userName,
                     password: encryption.Encrypt(user.password),
-                    tchChiefId:user.tchChiefId,
-                    tchHenchManId:user.tchHenchManId,
-                    roleId:user.roleId
+                    tchChiefId: user.tchChiefId,
+                    tchHenchManId: user.tchHenchManId,
+                    roleId: user.roleId
                 },
                 function (err, result) {
                     if (err) {

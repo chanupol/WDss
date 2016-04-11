@@ -45,7 +45,7 @@
     <!-- /.navbar-header -->
 
     <ul class="nav navbar-top-links navbar-right" ng-controller="indexController">
-        Welcome : {{user.userName}}, {{user.roleName}}
+        Welcome : {{user.userName +', '+ user.tchFullName +' สังกัด '+ user.facName}}, {{user.roleName}}
        <!-- <li ng-repeat="menu in groupMenu">
 
             <a href="#/{{menu.path}}"> {{menu.name}}</a>
