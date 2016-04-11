@@ -11,6 +11,9 @@
 //
 // Subject
 app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $location, reportService) {
+
+    $scope.FacultyName ='';
+    $scope.SubjectFullName='';
     //------------------------------------------------
     //
     // KendoUi Configurations
@@ -73,7 +76,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 }
             }
         },
-        toolbar: kendo.template($("#periodTemplate").html()),
+        //toolbar: kendo.template($("#periodTemplate").html()),
         pageable: {
             buttonCount: 5,
             refresh: true,
@@ -89,8 +92,11 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
             //console.log($("#ddlPeriodCode").data("kendoDropDownList").text());
             //console.log($("#ddlPeriodCode").data("kendoDropDownList").value());
 
+            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
+                $scope.FacultyName= row[0].cells[0].innerText;;
+                $scope.SubjectFullName = row[0].cells[4].innerText;;
             });
         },
         columns: [
@@ -126,8 +132,8 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 field: null,
                 title: "Subject",
                 width: "250px",
-                template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
-
+                //template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                template: "<span> #= SUBJECTCODE #-#=SUBJECTNAME#</span>"
             }
             , {
                 field: "IMPORTDATE",
@@ -142,7 +148,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
+                template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/2_58'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
             }
 
         ]
@@ -666,7 +672,70 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
     // KendoUi Configurations
     //
     //------------------------------------------------
+    $scope.returnPeriod = function () {
+        var ddlPeriodCodeSplit = $("#ddlPeriodCode").data("kendoDropDownList").text().split('/');
+        if (ddlPeriodCodeSplit.length === 2) {
+            ddlPeriodCodeSplit = ddlPeriodCodeSplit[0] + "_" + ddlPeriodCodeSplit[1];
+        }
+        return ddlPeriodCodeSplit;
+    }
 
+
+    $scope.ddlPeriodCodeOptions = {
+        //$scope.ddlPeriodCode.value()
+        dataSource: reportService.getPeriodDs(),
+        dataTextField: "Period",
+        dataValueField: "PeriodValue",
+        dataBound: function() {
+            var dataSource = this.dataSource;
+            var data = dataSource.data();
+
+            if (!this._adding) {
+                this._adding = true;
+
+                data.splice(0, 0, {
+                    "Period": "All",
+                    "PeriodValue": "All"
+                });
+
+                //OR add it at the and
+                /*dataSource.add({
+                 "ProductName": "test",
+                 "ProductID": "10000"
+                 });*/
+
+                this._adding = false;
+            }
+        },
+        index: -1,
+        change: ddlPeriodCodeOnChange
+
+    };
+    function ddlPeriodCodeOnChange(e) {
+        /*  console.log($scope.ddlPeriodCode.value());
+         console.log($scope.ddlPeriodCode.text());
+         console.log(e);
+         console.log(this.value());*/
+        var value = this.value();
+        if (value) {
+            var xxxx = $scope.grdSubjectAllOptions;
+            console.log(xxxx);
+            if ($scope.ddlPeriodCode.text()!=='All'){
+                $scope.grdSubjectAllOptions.dataSource.filter({
+                    field: "PERIODCODE",
+                    operator: "contains",
+                    value: $scope.ddlPeriodCode.text()
+                });
+            }else {
+                $scope.grdSubjectAllOptions.dataSource.filter({});
+            }
+
+        } else {
+
+            $scope.grdSubjectAllOptions.dataSource.filter({});
+        }
+
+    }
 
     $scope.grdSubjectAllOptions = {
         dataSource: reportService.getSubjectAllDs(),
@@ -683,6 +752,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 }
             }
         },
+        toolbar: kendo.template($("#periodTemplate").html()),
         pageable: {
             buttonCount: 4,
             refresh: true,
@@ -727,7 +797,8 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 field: null,
                 title: "Subject",
                 width: "250px",
-                template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                //template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                template: "<span>#= SUBJECTCODE #-#=SUBJECTNAME#</span>"
 
             }
             , {
@@ -743,7 +814,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
+                template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
             }
 
         ]
@@ -901,12 +972,12 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
     console.log("tchCode " + $routeParams.tchCode);
 
 
-   /* $scope.returnPeriod = function () {
-        return $routeParams.periodCode;
-    }*/
+    /* $scope.returnPeriod = function () {
+     return $routeParams.periodCode;
+     }*/
 
     $scope.grdUnitOptions = {
-        dataSource: reportService.getUnitBySubjectTeacherDs($routeParams.subjectCode,$routeParams.tchCode),
+        dataSource: reportService.getUnitBySubjectTeacherDs($routeParams.subjectCode, $routeParams.tchCode),
         height: 500,
         sortable: true,
         //selectable: "row",

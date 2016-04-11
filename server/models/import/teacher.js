@@ -62,6 +62,8 @@ TeacherModel.prototype.GetTeacherFromCyberU = function (callback) {
                         ":tchIsActive," +
                         ":statusCode," +
                         ":createDate," +
+                        ":facName," +
+                        ":facNameEng," +
                         //":updateDate" +
                         ":importedDate); End;";
                     for (var i = 0; i < teacherResponse.length; i++) {
@@ -81,6 +83,8 @@ TeacherModel.prototype.GetTeacherFromCyberU = function (callback) {
                                 tchIsActive: teacherResponse[i].tchIsActive ? 'Y' : 'N',
                                 statusCode: teacherResponse[i].statusCode,
                                 createDate: new Date(teacherResponse[i].createDate),
+                                facName:teacherResponse[i].facName,
+                                facNameEng:teacherResponse[i].facNameEng,
                                 //updateDate: (teacherResponse[i].updateDate != null) ? new Date(teacherResponse[i].updateDate) : null,
                                 importedDate: importDate
 
