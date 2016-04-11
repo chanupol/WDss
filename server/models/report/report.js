@@ -76,6 +76,8 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 }
             });
         });
+    }else { // admin
+
     }
 
 
@@ -143,6 +145,8 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 }
             });
         });
+    }else { // admin
+
     }
 
 
