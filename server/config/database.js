@@ -33,7 +33,7 @@ module.exports = function () {
     //
     //--------------------------------------------------------------------------------
     Database.prototype.MaximumCursorRows = function () {
-        var maximuCursorRows = 1000000;
+        var maximuCursorRows = 100000;
 
         return maximuCursorRows;
     };
