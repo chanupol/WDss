@@ -14,13 +14,10 @@ module.exports = function () {
     //--------------------------------------------------------------------------------
     Database.prototype.oracleConfig = function () {
         var oracleConfig = {
-            //user: "WTUDSS",
-            //password: "WTUDSS12345678",
-            //connectString: "wstock.dyndns.org/orcl.localdomain",
             user: "WTUDSS",
             password: "WTUDSS12345678",
-            //connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "wstock.dyndns.org/orcl.localdomain",
-            //connectString : process.env.NODE_ORACLEDB_CONNECTIONSTRING || "10.1.10.16/orcl.localdomain",
+            //connectString : "wstock.dyndns.org/orcl.localdomain",
+            //connectString : "10.1.10.16/orcl.localdomain",
             connectString: "113.53.249.27/orcl.localdomain"
         };
 
