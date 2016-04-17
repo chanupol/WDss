@@ -22,6 +22,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
     reportService.getCurrentPeriod().then(function (response) {
         console.log("getCurrentPeriod response " + response);
         currentPeriod = response[0].CURRENTLEARNPERIOD;
+        $scope.CurrentPeriod = response[0].CURRENTLEARNPERIOD;
         console.log("getCurrentPeriod currentPeriod = " + currentPeriod);
 
         var periodCodeSplit = currentPeriod.split('/');
@@ -213,6 +214,8 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
     console.log("subjectCode " + $routeParams.subjectCode);
     console.log("periodCode " + $routeParams.periodCode);
 
+    $scope.FacultyName = '';
+    $scope.SubjectFullName = '';
     /*var periodCode = $routeParams.periodCode;
      if (periodCode != null && periodCode !== undefined) {
      periodCode = periodCode.split('_');
@@ -251,6 +254,14 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             // Set defautl first row selected
             /*var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
              e.sender.select(row);*/
+            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+            $scope.$apply(function () {
+                //returnPeriod();
+                $scope.FacultyName = row[0].cells[0].innerText;
+
+                $scope.SubjectFullName = row[0].cells[7].innerText + '-' + row[0].cells[8].innerText;
+
+            });
         },
         columns: [
             {
@@ -893,6 +904,10 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
     console.log("subjectCode " + $routeParams.subjectCode);
     //console.log("periodCode " + $routeParams.periodCode);
 
+    $scope.FacultyName = '';
+    $scope.SubjectFullName = '';
+
+
     /*var periodCode = $routeParams.periodCode;
      if (periodCode != null && periodCode !== undefined) {
      periodCode = periodCode.split('_');
@@ -931,6 +946,14 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             // Set defautl first row selected
             /*var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
              e.sender.select(row);*/
+            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+            $scope.$apply(function () {
+                //returnPeriod();
+                $scope.FacultyName = row[0].cells[0].innerText;
+
+                $scope.SubjectFullName = row[0].cells[7].innerText + '-' + row[0].cells[8].innerText;
+
+            });
         },
         columns: [
             {
