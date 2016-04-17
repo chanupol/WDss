@@ -1,3 +1,10 @@
+<!--<style type="text/css">
+    #grdSubjectByPeriod
+    {
+        border-width: 0;
+        height: 100%; /* DO NOT USE !important for setting the Grid height! */
+    }
+</style>-->
 <div class="row" ng-controller="reportSubjectByPeriodController">
     <div class="col-md-12">
         <div class="panel panel-primary">
@@ -45,6 +52,7 @@
                     <div class="col-md-12">
                         <div id="grdSubjectAll" kendo-grid="grdSubjectAll" k-options="grdSubjectAllOptions"></div>
 
+                        <!--Period Filter Template-->
                         <script type="text/x-kendo-template" id="periodTemplate">
                             <div class="toolbar">
                                 <div class="form-inline">
@@ -60,6 +68,26 @@
                                 </div>
                             </div>
                         </script>
+
+
+
+                        <!--Period Filter Template-->
+                        <!--<script type="text/x-kendo-template" id="periodForUnit">
+                            &lt;!&ndash;<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/#:uniCodePeriod(PERIODCODE)#/{{returnTchCode()}}'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, "n2")#' style='width: 100%;'></div></a>&ndash;&gt;
+                            <a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, "n2")#' style='width: 100%;'></div></a>
+                        </script>
+
+                        <script type="text/javascript">
+                            function uniCodePeriod(value) {
+                                console.log("value = "+value);
+                                if (value!='' && value!=undefined){
+                                    return value.replace("/", "_");
+                                }else {
+                                    return '';
+                                }
+                            }
+                        </script>-->
+
 
                     </div>
                 </div>

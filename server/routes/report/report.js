@@ -141,6 +141,12 @@ exports.register = function (server, options, next) {
             path: "/api/report/subject/period/list",
             handler: reportController.getPeriod,
         }
+        ,
+        {
+            method: "GET",
+            path: "/api/report/period/currentperiod",
+            handler: reportController.getCurrentPeriod,
+        }
     ]);
 
     next();

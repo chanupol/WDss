@@ -29,16 +29,19 @@ SecurityModel.prototype.GetUser = function (callback) {
             console.error(err.message);
             callback(err, null);
         } else {
-            connection.execute("SELECT ID, USERNAME, STATUS,RoleId FROM 'USER'", function (err, result) {
+
+            connection.execute("SELECT * FROM vUser", [], {maxRows: 1000}, function (err, result) {
                 if (err) {
                     console.error(err.message);
                     database.DoRelease(connection);
                     callback(err, null);
                 } else {
-                    result.outBinds.cursor.getRows(database.MaximumCursorRows(), function (err, rows) {
-                        oracledb.DoClose(connection, result.outBinds.cursor);
-                        callback(err, rows);
-                    });
+                    /* result.outBinds.cursor.getRows(database.MaximumCursorRows(), function (err, rows) {
+                     oracledb.DoClose(connection, result.outBinds.cursor);
+                     callback(err, rows);
+                     });*/
+                    database.DoRelease(connection);
+                    callback(err, result.rows);
                 }
             });
         }
@@ -121,12 +124,10 @@ SecurityModel.prototype.CreateNewUser = function (user, callback) {
             console.error(err.message);
             callback(err, null);
         } else {
-            connection.execute("BEGIN SP_INSERT_USER(:username, :password,:tchChiefId,:tchHenchManId,:roleId); END;",
+            connection.execute("BEGIN SP_INSERT_USER(:username, :password,:roleId); END;",
                 {
                     userName: user.userName,
                     password: encryption.Encrypt(user.password),
-                    tchChiefId: user.tchChiefId,
-                    tchHenchManId: user.tchHenchManId,
                     roleId: user.roleId
                 },
                 function (err, result) {

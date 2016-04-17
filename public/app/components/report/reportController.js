@@ -10,21 +10,52 @@
 //----------------------------------------
 //
 // Subject
-app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $location, reportService) {
+app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $location, reportService, localStorageService) {
 
-    $scope.FacultyName ='';
-    $scope.SubjectFullName='';
+    $scope.FacultyName = '';
+    $scope.SubjectFullName = '';
+    $scope.CurrentPeriod = '';
+    var currentPeriod = "";
+    var currentPeriodUniCode = "";
+
+    // Get Current Period
+    reportService.getCurrentPeriod().then(function (response) {
+        console.log("getCurrentPeriod response " + response);
+        currentPeriod = response[0].CURRENTLEARNPERIOD;
+        console.log("getCurrentPeriod currentPeriod = " + currentPeriod);
+
+        var periodCodeSplit = currentPeriod.split('/');
+        console.log(periodCodeSplit);
+        if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
+            currentPeriod = periodCodeSplit[0] + "_" + periodCodeSplit[1];
+            //currentPeriodUniCode = periodCodeSplit[0] + "%2F" + periodCodeSplit[1];
+        }
+    }, function (err) {
+        if (err) {
+            console.log("getCurrentPeriod err " + err.message);
+        }
+    });
+
+
     //------------------------------------------------
     //
     // KendoUi Configurations
     //
     //------------------------------------------------
+    /* $scope.returnPeriod = function () {
+     var ddlPeriodCodeSplit = $("#ddlPeriodCode").data("kendoDropDownList").text().split('/');
+     if (ddlPeriodCodeSplit.length === 2) {
+     ddlPeriodCodeSplit = ddlPeriodCodeSplit[0] + "_" + ddlPeriodCodeSplit[1];
+     }
+     return ddlPeriodCodeSplit;
+     }*/
+
     $scope.returnPeriod = function () {
-        var ddlPeriodCodeSplit = $("#ddlPeriodCode").data("kendoDropDownList").text().split('/');
-        if (ddlPeriodCodeSplit.length === 2) {
-            ddlPeriodCodeSplit = ddlPeriodCodeSplit[0] + "_" + ddlPeriodCodeSplit[1];
-        }
-        return ddlPeriodCodeSplit;
+        return currentPeriod;
+    }
+
+    $scope.returnTchCode = function () {
+        return localStorageService.get("UserName");
     }
 
 
@@ -63,6 +94,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
 
     $scope.grdSubjectByPeriodOptions = {
         dataSource: reportService.getSubjectListByPeriodCodeDs('2%2F58'),
+        //dataSource: reportService.getSubjectListByPeriodCodeDs(currentPeriodUniCode),
         height: 500,
         sortable: true,
         //selectable: "row",
@@ -95,34 +127,36 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName= row[0].cells[0].innerText;;
-                $scope.SubjectFullName = row[0].cells[4].innerText;;
+                $scope.FacultyName = row[0].cells[0].innerText;
+                ;
+                $scope.SubjectFullName = row[0].cells[4].innerText;
+                ;
             });
         },
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             },
             {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 hidden: true
             }, {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true
             }, {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -130,25 +164,34 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
             },
             {
                 field: null,
-                title: "Subject",
+                title: "ชื่อวิชา",
                 width: "250px",
-                //template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
-                template: "<span> #= SUBJECTCODE #-#=SUBJECTNAME#</span>"
+                template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                //template: "<span> #= SUBJECTCODE #-#=SUBJECTNAME#</span>"
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             },
             {
+                field: "TCHCODE",
+                title: "รหัสอาจารย์ผู้สอน",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                hidden: true,
+            },
+            {
                 field: "Percentage",
-                title: "Percentage",
+                title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/2_58'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                //template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
             }
 
         ]
@@ -212,14 +255,14 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 250,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             }
             , {
                 field: "TCHCODE",
-                title: "Teacher Code",
+                title: "รหัสอาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -227,7 +270,7 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             }
             , {
                 field: "TCHNAME",
-                title: "Teacher Name",
+                title: "ชื่ออาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -236,15 +279,16 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             ,
             {
                 field: null,
-                title: "Teacher",
+                title: "อาจารย์ผู้สอน",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
+                template: "<span>#= TCHCODE #-#=TCHNAME#</span>"
+                //template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
             }
             , {
                 field: "DEGREECODE",
-                title: "Degree Code",
+                title: "รหัสระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -252,7 +296,7 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             }
             , {
                 field: "DEGREENAME",
-                title: "Degree Name",
+                title: "ระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -262,7 +306,7 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             ,
             {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -270,14 +314,14 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             },
             {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true
             },
             {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -285,7 +329,7 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -343,14 +387,14 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 hidden: true
             }, {
                 field: "DEGREECODE",
-                title: "Degree Code",
+                title: "รหัสระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -358,7 +402,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             }
             , {
                 field: "DEGREENAME",
-                title: "Degree Name",
+                title: "ระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -366,7 +410,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             }
             , {
                 field: "TCHCODE",
-                title: "Teacher Code",
+                title: "รหัสอาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -374,7 +418,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             }
             , {
                 field: "TCHNAME",
-                title: "Teacher Name",
+                title: "อาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -383,7 +427,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             ,
             {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -391,13 +435,13 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true
             }, {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -405,7 +449,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: "UNITID",
-                title: "Unit",
+                title: "หน่วย",
                 width: 60,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -413,7 +457,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: "UNITNAME",
-                title: "Unit Name",
+                title: "ชื่อหน่วย",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -421,7 +465,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: null,
-                title: "Unit Name",
+                title: "ชื่อหน่วย",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"},
@@ -429,7 +473,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: "TOTALVIDEOINMINUTE",
-                title: "Total VDO Minute",
+                title: "จำนวนเวลาที่มี",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -448,7 +492,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: "TotalVDODeficitInMinute",
-                title: "Total VDO Deficit Minute",
+                title: "จำนวนเวลาที่ขาด",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -458,7 +502,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: "StandardTotalVideoInMinute",
-                title: "Standard VDO Minute",
+                title: "จำนวนเวลาที่ต้องมี",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -468,7 +512,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             },
             {
                 field: "Percentage",
-                title: "Percentage",
+                title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -476,7 +520,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -538,14 +582,14 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 hidden: true
             }, {
                 field: "DEGREECODE",
-                title: "Degree Code",
+                title: "รหัสระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -553,7 +597,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             }
             , {
                 field: "DEGREENAME",
-                title: "Degree Name",
+                title: "ระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -561,7 +605,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             }
             , {
                 field: "TCHCODE",
-                title: "Teacher Code",
+                title: "รหัสอาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -569,7 +613,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             }
             , {
                 field: "TCHNAME",
-                title: "Teacher Name",
+                title: "ชื่ออาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -578,7 +622,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             ,
             {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -586,13 +630,13 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             },
             {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true
             }, {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -600,7 +644,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             },
             {
                 field: "UNITID",
-                title: "Unit",
+                title: "หน่วย",
                 width: 60,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -608,7 +652,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             },
             {
                 field: "UNITNAME",
-                title: "Unit Name",
+                title: "ชื่อหน่วย",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -624,14 +668,14 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             },
             {
                 field: "TOPICNAME",
-                title: "Topic Name",
+                title: "ชื่อหัวข้อ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"}
             },
             {
                 field: "TotalVideoInMinute",
-                title: "Total VDO Minute",
+                title: "จำนวนเวลาที่มี",
                 width: 60,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -646,7 +690,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -666,7 +710,7 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
 
 //
 // Subject All
-app.controller("reportSubjectAllController", function ($scope, $uibModal, $location, reportService) {
+app.controller("reportSubjectAllController", function ($scope, $uibModal, $location, reportService, localStorageService) {
     //------------------------------------------------
     //
     // KendoUi Configurations
@@ -680,13 +724,17 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
         return ddlPeriodCodeSplit;
     }
 
+    $scope.returnTchCode = function () {
+        return localStorageService.get("UserName");
+    }
+
 
     $scope.ddlPeriodCodeOptions = {
         //$scope.ddlPeriodCode.value()
         dataSource: reportService.getPeriodDs(),
         dataTextField: "Period",
         dataValueField: "PeriodValue",
-        dataBound: function() {
+        dataBound: function () {
             var dataSource = this.dataSource;
             var data = dataSource.data();
 
@@ -720,13 +768,13 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
         if (value) {
             var xxxx = $scope.grdSubjectAllOptions;
             console.log(xxxx);
-            if ($scope.ddlPeriodCode.text()!=='All'){
+            if ($scope.ddlPeriodCode.text() !== 'All') {
                 $scope.grdSubjectAllOptions.dataSource.filter({
                     field: "PERIODCODE",
                     operator: "contains",
                     value: $scope.ddlPeriodCode.text()
                 });
-            }else {
+            } else {
                 $scope.grdSubjectAllOptions.dataSource.filter({});
             }
 
@@ -754,7 +802,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
         },
         toolbar: kendo.template($("#periodTemplate").html()),
         pageable: {
-            buttonCount: 4,
+            buttonCount: 5,
             refresh: true,
             messages: {
                 morePages: "More pages"
@@ -769,25 +817,25 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             }, {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             }, {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true,
             }, {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -795,26 +843,36 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
             },
             {
                 field: null,
-                title: "Subject",
+                title: "ชื่อวิชา",
                 width: "250px",
-                //template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
-                template: "<span>#= SUBJECTCODE #-#=SUBJECTNAME#</span>"
+                template: " <a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                //template: "<span>#= SUBJECTCODE #-#=SUBJECTNAME#</span>"
 
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             },
             {
+                field: "TCHCODE",
+                title: "รหัสอาจารย์ผู้สอน",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                hidden: true,
+            },
+            {
                 field: "Percentage",
-                title: "Percentage",
+                title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                //template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                //template: kendo.template($("#periodForUnit").html()),
             }
 
         ]
@@ -877,14 +935,14 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 250,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             }
             , {
                 field: "TCHCODE",
-                title: "Teacher Code",
+                title: "รหัสอาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -892,7 +950,7 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             }
             , {
                 field: "TCHNAME",
-                title: "Teacher Name",
+                title: "ชื่ออาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -901,15 +959,16 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             ,
             {
                 field: null,
-                title: "Teacher",
+                title: "ชื่ออาจารย์ผู้สอน",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
+                //template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
+                template: "<span>#= TCHCODE #-#=TCHNAME#</span>"
             }
             , {
                 field: "DEGREECODE",
-                title: "Degree Code",
+                title: "รหัสระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -917,7 +976,7 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             }
             , {
                 field: "DEGREENAME",
-                title: "Degree Name",
+                title: "ระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -927,7 +986,7 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             ,
             {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -935,14 +994,14 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             },
             {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true
             },
             {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -950,7 +1009,7 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1009,14 +1068,14 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 hidden: true
             }, {
                 field: "DEGREECODE",
-                title: "Degree Code",
+                title: "รหัสระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1024,7 +1083,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             }
             , {
                 field: "DEGREENAME",
-                title: "Degree Name",
+                title: "ระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1032,7 +1091,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             }
             , {
                 field: "TCHCODE",
-                title: "Teacher Code",
+                title: "รหัสอาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1040,7 +1099,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             }
             , {
                 field: "TCHNAME",
-                title: "Teacher Name",
+                title: "ชื่ออาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1049,7 +1108,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             ,
             {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1057,13 +1116,13 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true
             }, {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1071,7 +1130,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: "UNITID",
-                title: "Unit",
+                title: "หน่วย",
                 width: 60,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1079,7 +1138,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: "UNITNAME",
-                title: "Unit Name",
+                title: "ชื่อหน่วย",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1087,7 +1146,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: null,
-                title: "Unit Name",
+                title: "ชื่อหน่วย",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"},
@@ -1095,7 +1154,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: "TOTALVIDEOINMINUTE",
-                title: "Total VDO Minute",
+                title: "จำนวนเวลาที่มีจำนวนเวลาที่มี",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1114,7 +1173,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: "TotalVDODeficitInMinute",
-                title: "Total VDO Deficit Minute",
+                title: "จำนวนเวลาที่ขาด",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1124,7 +1183,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: "StandardTotalVideoInMinute",
-                title: "Standard VDO Minute",
+                title: "จำนวนเวลาที่ต้องมี",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1134,7 +1193,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             },
             {
                 field: "Percentage",
-                title: "Percentage",
+                title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1142,7 +1201,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1205,14 +1264,14 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
         columns: [
             {
                 field: "FACULTYNAME",
-                title: "Faculty Name",
+                title: "คณะ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 hidden: true
             }, {
                 field: "DEGREECODE",
-                title: "Degree Code",
+                title: "รหัสระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1220,7 +1279,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             }
             , {
                 field: "DEGREENAME",
-                title: "Degree Name",
+                title: "ระดับ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1228,7 +1287,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             }
             , {
                 field: "TCHCODE",
-                title: "Teacher Code",
+                title: "รหัสอาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1236,7 +1295,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             }
             , {
                 field: "TCHNAME",
-                title: "Teacher Name",
+                title: "ชื่ออาจารย์ผู้สอน",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1245,7 +1304,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             ,
             {
                 field: "PERIODCODE",
-                title: "Period Code",
+                title: "ภาคการศึกษา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1253,13 +1312,13 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             },
             {
                 field: "SUBJECTCODE",
-                title: "Subject Code",
+                title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 hidden: true
             }, {
                 field: "SUBJECTNAME",
-                title: "Subject Name",
+                title: "ชื่อวิชา",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1267,7 +1326,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             },
             {
                 field: "UNITID",
-                title: "Unit",
+                title: "หน่วย",
                 width: 60,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1275,7 +1334,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             },
             {
                 field: "UNITNAME",
-                title: "Unit Name",
+                title: "ชื่อหน่วย",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1283,7 +1342,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             },
             {
                 field: "TOPICNO",
-                title: "Topic No.",
+                title: "หัวข้อ",
                 width: 40,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1291,14 +1350,14 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             },
             {
                 field: "TOPICNAME",
-                title: "Topic Name",
+                title: "ชื่อหัวข้อ",
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"}
             },
             {
                 field: "TotalVideoInMinute",
-                title: "Total VDO Minute",
+                title: "จำนวนเวลาที่มี",
                 width: 60,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -1313,7 +1372,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             }
             , {
                 field: "IMPORTDATE",
-                title: "import Date",
+                title: "วันที่นำเข้าข้อมูล",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},

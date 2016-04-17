@@ -31,6 +31,32 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 
+    function getCurrentPeriod() {
+        var request = $http.get(uri + "/period/currentperiod");
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
+    function getCurrentPeriodDs() {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/period/currentperiod",
+                    dataType: "json"
+                }
+            },
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "CURRENTLEARNPERIOD",
+                    fields: {
+                        Period: {type: "string"}
+                    }
+                }
+            }
+        });
+    }
+
     function getPeriodDs() {
         return new kendo.data.DataSource({
             batch: true,
@@ -40,7 +66,7 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                     dataType: "json"
                 }
             },
-            pageSize: 20,
+            pageSize: 1000,
             schema: {
                 model: {
                     id: "Period",
@@ -65,14 +91,14 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
 
     function getSubjectAllDs() {
         return new kendo.data.DataSource({
-            batch: true,
+            //batch: true,
             transport: {
                 read: {
                     url: uri + "/subject/list/" + localStorageService.get("RoleId") + "/" + localStorageService.get("UserName"),
                     dataType: "json"
                 }
             },
-            pageSize: 20,
+            //serverPaging: true,
             schema: {
                 model: {
                     id: "PERIODCODE",
@@ -82,10 +108,15 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         SUBJECTCODE: {type: "string"},
                         SUBJECTNAME: {type: "string"},
                         IMPORTDATE: {type: "string"},
-                        Percentage: {type: "number"}
+                        Percentage: {type: "number"},
+                        TCHCODE: {type: "string"}
                     }
                 }
-            }
+            },
+            pageSize: 20,
+           /* serverPaging: true,
+            serverFiltering: true,
+            serverSorting: true*/
         });
     }
 
@@ -117,7 +148,8 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         SUBJECTCODE: {type: "string"},
                         SUBJECTNAME: {type: "string"},
                         IMPORTDATE: {type: "string"},
-                        Percentage: {type: "number"}
+                        Percentage: {type: "number"},
+                        TCHCODE: {type: "string"}
                     }
                 }
             }
@@ -181,7 +213,7 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                     dataType: "json"
                 }
             },
-            pageSize: 20,
+
             schema: {
                 model: {
                     id: "TCHCODE",
@@ -198,7 +230,9 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
 
                     }
                 }
-            }
+            },
+            pageSize: 20,
+
         });
     }
 
@@ -410,6 +444,8 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
     return ({
         getPeriod: getPeriod,
         getPeriodDs: getPeriodDs,
+        getCurrentPeriod: getCurrentPeriod,
+        getCurrentPeriodDs: getCurrentPeriodDs,
         getSubjectAll: getSubjectAll,
         getSubjectAllDs: getSubjectAllDs,
         getSubjectListByPeriodCode: getSubjectListByPeriodCode,

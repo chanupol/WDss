@@ -127,14 +127,18 @@ app.factory("securityService", function ($http, $q, $location, $rootScope, local
                     dataType: "json"
                 }
             },
-            pageSize: 20,
+            pageSize: 10,
             schema: {
                 model: {
-                    id: "PERIODCODE",
+                    id: "ID",
                     fields: {
                         ID: {type: "number"},
+                        ROLENAME:{type: "string"},
                         USERNAME: {type: "string"},
-                        STATUS: {type: "string"}
+                        TCHFULLNAME:{type: "string"},
+                        TCHEMAIL:{type: "string"},
+                        FACNAME:{type: "string"},
+                        USERSTATUS: {type: "string"},
                     }
                 }
             }

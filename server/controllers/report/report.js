@@ -12,6 +12,18 @@ function ReportController() {
 
 }
 
+ReportController.prototype.getCurrentPeriod = function (request, reply) {
+
+    reportModel.getCurrentPeriod(function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get period information", err));
+        } else {
+            reply(result);
+        }
+    });
+    
+};
+
 ReportController.prototype.getAllSubject = function (request, reply) {
 
     var roleId = request.params.roleId;

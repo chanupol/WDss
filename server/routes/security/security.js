@@ -85,8 +85,8 @@ exports.register = function (server, options, next) {
                     payload: {
                         userName: Joi.string().min(3).max(50).required(),
                         password: Joi.string().min(3).max(255).required(),
-                        tchChiefId: Joi.string().max(10).required(),
-                        tchHenchManId: Joi.string().max(10).required(),
+                       /* tchChiefId: Joi.string().max(10).required(),
+                        tchHenchManId: Joi.string().max(10).required(),*/
                         roleId: Joi.number().required(),
                     }
                 }

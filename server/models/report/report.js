@@ -20,7 +20,7 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
 
     oracledb.outFormat = oracledb.OBJECT;
 
-    if (roleId === 1) {
+    if (roleId === 1) { // Dean
         oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
                 console.error(err.message);
@@ -55,7 +55,7 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 }
             });
         });
-    } else if(roleId === 2) {
+    } else if (roleId === 2) { // Teacher
         oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
                 console.error(err.message);
@@ -63,8 +63,8 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 callback(err, null);
             }
 
-            var strSql = "SELECT distinct VSUBJECT.* FROM VSUBJECT,Videolength " +
-                "where VSUBJECT.SubjectCode = Videolength.SubjectCode and TchCode='" + userName + "' " ;
+            var strSql = "SELECT distinct VSUBJECT.*,Videolength.TCHCODE FROM VSUBJECT,Videolength " +
+                "where VSUBJECT.SubjectCode = Videolength.SubjectCode  and TchCode='" + userName + "' ";
             connection.execute(strSql, function (err, result) {
                 if (err) {
                     console.error(err.message);
@@ -76,7 +76,37 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 }
             });
         });
-    }else { // admin
+    } else { // admin role
+
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+           /* var strSql = "SELECT DISTINCT VSUBJECT.*, Videolength.TCHCODE " +
+                " FROM VSUBJECT,Videolength " +
+                "WHERE VSUBJECT.SubjectCode = Videolength.SubjectCode "*/
+
+            var strSql = "select distinct vSubject.*,Videolength.TCHCODE from " +
+                "( SELECT DISTINCT VSUBJECT.* FROM VSUBJECT WHERE PeriodCode IS NOT NULL ) vSubject " +
+                "join Videolength on Videolength.SubjectCode =vSubject.SubjectCode "
+            connection.execute(strSql,
+                [],
+                {maxRows: 2000},
+                function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        database.DoRelease(connection);
+                        callback(err, null);
+                    } else {
+                        database.DoRelease(connection);
+                        //console.log(result.rows);
+                        callback(err, result.rows);
+                    }
+                });
+        });
 
     }
 
@@ -88,7 +118,7 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
 
     oracledb.outFormat = oracledb.OBJECT;
 
-    if (roleId === 1) {
+    if (roleId === 1) { // Dean
         oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
                 console.error(err.message);
@@ -123,7 +153,7 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 }
             });
         });
-    } else if (roleId === 2) {
+    } else if (roleId === 2) { // Teacher
         oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
                 console.error(err.message);
@@ -131,7 +161,7 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 callback(err, null);
             }
 
-            var strSql = "SELECT distinct VSUBJECT.* FROM VSUBJECT,Videolength " +
+            var strSql = "SELECT distinct VSUBJECT.*,Videolength.TCHCODE FROM VSUBJECT,Videolength " +
                 "where VSUBJECT.SubjectCode = Videolength.SubjectCode and TchCode='" + userName + "' " +
                 "and VSUBJECT.PeriodCode like '%" + periodCode + "%'"
             connection.execute(strSql, function (err, result) {
@@ -145,7 +175,42 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 }
             });
         });
-    }else { // admin
+    } else { // admin role
+
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+            /*var strSql = "SELECT DISTINCT VSUBJECT.*, Videolength.TCHCODE " +
+                " FROM VSUBJECT,Videolength " +
+                "WHERE VSUBJECT.SubjectCode = Videolength.SubjectCode " +
+                "AND VSUBJECT.PeriodCode = (SELECT CURRENTLEARNPERIOD FROM " +
+                "(SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
+                "FROM CYBERUPERIODCONFIG ORDER BY CYBERUPERIODCONFIG.ID DESC ))"*/
+
+            var strSql = "select distinct vSubject.*,Videolength.TCHCODE from " +
+                "( SELECT DISTINCT VSUBJECT.* FROM VSUBJECT WHERE PeriodCode IS NOT NULL ) vSubject " +
+                "join Videolength on Videolength.SubjectCode =vSubject.SubjectCode " +
+                "where vSubject.PeriodCode=(SELECT CURRENTLEARNPERIOD " +
+                "FROM (SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
+                "FROM CYBERUPERIODCONFIG ORDER BY CYBERUPERIODCONFIG.ID DESC )) "
+            connection.execute(strSql,
+                [],
+                {maxRows: 2000},
+                function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    database.DoRelease(connection);
+                    callback(err, result.rows);
+                }
+            });
+        });
 
     }
 
@@ -214,6 +279,27 @@ ReportModel.prototype.getTeacherBySubjectPeriod = function (subjectCode, periodC
             connection.execute("SELECT * FROM VGETVDOLENGTHFORTEACHER " +
                 "Where SubjectCode ='" + subjectCode + "'  " +
                 "and PeriodCode like '%" + periodCode + "%' and TCHCODE='" + userName + "'", function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    database.DoRelease(connection);
+                    callback(err, result.rows);
+                }
+            });
+        });
+    } else {
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+            connection.execute("SELECT * FROM VGETVDOLENGTHFORTEACHER " +
+                "Where SubjectCode ='" + subjectCode + "'  " +
+                "and PeriodCode like '%" + periodCode + "%'  ", function (err, result) {
                 if (err) {
                     console.error(err.message);
                     database.DoRelease(connection);
@@ -368,6 +454,33 @@ ReportModel.prototype.getTopicBySubjectTeacher = function (subjectCode, tchCode,
             }
         });
     });
+};
+
+ReportModel.prototype.getCurrentPeriod = function (callback) {
+
+    var database = new Database();
+
+    //oracledb.outFormat = oracledb.OBJECT;
+
+    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+        if (err) {
+            console.error(err.message);
+            database.DoRelease(connection);
+            callback(err, null);
+        }
+
+        connection.execute("select CURRENTLEARNPERIOD from CYBERUPERIODCONFIG where rownum=1 order by id desc", function (err, result) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            } else {
+                database.DoRelease(connection);
+                callback(err, result.rows);
+            }
+        });
+    });
+
 };
 
 

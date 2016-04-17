@@ -18,14 +18,30 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
         dataSource: securityService.getUsersDs(),
         //height: 500,
         sortable: true,
-        selectable: "row",
+        //selectable: "row",
         scrollable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "contains"
+                }
+            }
+        },
+        pageable: {
+            buttonCount: 5,
+            refresh: true,
+            messages: {
+                morePages: "More pages"
+            }
+        },
         // change: onGridMasterOrderChange,
         dataBound: function (e) {
             //
             // Set defautl first row selected
-            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
-            e.sender.select(row);
+            /*var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+             e.sender.select(row);*/
         },
         columns: [
             {
@@ -33,16 +49,49 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
                 title: "Id",
                 width: 50,
                 headerAttributes: {style: "text-align:center"},
-            }, {
+                hidden: true,
+            },
+            {
+                field: "ROLENAME",
+                title: "ROLE NAME",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+            },
+            {
                 field: "USERNAME",
-                title: "Username",
+                title: "User Name",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
 
             },
             {
-                field: "STATUS",
+                field: "TCHFULLNAME",
+                title: "Teacher Name",
+                width: 150,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "TCHEMAIL",
+                title: "Teacher Email",
+                width: 150,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "FACNAME",
+                title: "Faculty Name",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "USERSTATUS",
                 title: "Status",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
@@ -57,26 +106,38 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
     // Even Handler
     //
     //------------------------------------------------
+    $scope.NewUsername = "";
+
     $scope.btnCreateNewUserClicked = function () {
+        /* var user = {
+         userName: "489000608",
+         password: "489000608",
+         tchChiefId: "489000608",
+         tchHenchManId: "489000608",
+         roleId: 2,
+
+         };*/
+
+        console.log("$scope.NewUsername ="+$scope.NewUsername);
+
         var user = {
-            userName: "489000608",
-            password: "489000608",
-            tchChiefId: "489000608",
-            tchHenchManId: "489000608",
-            roleId: 2,
+            userName: $scope.NewUsername,
+            password: $scope.NewUsername,
+            roleId: 2, //1 :Dean ,2 : Teacher
 
         };
-
         //
         // Create new user
         securityService.addUser(user).then(function (result) {
             $scope.notificationCenter.success({
                 message: "Save success."
             });
+            $scope.NewUsername="";
         }, function (err) {
             $scope.notificationCenter.error({
                 message: err.message
             });
+            $scope.NewUsername="";
         });
     };
 
