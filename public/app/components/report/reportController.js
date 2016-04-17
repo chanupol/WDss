@@ -360,6 +360,9 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
     console.log("periodCode " + $routeParams.periodCode);
     console.log("tchCode " + $routeParams.tchCode);
 
+    $scope.FacultyName = '';
+    $scope.SubjectFullName = '';
+
 
     $scope.returnPeriod = function () {
         return $routeParams.periodCode;
@@ -392,6 +395,15 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             // Set defautl first row selected
             /* var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
              e.sender.select(row);*/
+
+            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+            $scope.$apply(function () {
+                //returnPeriod();
+                $scope.FacultyName = row[0].cells[0].innerText;
+
+                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+
+            });
         },
 
 
@@ -559,6 +571,12 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
      periodCode = periodCode[0] + '%2F' + periodCode[1];
      }*/
 
+    $scope.FacultyName = '';
+    $scope.SubjectCode = $routeParams.subjectCode;
+    $scope.SubjectFullName = '';
+    $scope.UnitName = '';
+    $scope.TchCode = $routeParams.tchCode;
+    $scope.PeriodCode = $routeParams.periodCode;
 
     $scope.grdTopicOptions = {
         dataSource: reportService.getTopicBySubjectPeriodTeacherUnitDs($routeParams.subjectCode, $routeParams.periodCode, $routeParams.tchCode, $routeParams.unitId),
@@ -587,6 +605,18 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             // Set defautl first row selected
             /* var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
              e.sender.select(row);*/
+            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+            $scope.$apply(function () {
+                //returnPeriod();
+                $scope.FacultyName = row[0].cells[0].innerText;
+
+                //$scope.SubjectCode =row[0].cells[6].innerText;
+
+                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+
+                $scope.UnitName = row[0].cells[8].innerText + '-' + row[0].cells[9].innerText;
+
+            });
         },
 
 
@@ -1058,6 +1088,10 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
      return $routeParams.periodCode;
      }*/
 
+    $scope.FacultyName = '';
+    $scope.SubjectFullName = '';
+
+
     $scope.grdUnitOptions = {
         dataSource: reportService.getUnitBySubjectTeacherDs($routeParams.subjectCode, $routeParams.tchCode),
         height: 500,
@@ -1085,6 +1119,14 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             // Set defautl first row selected
             /* var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
              e.sender.select(row);*/
+            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+            $scope.$apply(function () {
+                //returnPeriod();
+                $scope.FacultyName = row[0].cells[0].innerText;
+
+                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+
+            });
         },
 
 
@@ -1242,7 +1284,7 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
 app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $routeParams, $uibModal, $location, reportService) {
 
     console.log("subjectCode " + $routeParams.subjectCode);
-    //console.log("periodCode " + $routeParams.periodCode);
+    console.log("periodCode " + $routeParams.periodCode);
     console.log("tchCode " + $routeParams.tchCode);
     console.log("unitId " + $routeParams.unitId);
 
@@ -1252,6 +1294,13 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
      //console.log('split periodCode' + periodCode);
      periodCode = periodCode[0] + '%2F' + periodCode[1];
      }*/
+
+    $scope.FacultyName = '';
+    $scope.SubjectCode = $routeParams.subjectCode;
+    $scope.SubjectFullName = '';
+    $scope.UnitName = '';
+    $scope.TchCode = $routeParams.tchCode;
+    $scope.PeriodCode = $routeParams.periodCode;
 
 
     $scope.grdTopicOptions = {
@@ -1281,6 +1330,19 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             // Set defautl first row selected
             /* var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
              e.sender.select(row);*/
+
+            var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+            $scope.$apply(function () {
+                //returnPeriod();
+                $scope.FacultyName = row[0].cells[0].innerText;
+
+                //$scope.SubjectCode =row[0].cells[6].innerText;
+
+                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+
+                $scope.UnitName = row[0].cells[8].innerText + '-' + row[0].cells[9].innerText;
+
+            });
         },
 
 
