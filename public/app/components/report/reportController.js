@@ -128,9 +128,9 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName = row[0].cells[0].innerText;
+                $scope.FacultyName = row[0].cells[0].textContent;
                 ;
-                $scope.SubjectFullName = row[0].cells[4].innerText;
+                $scope.SubjectFullName = row[0].cells[4].textContent;
                 ;
             });
         },
@@ -257,9 +257,9 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName = row[0].cells[0].innerText;
+                $scope.FacultyName = row[0].cells[0].textContent;
 
-                $scope.SubjectFullName = row[0].cells[7].innerText + '-' + row[0].cells[8].innerText;
+                $scope.SubjectFullName = row[0].cells[7].textContent + '-' + row[0].cells[8].textContent;
 
             });
         },
@@ -399,9 +399,9 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName = row[0].cells[0].innerText;
+                $scope.FacultyName = row[0].cells[0].textContent;
 
-                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+                $scope.SubjectFullName = row[0].cells[6].textContent + '-' + row[0].cells[7].textContent;
 
             });
         },
@@ -608,13 +608,13 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName = row[0].cells[0].innerText;
+                $scope.FacultyName = row[0].cells[0].textContent;
 
                 //$scope.SubjectCode =row[0].cells[6].innerText;
 
-                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+                $scope.SubjectFullName = row[0].cells[6].textContent + '-' + row[0].cells[7].textContent;
 
-                $scope.UnitName = row[0].cells[8].innerText + '-' + row[0].cells[9].innerText;
+                $scope.UnitName = row[0].cells[8].textContent + '-' + row[0].cells[9].textContent;
 
             });
         },
@@ -979,9 +979,9 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName = row[0].cells[0].innerText;
+                $scope.FacultyName = row[0].cells[0].textContent;
 
-                $scope.SubjectFullName = row[0].cells[7].innerText + '-' + row[0].cells[8].innerText;
+                $scope.SubjectFullName = row[0].cells[7].textContent + '-' + row[0].cells[8].textContent;
 
             });
         },
@@ -1122,9 +1122,9 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName = row[0].cells[0].innerText;
+                $scope.FacultyName = row[0].cells[0].textContent;
 
-                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+                $scope.SubjectFullName = row[0].cells[6].textContent + '-' + row[0].cells[7].textContent;
 
             });
         },
@@ -1334,13 +1334,13 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
             $scope.$apply(function () {
                 //returnPeriod();
-                $scope.FacultyName = row[0].cells[0].innerText;
+                $scope.FacultyName = row[0].cells[0].textContent;
 
                 //$scope.SubjectCode =row[0].cells[6].innerText;
 
-                $scope.SubjectFullName = row[0].cells[6].innerText + '-' + row[0].cells[7].innerText;
+                $scope.SubjectFullName = row[0].cells[6].textContent + '-' + row[0].cells[7].textContent;
 
-                $scope.UnitName = row[0].cells[8].innerText + '-' + row[0].cells[9].innerText;
+                $scope.UnitName = row[0].cells[8].textContent + '-' + row[0].cells[9].textContent;
 
             });
         },
