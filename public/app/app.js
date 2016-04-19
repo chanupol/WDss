@@ -13,8 +13,8 @@ app.config(function (localStorageServiceProvider) {
 // Global Variable
 //
 //--------------------------------------------------------------------------------
-var urlPath = "http://localhost:8000/api/";
+var urlPath = "http://0.0.0.0:8000/api/";
 var cyberuApiPath ="http://western-cyberu.net:81/api/";
 
-var serverUrl = "http://localhost:8000";
+var serverUrl = "http://0.0.0.0:8000";
 var serverApiUrl = serverUrl + "/api/";
