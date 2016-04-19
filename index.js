@@ -10,7 +10,7 @@ var server = new Hapi.Server();
 //
 // Create server
 server.connection({
-    host: "localhost",
+    host: "0.0.0.0",
     port: 8000,
     routes: {
         cors: true

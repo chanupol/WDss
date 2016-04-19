@@ -3,7 +3,7 @@
  */
 "use strict";
 
-app.controller("videolengthController", function ($scope, videolengthService, notificationService, $window) {
+app.controller("videolengthController", function ($scope, $uibModal, videolengthService, notificationService, $window) {
 
     var videoData = [{}];
 
@@ -11,15 +11,25 @@ app.controller("videolengthController", function ($scope, videolengthService, no
 
     $scope.notificationCenterOptions = notificationService.options;
 
+    function displayLoading(target) {
+        var element = $(target);
+        kendo.ui.progress(element, true);
+        setTimeout(function () {
+            kendo.ui.progress(element, false);
+            $scope.notificationCenter.success({
+                message: "Import success."
+            });
+        }, 100000);
+    }
+
     $scope.getNewVideoData = function () {
 
         var importDate = new Date();
         //localStorageDateTime.setItem("importDate");
         videolengthService.getVideoFromCyberU(importDate).then(function (response) {
-            console.log(response);
-            $scope.notificationCenter.success({
-                message: "Import success."
-            });
+            //console.log(response);
+            displayLoading(document.body);
+
         }, function (err) {
             console.log(err);
             $scope.notificationCenter.error({
