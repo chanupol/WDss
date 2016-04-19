@@ -108,15 +108,16 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         SUBJECTCODE: {type: "string"},
                         SUBJECTNAME: {type: "string"},
                         IMPORTDATE: {type: "string"},
-                        Percentage: {type: "number"},
-                        TCHCODE: {type: "string"}
+                        PERCENTAGE: {type: "number"},
+                        TCHCODE: {type: "string"},
+                        TCHNAME: {type: "string"},
                     }
                 }
             },
             pageSize: 20,
-           /* serverPaging: true,
-            serverFiltering: true,
-            serverSorting: true*/
+            /* serverPaging: true,
+             serverFiltering: true,
+             serverSorting: true*/
         });
     }
 
@@ -148,8 +149,9 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         SUBJECTCODE: {type: "string"},
                         SUBJECTNAME: {type: "string"},
                         IMPORTDATE: {type: "string"},
-                        Percentage: {type: "number"},
-                        TCHCODE: {type: "string"}
+                        PERCENTAGE: {type: "number"},
+                        TCHCODE: {type: "string"},
+                        TCHNAME: {type: "string"},
                     }
                 }
             }
@@ -236,6 +238,43 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         });
     }
 
+    function getTeacherBySubjectWithPeriod(subjectCode, periodCode) {
+        var request = $http.get(uri + "/subject/teacher/period/" + subjectCode + "/" + periodCode);
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
+    function getTeacherBySubjectWithPeriodDs(subjectCode, periodCode) {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/subject/teacher/period/" + subjectCode + "/" + periodCode,
+                    dataType: "json"
+                }
+            },
+
+            schema: {
+                model: {
+                    id: "TCHCODE",
+                    fields: {
+                        FACULTYNAME: {type: "string"},
+                        PERIODCODE: {type: "string"},
+                        DEGREECODE: {type: "string"},
+                        DEGREENAME: {type: "string"},
+                        TCHCODE: {type: "string"},
+                        TCHNAME: {type: "string"},
+                        SUBJECTCODE: {type: "string"},
+                        SUBJECTNAME: {type: "string"},
+                        IMPORTDATE: {type: "string"}
+
+                    }
+                }
+            },
+            pageSize: 20,
+
+        });
+    }
+
 
     //--------------------------------------------------------------------------------
     //
@@ -276,7 +315,11 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TotalVDODeficitInMinute: {type: "number"},
                         StandardTotalVideoInMinute: {type: "number"},
                         Percentage: {type: "number"},
-                        IMPORTDATE: {type: "string"}
+                        IMPORTDATE: {type: "string"},
+                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
+                        TCHFORTAPEUNIT:{type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
+                        TCHFORTAPETOPIC:{type: "string"}
 
                     }
                 }
@@ -324,7 +367,13 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TotalVDODeficitInMinute: {type: "number"},
                         StandardTotalVideoInMinute: {type: "number"},
                         Percentage: {type: "number"},
-                        IMPORTDATE: {type: "string"}
+                        IMPORTDATE: {type: "string"},
+                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
+                        TCHFORTAPEUNIT:{type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
+                        TCHFORTAPETOPIC:{type: "string"}
+
+
 
                     }
                 }
@@ -376,7 +425,11 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TOPICNAME: {type: "string"},
                         TotalVideoInMinute: {type: "number"},
                         PERCENTAGE: {type: "number"},
-                        IMPORTDATE: {type: "string"}
+                        IMPORTDATE: {type: "string"},
+                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
+                        TCHFORTAPEUNIT:{type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
+                        TCHFORTAPETOPIC:{type: "string"}
 
                     }
                 }
@@ -422,7 +475,11 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TOPICNAME: {type: "string"},
                         TotalVideoInMinute: {type: "number"},
                         PERCENTAGE: {type: "number"},
-                        IMPORTDATE: {type: "string"}
+                        IMPORTDATE: {type: "string"},
+                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
+                        TCHFORTAPEUNIT:{type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
+                        TCHFORTAPETOPIC:{type: "string"}
 
                     }
                 }
@@ -461,6 +518,10 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         getTopicBySubjectPeriodTeacherUnit: getTopicBySubjectPeriodTeacherUnit,
         getTopicBySubjectPeriodTeacherUnitDs: getTopicBySubjectPeriodTeacherUnitDs,
         getTopicBySubjectTeacherUnit: getTopicBySubjectTeacherUnit,
-        getTopicBySubjectTeacherUnitDs: getTopicBySubjectTeacherUnitDs
+        getTopicBySubjectTeacherUnitDs: getTopicBySubjectTeacherUnitDs,
+
+        getTeacherBySubjectWithPeriod: getTeacherBySubjectWithPeriod,
+        getTeacherBySubjectWithPeriodDs: getTeacherBySubjectWithPeriodDs
+
     });
 });

@@ -97,6 +97,20 @@ ReportController.prototype.getTeacherBySubject = function (request, reply) {
     });
 };
 
+ReportController.prototype.getTeacherBySubjectWithPeriod = function (request, reply) {
+
+    var subjectCode = request.params.subjectCode;
+    var periodCode = decodeURIComponent(request.params.periodCode);
+
+    reportModel.getTeacherBySubjectWithPeriod(subjectCode,periodCode, function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get teacher list information", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
 
 ReportController.prototype.getUnitBySubjectPeriodTeacher = function (request, reply) {
 

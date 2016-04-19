@@ -15,3 +15,19 @@
         </div>
     </div>
 </div>
+
+<script type="text/x-kendo-template" id="displayUnitName">
+#:returnUnitName(UNITID,UNITNAME)#
+</script>
+
+<script type="text/javascript">
+    function returnUnitName(unitId, unitName) {
+        console.log("unitId = " + unitId);
+        console.log("unitName = " + unitName);
+        if (unitId != null && unitId != '' && unitName != null && unitName != '') {
+            return unitId + '-' + unitName;
+        } else {
+            return '-';
+        }
+    }
+</script>

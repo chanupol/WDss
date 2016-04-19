@@ -230,7 +230,13 @@ function importVDO(vdoLengthData, importDate) {
             ":topicName," +
             ":totalTopicVdoLengthInMinute," +
             ":rtmpStream," +
-            ":importDate);End;";
+            ":importDate," +
+            ":tchCodeForUnit," +
+            ":tchForCourseOutlineUnit," +
+            ":tchForTapeUnit," +
+            ":tchCodeForTopic," +
+            ":tchForCourseOutlineTopic," +
+            ":tchForTapeTopic);End;";
 
         var insertVDOData = function (conn, cb) {
             for (var i = 0; i < vdoLengthData.length; i++) {
@@ -264,7 +270,13 @@ function importVDO(vdoLengthData, importDate) {
                         topicName: vdoLengthData[i].topicName,
                         totalTopicVdoLengthInMinute: vdoLengthData[i].totalTopicVdoLengthInMinute,
                         rtmpStream: vdoLengthData[i].rtmpStream,
-                        importDate: importDate
+                        importDate: importDate,
+                        tchCodeForUnit:vdoLengthData[i].tchCodeForUnit,
+                        tchForCourseOutlineUnit:vdoLengthData[i].tchForCourseOutlineUnit,
+                        tchForTapeUnit:vdoLengthData[i].tchForTapeUnit,
+                        tchCodeForTopic:vdoLengthData[i].tchCodeForTopic,
+                        tchForCourseOutlineTopic:vdoLengthData[i].tchForCourseOutlineTopic,
+                        tchForTapeTopic:vdoLengthData[i].tchForTapeTopic
 
                     },  // Bind values
                     {autoCommit: true},  // Override the default non-autocommit behavior

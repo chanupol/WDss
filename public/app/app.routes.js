@@ -62,6 +62,13 @@ app.config(function ($routeProvider) {
     });
 
 
+
+    $routeProvider.when("/import/report/subject/list/teacher/period/:subjectCode/:periodCode", {
+        controller: "reportTeacherBySubjectAPeriodController",
+        templateUrl: "app/components/report/teacherbysubject.html"
+    });
+
+
     $routeProvider.when("/import/report/subject/unit/:subjectCode/:periodCode/:tchCode", {
         controller: "reportUnitBySubjectPeriodTchCodeController",
         templateUrl: "app/components/report/unit.html"

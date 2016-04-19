@@ -138,7 +138,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
             {
                 field: "FACULTYNAME",
                 title: "คณะ",
-                width: 255,
+                width: 200,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             },
@@ -169,6 +169,15 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 width: "250px",
                 template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
                 //template: "<span> #= SUBJECTCODE #-#=SUBJECTNAME#</span>"
+            },
+            {
+                field: null,
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 250,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                template: "<span> #= TCHCODE #-#=TCHNAME#</span>",
+                hidden: true,
             }
             , {
                 field: "IMPORTDATE",
@@ -179,19 +188,28 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
             },
             {
                 field: "TCHCODE",
-                title: "รหัสอาจารย์ผู้สอน",
+                title: "รหัสอาจารย์ผู้รับผิดชอบ",
                 width: 120,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 hidden: true,
             },
             {
-                field: "Percentage",
+                field: "TCHNAME",
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                hidden: true,
+            },
+
+            {
+                field: "PERCENTAGE",
                 title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div></a>",
                 //template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
             }
 
@@ -489,10 +507,13 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
             {
                 field: null,
                 title: "ชื่อหน่วย",
-                width: 255,
+                width: 220,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"},
-                template: "<a href='\\#/import/report/subject/topic/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
+                template: kendo.template($("#displayUnitName").html()),
+                //template: "<span> #= UNITID #-#=UNITNAME#</span>"
+
+                //template: "<a href='\\#/import/report/subject/topic/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
             },
             {
                 field: "TOTALVIDEOINMINUTE",
@@ -533,13 +554,39 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
                 footerTemplate: "#: kendo.toString(sum, 'n2') #"
 
             },
+            /*{
+                field: null,
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                template: "<span>#=TCHNAME#</span>"
+                //hidden: true
+            },*/
+            {
+                field: "TCHFORCOURSEOUTLINEUNIT",
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
+                field: "TCHFORTAPEUNIT",
+                title: "สถานะ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
             {
                 field: "Percentage",
                 title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
+                //template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
+                template: "<a href='\\#/import/report/subject/topic/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#/#=UNITID#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>"
             }
             , {
                 field: "IMPORTDATE",
@@ -549,6 +596,7 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
                 attributes: {"class": "text-center"},
                 hidden: true
             }
+
 
         ]
     };
@@ -710,20 +758,45 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
             {
                 field: "TOPICNAME",
                 title: "ชื่อหัวข้อ",
-                width: 255,
+                width: 150,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"}
             },
             {
                 field: "TotalVideoInMinute",
                 title: "จำนวนเวลาที่มี",
-                width: 60,
+                width: 80,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 format: "{0:n2}",
                 footerTemplate: "#: kendo.toString(sum, 'n2') #"
 
-            }, {
+            },
+            {
+                field: "TCHFORCOURSEOUTLINEUNIT",
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
+                field: "TCHFORCOURSEOUTLINETOPIC",
+                title: "อาจารย์เจ้าของเทป",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
+                field: "TCHFORTAPETOPIC",
+                title: "สถานะ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
                 field: "PERCENTAGE",
                 title: "การกระจายของหัวข้อ",
                 template: "<div kendo-progress-bar='progressBar' k-min='0' k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div>",
@@ -749,6 +822,12 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
 //----------------------------------------
 
 
+
+
+
+
+
+
 //
 // Subject All
 app.controller("reportSubjectAllController", function ($scope, $uibModal, $location, reportService, localStorageService) {
@@ -769,6 +848,15 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
         return localStorageService.get("UserName");
     }
 
+    $scope.uniCodePeriod = function (value) {
+        console.log("value = " + value);
+        if (value != '' && value != undefined) {
+            return value.replace("/", "_");
+        } else {
+            return '';
+        }
+    }
+
 
     $scope.ddlPeriodCodeOptions = {
         //$scope.ddlPeriodCode.value()
@@ -787,6 +875,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                     "PeriodValue": "All"
                 });
 
+
                 //OR add it at the and
                 /*dataSource.add({
                  "ProductName": "test",
@@ -795,11 +884,15 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
 
                 this._adding = false;
             }
+            // set selected value after bind
+            $("#ddlPeriodCode").data('kendoDropDownList').value("All");
         },
         index: -1,
         change: ddlPeriodCodeOnChange
 
     };
+
+
     function ddlPeriodCodeOnChange(e) {
         /*  console.log($scope.ddlPeriodCode.value());
          console.log($scope.ddlPeriodCode.text());
@@ -825,6 +918,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
         }
 
     }
+
 
     $scope.grdSubjectAllOptions = {
         dataSource: reportService.getSubjectAllDs(),
@@ -859,7 +953,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
             {
                 field: "FACULTYNAME",
                 title: "คณะ",
-                width: 255,
+                width: 200,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"}
             }, {
@@ -882,13 +976,32 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 attributes: {"class": "text-center"},
                 hidden: true,
             },
+            /* {
+             field: null,
+             title: "ชื่อวิชา",
+             width: "250px",
+             template: " <a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+             //template: " <a href='\\#/import/report/subject/list/teacher/period/#=SUBJECTCODE#/{{uniCodePeriod(kendo.toString(#=PERIODCODE#))}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+             //template: "<span>#= SUBJECTCODE #-#=SUBJECTNAME#</span>"
+
+             },*/
             {
                 field: null,
                 title: "ชื่อวิชา",
-                width: "250px",
-                template: " <a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
-                //template: "<span>#= SUBJECTCODE #-#=SUBJECTNAME#</span>"
-
+                width: 250,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                template: kendo.template($("#teacherWithPeriod").html()),
+                //hidden: false,
+            },
+            {
+                field: null,
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 250,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                template: "<span> #= TCHCODE #-#=TCHNAME#</span>",
+                hidden: true,
             }
             , {
                 field: "IMPORTDATE",
@@ -906,15 +1019,26 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 hidden: true,
             },
             {
-                field: "Percentage",
+                field: "TCHNAME",
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                hidden: true,
+            },
+            {
+                field: "PERCENTAGE",
                 title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
+                template: kendo.template($("#unitWithPeriod").html()),
                 //template: "<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
-                template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                //template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
+                //template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>",
                 //template: kendo.template($("#periodForUnit").html()),
             }
+
 
         ]
     };
@@ -932,7 +1056,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
 app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $routeParams, $uibModal, $location, reportService) {
 
     console.log("subjectCode " + $routeParams.subjectCode);
-    //console.log("periodCode " + $routeParams.periodCode);
+    console.log("periodCode " + $routeParams.periodCode);
 
     $scope.FacultyName = '';
     $scope.SubjectFullName = '';
@@ -950,7 +1074,8 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
     }
 
     $scope.grdTeacherOptions = {
-        dataSource: reportService.getTeacherBySubjectDs($routeParams.subjectCode),
+        //dataSource: reportService.getTeacherBySubjectDs($routeParams.subjectCode),
+        dataSource: reportService.getTeacherBySubjectWithPeriodDs($routeParams.subjectCode, $routeParams.periodCode),
         height: 500,
         sortable: true,
         //selectable: "row",
@@ -1215,7 +1340,8 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"},
-                template: "<a href='\\#/import/report/subject/list/topic/#=SUBJECTCODE#/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
+                template: "<span>#= UNITID #-#=UNITNAME#</span>"
+                //template: "<a href='\\#/import/report/subject/list/topic/#=SUBJECTCODE#/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
             },
             {
                 field: "TOTALVIDEOINMINUTE",
@@ -1256,13 +1382,41 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
                 footerTemplate: "#: kendo.toString(sum, 'n2') #"
 
             },
+           /* {
+                field: null,
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 220,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                template: "<span>#=TCHCODE#-#=TCHNAME#</span>"
+                hidden: true
+            },*/
+
+            {
+                field: "TCHFORCOURSEOUTLINEUNIT",
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
+                field: "TCHFORTAPEUNIT",
+                title: "สถานะ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+
             {
                 field: "Percentage",
                 title: "เปอร์เซ็น",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
+                template: "<a href='\\#/import/report/subject/list/topic/#=SUBJECTCODE#/#=TCHCODE#/#=UNITID#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div></a>"
+                //template: "<div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, 'n2')#' style='width: 100%;'></div>",
             }
             , {
                 field: "IMPORTDATE",
@@ -1436,7 +1590,7 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
             {
                 field: "TOPICNAME",
                 title: "ชื่อหัวข้อ",
-                width: 255,
+                width: 180,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"}
             },
@@ -1449,7 +1603,32 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
                 format: "{0:n2}",
                 footerTemplate: "#: kendo.toString(sum, 'n2') #"
 
-            }, {
+            },
+            {
+                field: "TCHFORCOURSEOUTLINEUNIT",
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
+                field: "TCHFORCOURSEOUTLINETOPIC",
+                title: "อาจารย์ผู้รับผิดชอบ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
+                field: "TCHFORTAPETOPIC",
+                title: "สถานะ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            },
+            {
                 field: "PERCENTAGE",
                 title: "การกระจายของหัวข้อ",
                 template: "<div kendo-progress-bar='progressBar' k-min='0' k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div>",

@@ -107,6 +107,7 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
     //
     //------------------------------------------------
     $scope.NewUsername = "";
+    $scope.Password = "";
 
     $scope.btnCreateNewUserClicked = function () {
         /* var user = {
@@ -118,12 +119,13 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
 
          };*/
 
-        console.log("$scope.NewUsername ="+$scope.NewUsername);
+        console.log("$scope.NewUsername =" + $scope.NewUsername);
+        console.log("$scope.NewUsername =" + $scope.Password);
 
         var user = {
             userName: $scope.NewUsername,
-            password: $scope.NewUsername,
-            roleId: 2, //1 :Dean ,2 : Teacher
+            password: $scope.Password,
+            roleId: 2, //1 :Dean ,2 : Teacher, 5 : Admin
 
         };
         //
@@ -132,12 +134,12 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
             $scope.notificationCenter.success({
                 message: "Save success."
             });
-            $scope.NewUsername="";
+            $scope.NewUsername = "";
         }, function (err) {
             $scope.notificationCenter.error({
                 message: err.message
             });
-            $scope.NewUsername="";
+            $scope.NewUsername = "";
         });
     };
 

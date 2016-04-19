@@ -78,6 +78,19 @@ exports.register = function (server, options, next) {
         },
         {
             method: "GET",
+            path: "/api/report/subject/teacher/period/{subjectCode}/{periodCode}",
+            config: {
+                handler: reportController.getTeacherBySubjectWithPeriod,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required(),
+                        periodCode: Joi.string().required(),
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
             path: "/api/report/subject/unit/list/{subjectCode}/{periodCode}/{tchCode}",
             config: {
                 handler: reportController.getUnitBySubjectPeriodTeacher,

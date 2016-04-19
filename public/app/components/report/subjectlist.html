@@ -18,22 +18,22 @@
                         <div id="grdSubjectByPeriod" kendo-grid="grdSubjectByPeriod"
                              k-options="grdSubjectByPeriodOptions"></div>
 
-                      <!--  <script type="text/x-kendo-template" id="periodTemplate">
-                            <div class="toolbar">
-                                <div class="form-inline">
-                                    <div class="form-group pull-right">
-                                        <label for="ddlPeriodCode">Period</label>
-                                        <select class="form-control"
-                                                style="width: 140px;"
-                                                id="ddlPeriodCode" ng-model="PeriodCode"
-                                                name="ddlPeriodCode" required
-                                                kendo-drop-down-list="ddlPeriodCode"
-                                                k-options="ddlPeriodCodeOptions"></select>
-                                    </div>
-                                </div>
-                            </div>
-                        </script>
--->
+                        <!--  <script type="text/x-kendo-template" id="periodTemplate">
+                              <div class="toolbar">
+                                  <div class="form-inline">
+                                      <div class="form-group pull-right">
+                                          <label for="ddlPeriodCode">Period</label>
+                                          <select class="form-control"
+                                                  style="width: 140px;"
+                                                  id="ddlPeriodCode" ng-model="PeriodCode"
+                                                  name="ddlPeriodCode" required
+                                                  kendo-drop-down-list="ddlPeriodCode"
+                                                  k-options="ddlPeriodCodeOptions"></select>
+                                      </div>
+                                  </div>
+                              </div>
+                          </script>
+  -->
                     </div>
                 </div>
             </div>
@@ -63,30 +63,52 @@
                                                 id="ddlPeriodCode" ng-model="PeriodCode"
                                                 name="ddlPeriodCode" required
                                                 kendo-drop-down-list="ddlPeriodCode"
-                                                k-options="ddlPeriodCodeOptions"></select>
+                                                k-options="ddlPeriodCodeOptions">
+
+                                        </select>
                                     </div>
                                 </div>
                             </div>
                         </script>
 
-
+                        <script>
+                            $(document).ready(function () {
+                                console.log($("#ddlPeriodCode"));
+                                $("#ddlPeriodCode").prop('selectedIndex', 0);
+                            });
+                        </script>
 
                         <!--Period Filter Template-->
                         <!--<script type="text/x-kendo-template" id="periodForUnit">
                             &lt;!&ndash;<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/#:uniCodePeriod(PERIODCODE)#/{{returnTchCode()}}'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, "n2")#' style='width: 100%;'></div></a>&ndash;&gt;
                             <a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(Percentage, "n2")#' style='width: 100%;'></div></a>
+                        </script>-->
+
+
+                        <script type="text/x-kendo-template" id="teacherWithPeriod">
+
+                            <a href='\\#/import/report/subject/list/teacher/period/#=SUBJECTCODE#/#:kendo.toString(uniCodePeriod(PERIODCODE))#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>
                         </script>
+
+                        <script type="text/x-kendo-template" id="unitWithPeriod">
+
+
+                            <a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/#:kendo.toString(uniCodePeriod(PERIODCODE))#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div></a>
+                        </script>
+
+
+
 
                         <script type="text/javascript">
                             function uniCodePeriod(value) {
-                                console.log("value = "+value);
-                                if (value!='' && value!=undefined){
+                                console.log("value = " + value);
+                                if (value != '' && value != undefined) {
                                     return value.replace("/", "_");
-                                }else {
+                                } else {
                                     return '';
                                 }
                             }
-                        </script>-->
+                        </script>
 
 
                     </div>
