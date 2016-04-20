@@ -21,7 +21,7 @@ ReportController.prototype.getCurrentPeriod = function (request, reply) {
             reply(result);
         }
     });
-    
+
 };
 
 ReportController.prototype.getAllSubject = function (request, reply) {
@@ -29,7 +29,7 @@ ReportController.prototype.getAllSubject = function (request, reply) {
     var roleId = request.params.roleId;
     var userName = request.params.userName;
 
-    reportModel.getAllSubject(roleId, userName,function (err, result) {
+    reportModel.getAllSubject(roleId, userName, function (err, result) {
         if (err) {
             reply(Boom.internal("Cannot get subject list information", err));
         } else {
@@ -74,7 +74,7 @@ ReportController.prototype.getTeacherBySubjectPeriod = function (request, reply)
     var userName = request.params.userName;
 
 
-    reportModel.getTeacherBySubjectPeriod(subjectCode, periodCode,token,roleId,userName, function (err, result) {
+    reportModel.getTeacherBySubjectPeriod(subjectCode, periodCode, token, roleId, userName, function (err, result) {
         if (err) {
             reply(Boom.internal("Cannot get teacher list information", err));
         } else {
@@ -101,8 +101,10 @@ ReportController.prototype.getTeacherBySubjectWithPeriod = function (request, re
 
     var subjectCode = request.params.subjectCode;
     var periodCode = decodeURIComponent(request.params.periodCode);
-
-    reportModel.getTeacherBySubjectWithPeriod(subjectCode,periodCode, function (err, result) {
+    if (periodCode == undefined) {
+        periodCode = null;
+    }
+    reportModel.getTeacherBySubjectWithPeriod(subjectCode, periodCode, function (err, result) {
         if (err) {
             reply(Boom.internal("Cannot get teacher list information", err));
         } else {

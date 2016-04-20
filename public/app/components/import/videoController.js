@@ -19,7 +19,7 @@ app.controller("videolengthController", function ($scope, $uibModal, videolength
             $scope.notificationCenter.success({
                 message: "Import success."
             });
-        }, 100000);
+        }, 160000);
     }
 
     $scope.getNewVideoData = function () {

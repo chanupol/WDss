@@ -140,7 +140,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 title: "คณะ",
                 width: 200,
                 headerAttributes: {style: "text-align:center"},
-                attributes: {"class": "text-center"}
+                //attributes: {"class": "text-center"}
             },
             {
                 field: "PERIODCODE",
@@ -154,7 +154,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
-                hidden: true
+                //hidden: true
             }, {
                 field: "SUBJECTNAME",
                 title: "ชื่อวิชา",
@@ -312,7 +312,8 @@ app.controller("reportTeacherBySubjectPeriodController", function ($scope, $rout
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                template: "<span>#= TCHCODE #-#=TCHNAME#</span>"
+                template: kendo.template($("#displayTeacherName").html()),
+                //template: "<span>#= TCHCODE #-#=TCHNAME#</span>"
                 //template: "<a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/{{returnPeriod()}}/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
             }
             , {
@@ -955,7 +956,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 title: "คณะ",
                 width: 200,
                 headerAttributes: {style: "text-align:center"},
-                attributes: {"class": "text-center"}
+                //attributes: {"class": "text-center"}
             }, {
                 field: "PERIODCODE",
                 title: "ภาคการศึกษา",
@@ -967,7 +968,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 title: "รหัสวิชา",
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
-                hidden: true,
+                //hidden: true,
             }, {
                 field: "SUBJECTNAME",
                 title: "ชื่อวิชา",
@@ -990,7 +991,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 title: "ชื่อวิชา",
                 width: 250,
                 headerAttributes: {style: "text-align:center"},
-                attributes: {"class": "text-center"},
+                //attributes: {"class": "text-center"},
                 template: kendo.template($("#teacherWithPeriod").html()),
                 //hidden: false,
             },
@@ -1142,7 +1143,8 @@ app.controller("reportTeacherBySubjectAPeriodController", function ($scope, $rou
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 //template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
-                template: "<span>#= TCHCODE #-#=TCHNAME#</span>"
+                //template: "<span>#= TCHCODE #-#=TCHNAME#</span>"
+                template: kendo.template($("#displayTeacherName").html()),
             }
             , {
                 field: "DEGREECODE",

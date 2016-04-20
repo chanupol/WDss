@@ -236,7 +236,9 @@ function importVDO(vdoLengthData, importDate) {
             ":tchForTapeUnit," +
             ":tchCodeForTopic," +
             ":tchForCourseOutlineTopic," +
-            ":tchForTapeTopic);End;";
+            ":tchForTapeTopic," +
+            ":courseOutlineOpenTchCode," +
+            ":courseOutlineOpenTchName );End;";
 
         var insertVDOData = function (conn, cb) {
             for (var i = 0; i < vdoLengthData.length; i++) {
@@ -276,7 +278,9 @@ function importVDO(vdoLengthData, importDate) {
                         tchForTapeUnit:vdoLengthData[i].tchForTapeUnit,
                         tchCodeForTopic:vdoLengthData[i].tchCodeForTopic,
                         tchForCourseOutlineTopic:vdoLengthData[i].tchForCourseOutlineTopic,
-                        tchForTapeTopic:vdoLengthData[i].tchForTapeTopic
+                        tchForTapeTopic:vdoLengthData[i].tchForTapeTopic,
+                        courseOutlineOpenTchCode:vdoLengthData[i].courseOutlineOpenTchCode,
+                        courseOutlineOpenTchName:vdoLengthData[i].courseOutlineOpenTchName
 
                     },  // Bind values
                     {autoCommit: true},  // Override the default non-autocommit behavior

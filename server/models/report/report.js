@@ -63,8 +63,21 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 callback(err, null);
             }
 
-            var strSql = "SELECT distinct VSUBJECT.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  FROM VSUBJECT,Videolength " +
-                "where VSUBJECT.SubjectCode = Videolength.SubjectCode  and TchCode='" + userName + "' ";
+            /*var strSql = "SELECT distinct VSUBJECT.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  FROM VSUBJECT,Videolength " +
+             "where VSUBJECT.SubjectCode = Videolength.SubjectCode  and TchCode='" + userName + "' ";*/
+            /*  var strSql = " SELECT distinct VSUBJECT.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME from  VSUBJECT,Videolength " +
+             "where VSUBJECT.COURSEOUTLINEOPENTCHCODE='" + userName + "' ";*/
+            /* var strSql = "SELECT distinct VSUBJECT.*  FROM VSUBJECT " +
+             "where tchCode ='" + userName + "' and COURSEOUTLINEOPENTCHCODE='" + userName + "' ";*/
+            var strSql = "select distinct Subjects.* " +
+                "from (SELECT distinct VSUBJECT.*, " +
+                "Decode(COURSEOUTLINEOPENTCHCODE,'" + userName + "'" +
+                ",COURSEOUTLINEOPENTCHCODE,tchcode) tmpTchCode " +
+                "FROM VSUBJECT where TchCode='" + userName + "' ) " +
+                "Subjects join Videolength on Videolength.SubjectCode = Subjects.SubjectCode " +
+                "where Subjects.tmpTchCode='" + userName + "' " +
+                "and Videolength.TCHCODEFORUNIT='" + userName + "' " +
+                "or Subjects.COURSEOUTLINEOPENTCHCODE = '" + userName + "'";
             connection.execute(strSql, function (err, result) {
                 if (err) {
                     console.error(err.message);
@@ -89,9 +102,12 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
              " FROM VSUBJECT,Videolength " +
              "WHERE VSUBJECT.SubjectCode = Videolength.SubjectCode "*/
 
-            var strSql = "select distinct vSubject.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  from " +
-                "( SELECT DISTINCT VSUBJECT.* FROM VSUBJECT WHERE PeriodCode IS NOT NULL ) vSubject " +
-                "join Videolength on Videolength.SubjectCode =vSubject.SubjectCode "
+            /* var strSql = "select distinct vSubject.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  from " +
+             "( SELECT DISTINCT VSUBJECT.* FROM VSUBJECT WHERE PeriodCode IS NOT NULL ) vSubject " +
+             "join Videolength on Videolength.SubjectCode =vSubject.SubjectCode "*/
+
+            var strSql = "select distinct VSUBJECT.* from vSubject  "; //WHERE PeriodCode IS NOT NULL
+            // "join Videolength on Videolength.SubjectCode =vSubject.SubjectCode "
             connection.execute(strSql,
                 [],
                 {maxRows: 2000},
@@ -126,8 +142,10 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 callback(err, null);
             }
 
-            connection.execute("Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;", {
+            var strSql = "Begin SP_GETSUBJECT_PERIOD_FOR_DEAN(:userName,:periodCode,:curUserLevel); End;"; //"Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;"
+            connection.execute(strSql, {
                 userName: userName,
+                periodCode: periodCode,
                 curUserLevel: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
             }, function (err, result) {
                 if (err) {
@@ -161,9 +179,13 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 callback(err, null);
             }
 
-            var strSql = "SELECT distinct VSUBJECT.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  FROM VSUBJECT,Videolength " +
-                "where VSUBJECT.SubjectCode = Videolength.SubjectCode and TchCode='" + userName + "' " +
-                "and VSUBJECT.PeriodCode like '%" + periodCode + "%'"
+            /*var strSql = "SELECT distinct VSUBJECT.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  FROM VSUBJECT,Videolength " +
+             "where VSUBJECT.SubjectCode = Videolength.SubjectCode and TchCode='" + userName + "' " +
+             "and VSUBJECT.PeriodCode like '%" + periodCode + "%'"*/
+
+            var strSql = "SELECT distinct * from VSUBJECT  " +
+                "where  TchCode ='" + userName + "' and VSUBJECT.COURSEOUTLINEOPENTCHCODE='" + userName + "' " +
+                "and VSUBJECT.PeriodCode like '%" + periodCode + "%'";
             connection.execute(strSql, function (err, result) {
                 if (err) {
                     console.error(err.message);
@@ -353,8 +375,14 @@ ReportModel.prototype.getTeacherBySubjectWithPeriod = function (subjectCode, per
             callback(err, null);
         }
 
-        connection.execute("SELECT * FROM VGETVDOLENGTHFORTEACHER " +
-            "Where SubjectCode ='" + subjectCode + "' and PeriodCode like '%" + periodCode + "%'   ", function (err, result) {
+        var strSql = '';
+        if(periodCode==null || periodCode == "undefined"){
+            strSql = "SELECT * FROM VGETVDOLENGTHFORTEACHER Where SubjectCode ='" + subjectCode + "' and PeriodCode is null  ";
+        }else {
+            strSql = "SELECT * FROM VGETVDOLENGTHFORTEACHER Where SubjectCode ='" + subjectCode + "' and PeriodCode like '%" + periodCode + "%'   ";
+        }
+
+        connection.execute(strSql, function (err, result) {
             if (err) {
                 console.error(err.message);
                 database.DoRelease(connection);
@@ -427,7 +455,7 @@ ReportModel.prototype.getUnitBySubjectTeacher = function (subjectCode, tchCode, 
 ReportModel.prototype.getTopicBySubjectPeriodTeacher = function (subjectCode, periodCode, tchCode, unitId, callback) {
     var database = new Database();
 
-    var getPeriodCode = periodCode.replace('_','/');
+    var getPeriodCode = periodCode.replace('_', '/');
 
     oracledb.outFormat = oracledb.OBJECT;
 
@@ -462,8 +490,8 @@ ReportModel.prototype.getTopicBySubjectPeriodTeacher = function (subjectCode, pe
                             callback(err, curSumTopic);
                         }
                     );
-                   /* database.DoRelease(connection);
-                    callback(err, result.rows);*/
+                    /* database.DoRelease(connection);
+                     callback(err, result.rows);*/
                 }
             });
 

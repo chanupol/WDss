@@ -86,14 +86,28 @@
 
 
                         <script type="text/x-kendo-template" id="teacherWithPeriod">
+                            # if (PERIODCODE!=null) {
 
-                            <a href='\\#/import/report/subject/list/teacher/period/#=SUBJECTCODE#/#:kendo.toString(uniCodePeriod(PERIODCODE))#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>
+                           # <a href='\\#/import/report/subject/list/teacher/period/#=SUBJECTCODE#/#:kendo.toString(uniCodePeriod(PERIODCODE))#'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>#
+                            }#
+
+
+                            # if (PERIODCODE==null) {
+
+                            #<a href='\\#/import/report/subject/list/teacher/#=SUBJECTCODE#'>#= SUBJECTCODE #-#=SUBJECTNAME#</a>#
+                            }#
+
                         </script>
 
                         <script type="text/x-kendo-template" id="unitWithPeriod">
 
+#if(PERIODCODE!=null){
+# <a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/#:kendo.toString(uniCodePeriod(PERIODCODE))#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div></a> #
+}#
+#if(PERIODCODE==null){
+# <a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div></a> #
+}#
 
-                            <a href='\\#/import/report/subject/unit/#=SUBJECTCODE#/#:kendo.toString(uniCodePeriod(PERIODCODE))#/#=TCHCODE#'><div kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(PERCENTAGE, 'n2')#' style='width: 100%;'></div></a>
                         </script>
 
 
