@@ -37,7 +37,23 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                     database.DoRelease(connection);
                     callback(err, null);
                 } else {
+
                     var obj = result.outBinds;
+
+                    database.FetchCursorRow(obj.curUserLevel, [], function (err, curUserLevel) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            var userData = {
+                                subjects: curUserLevel
+                            };
+
+                            database.DoCloses(connection, [obj.curUserLevel]);
+                            callback(err, userData.subjects);
+                        }
+                    );
+                    /*var obj = result.outBinds;
                     obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
                             if (err) {
                                 console.log(err);
@@ -51,7 +67,7 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                             database.DoRelease(connection);
                             callback(err, curUserLevel);
                         }
-                    );
+                    );*/
                 }
             });
         });
@@ -76,7 +92,7 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 "FROM VSUBJECT where TchCode='" + userName + "' ) " +
                 "Subjects join Videolength on Videolength.SubjectCode = Subjects.SubjectCode " +
                 "where Subjects.tmpTchCode='" + userName + "' " +
-                "and Videolength.TCHCODEFORUNIT='" + userName + "' " +
+                "or Videolength.TCHCODEFORUNIT='" + userName + "' " +
                 "or Subjects.COURSEOUTLINEOPENTCHCODE = '" + userName + "'";
             connection.execute(strSql, function (err, result) {
                 if (err) {
@@ -154,7 +170,20 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                     callback(err, null);
                 } else {
                     var obj = result.outBinds;
-                    obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
+                    database.FetchCursorRow(obj.curUserLevel, [], function (err, curUserLevel) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            var userData = {
+                                subjects: curUserLevel
+                            };
+
+                            database.DoCloses(connection, [obj.curUserLevel]);
+                            callback(err, userData.subjects);
+                        }
+                    );
+                    /*obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
                             if (err) {
                                 console.log(err);
                             }
@@ -167,7 +196,7 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                             database.DoRelease(connection);
                             callback(err, curUserLevel);
                         }
-                    );
+                    );*/
                 }
             });
         });
@@ -213,12 +242,19 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
              "(SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
              "FROM CYBERUPERIODCONFIG ORDER BY CYBERUPERIODCONFIG.ID DESC ))"*/
 
-            var strSql = "select distinct vSubject.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  from " +
-                "( SELECT DISTINCT VSUBJECT.* FROM VSUBJECT WHERE PeriodCode IS NOT NULL ) vSubject " +
-                "join Videolength on Videolength.SubjectCode =vSubject.SubjectCode " +
-                "where vSubject.PeriodCode=(SELECT CURRENTLEARNPERIOD " +
-                "FROM (SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
-                "FROM CYBERUPERIODCONFIG ORDER BY CYBERUPERIODCONFIG.ID DESC )) "
+            /* var strSql = "select distinct vSubject.*,Videolength.TCHCODE,VIDEOLENGTH.TCHNAME  from " +
+             "( SELECT DISTINCT VSUBJECT.* FROM VSUBJECT WHERE PeriodCode IS NOT NULL ) vSubject " +
+             "join Videolength on Videolength.SubjectCode =vSubject.SubjectCode " +
+             "where vSubject.PeriodCode=(SELECT CURRENTLEARNPERIOD " +
+             "FROM (SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
+             "FROM CYBERUPERIODCONFIG ORDER BY CYBERUPERIODCONFIG.ID DESC )) "*/
+            var strSql = "select distinct VSUBJECT.* from " +
+                "vSubject where PeriodCode IS NOT NULL " +
+                "and  vSubject.PeriodCode  = " +
+                "(SELECT CURRENTLEARNPERIOD FROM " +
+                "(SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
+                "FROM CYBERUPERIODCONFIG " +
+                "ORDER BY CYBERUPERIODCONFIG.ID DESC ))";
             connection.execute(strSql,
                 [],
                 {maxRows: 2000},
@@ -376,9 +412,9 @@ ReportModel.prototype.getTeacherBySubjectWithPeriod = function (subjectCode, per
         }
 
         var strSql = '';
-        if(periodCode==null || periodCode == "undefined"){
+        if (periodCode == null || periodCode == "undefined") {
             strSql = "SELECT * FROM VGETVDOLENGTHFORTEACHER Where SubjectCode ='" + subjectCode + "' and PeriodCode is null  ";
-        }else {
+        } else {
             strSql = "SELECT * FROM VGETVDOLENGTHFORTEACHER Where SubjectCode ='" + subjectCode + "' and PeriodCode like '%" + periodCode + "%'   ";
         }
 
@@ -481,7 +517,7 @@ ReportModel.prototype.getTopicBySubjectPeriodTeacher = function (subjectCode, pe
                     callback(err, null);
                 } else {
                     var obj = result.outBinds;
-                    obj.curSumTopic.getRows(database.MaximumCursorRows(), function (err, curSumTopic) {
+                    /*obj.curSumTopic.getRows(database.MaximumCursorRows(), function (err, curSumTopic) {
                             if (err) {
                                 console.log(err);
                             }
@@ -489,7 +525,18 @@ ReportModel.prototype.getTopicBySubjectPeriodTeacher = function (subjectCode, pe
                             database.DoRelease(connection);
                             callback(err, curSumTopic);
                         }
-                    );
+                    );*/
+
+                    database.FetchCursorRow(obj.curSumTopic, [], function (err, curSumTopic) {
+                        if (err) {
+                            console.log(err);
+                        }
+
+
+                        database.DoCloses(connection, [obj.curSumTopic]);
+
+                        callback(err, curSumTopic);
+                    });
                     /* database.DoRelease(connection);
                      callback(err, result.rows);*/
                 }

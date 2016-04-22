@@ -24,6 +24,9 @@ app.controller("videolengthController", function ($scope, $uibModal, videolength
 
     $scope.getNewVideoData = function () {
 
+
+        kendo.ui.progress($(document.body), true);
+
         var importDate = new Date();
         //localStorageDateTime.setItem("importDate");
         videolengthService.getVideoFromCyberU(importDate).then(function (response) {
@@ -36,6 +39,7 @@ app.controller("videolengthController", function ($scope, $uibModal, videolength
                 message: err.message
             });
         });
+        kendo.ui.progress($(document.body), false);
         /* videolengthService.getVideoFromCyberU().then(function (response) {
          //videoData.push(response);
          //console.log(response);

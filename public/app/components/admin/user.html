@@ -1,19 +1,23 @@
 <div class="row">
     <br/>
-    <div class="col-md-3">
+    <div class="col-md-2">
 
         <button class="btn btn-primary" ng-click="btnGenerateTokenClicked()">Generate Token</button>
         <!--<button class="btn btn-primary" ng-click="btnCreateNewUserClicked()">Create New User</button>-->
     </div>
-    <div class="col-md-3">
+    <div class="col-md-2">
+        <div ng-controller="teacherController">
+            <button class="btn btn-primary " type="button" ng-click="getNewTeacherData()">Get New Teacher Data</button>
+        </div>
+    </div>
+    <div class="col-md-2">
         <!--<a href="#/import">Import</a>-->
         <div ng-controller="videolengthController">
             <button class="btn btn-primary" type="button" ng-click="getNewVideoData()">Get New VDO Data</button>
         </div>
     </div>
-    <div class="col-md-3">
-        </div>
-    <div class="col-md-3">
+
+    <div class="col-md-6">
     </div>
 </div>
 <hr/>

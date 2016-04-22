@@ -4,6 +4,9 @@
 "use strict";
 
 module.exports = function () {
+
+    var async = require("async");
+
     function Database() {
     }
 
@@ -37,6 +40,25 @@ module.exports = function () {
 
     //--------------------------------------------------------------------------------
     //
+    // Fetch data form cursor
+    //
+    //--------------------------------------------------------------------------------
+    Database.prototype.FetchCursorRow = function(resultSet, resultRows, callback) {
+        resultSet.getRows(100, function (err, rows) {
+            if (err) {
+                callback(err, resultRows);
+            } else if (rows.length === 0) {
+                callback(null, resultRows);
+            } else if (rows.length > 0) {
+                resultRows.push.apply(resultRows, rows);
+
+                Database.prototype.FetchCursorRow(resultSet, resultRows, callback);
+            }
+        });
+    };
+
+    //--------------------------------------------------------------------------------
+    //
     // Disconnect from oracle section
     //
     //--------------------------------------------------------------------------------
@@ -48,6 +70,8 @@ module.exports = function () {
         });
     };
 
+    //
+    // Close only one result set and then release connection.
     Database.prototype.DoClose = function (connection, resultSet) {
         resultSet.close(
             function (err) {
@@ -55,12 +79,29 @@ module.exports = function () {
                     console.error(err.message);
                 }
 
-                connection.release(function (err) {
-                    if (err) {
-                        console.error(err.message);
-                    }
-                });
+                Database.prototype.DoRelease(connection);
             });
+    };
+
+    //
+    // Close all of result set and then release connection.
+    Database.prototype.DoCloses = function (connection, resultSets) {
+        async.each(resultSets, function (item, callback) {
+            item.close(function (err) {
+                if (err) {
+                    console.error(err.message);
+                }
+
+                callback();
+            });
+        }, function (err) {
+            if (err) {
+                console.log(err);
+            }
+
+            //This function is called when the whole forEach loop is over
+            Database.prototype.DoRelease(connection);
+        });
     };
 
     return new Database();

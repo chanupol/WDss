@@ -94,6 +94,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
 
 
     $scope.grdSubjectByPeriodOptions = {
+
         dataSource: reportService.getSubjectListByPeriodCodeDs('2%2F58'),
         //dataSource: reportService.getSubjectListByPeriodCodeDs(currentPeriodUniCode),
         height: 500,
@@ -167,7 +168,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 field: null,
                 title: "ชื่อวิชา",
                 width: "250px",
-                template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #= SUBJECTCODE #-#=SUBJECTNAME#</a>"
+                template: "<a href='\\#/import/report/subject/teacher/#=SUBJECTCODE#/{{returnPeriod()}}'> #=SUBJECTNAME#</a>"
                 //template: "<span> #= SUBJECTCODE #-#=SUBJECTNAME#</span>"
             },
             {
@@ -1342,7 +1343,8 @@ app.controller("reportUnitBySubjectTchCodeController", function ($scope, $routeP
                 width: 255,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"},
-                template: "<span>#= UNITID #-#=UNITNAME#</span>"
+                template: kendo.template($("#displayUnitName").html()),
+                //template: "<span>#= UNITID #-#=UNITNAME#</span>"
                 //template: "<a href='\\#/import/report/subject/list/topic/#=SUBJECTCODE#/#=TCHCODE#/#=UNITID#'> #= UNITID #-#=UNITNAME#</a>"
             },
             {

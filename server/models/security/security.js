@@ -40,6 +40,19 @@ SecurityModel.prototype.GetUser = function (callback) {
                      oracledb.DoClose(connection, result.outBinds.cursor);
                      callback(err, rows);
                      });*/
+/*
+                    database.FetchCursorRow(result.outBinds.cursor, [], function(err, rows){
+                        if (err) {
+                            console.log(err);
+                        }
+
+                        //
+                        // Clear memory
+                        oracledb.DoClose(connection, result.outBinds.cursor);
+
+                        callback(err, rows);
+                    });*/
+
                     database.DoRelease(connection);
                     callback(err, result.rows);
                 }
@@ -83,7 +96,7 @@ SecurityModel.prototype.GetUserByToken = function (token, callback) {
                 } else {
                     var obj = result.outBinds;
 
-                    obj.cursorMenu.getRows(database.MaximumCursorRows(), function (err, cursorMenu) {
+                    database.FetchCursorRow(obj.cursorMenu, [], function (err, cursorMenu) {
                             if (err) {
                                 console.log(err);
                             }
@@ -103,10 +116,36 @@ SecurityModel.prototype.GetUserByToken = function (token, callback) {
                                 menu: cursorMenu
                             };
 
-                            database.DoRelease(connection);
+                            database.DoCloses(connection, [obj.cursorMenu]);
                             callback(err, userData);
                         }
                     );
+
+                    /*obj.cursorMenu.getRows(database.MaximumCursorRows(), function (err, cursorMenu) {
+                     if (err) {
+                     console.log(err);
+                     }
+
+                     var userData = {
+                     token: obj.token,
+                     userId: obj.userId,
+                     userName: obj.userName,
+                     status: obj.status,
+                     tchCode: obj.tchCode,
+                     tchFullName: obj.tchFullName,
+                     tchEmail: obj.tchEmail,
+                     facName: obj.facName,
+                     facNameEng: obj.facNameEng,
+                     roleId: obj.roleId,
+                     roleName: obj.roleName,
+                     menu: cursorMenu
+                     };
+
+                     database.DoRelease(connection);
+                     callback(err, userData);
+                     }
+                     );*/
+
                 }
             });
         }

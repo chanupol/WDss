@@ -118,6 +118,7 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
             /* serverPaging: true,
              serverFiltering: true,
              serverSorting: true*/
+            sort: ({ field: "FACULTYNAME", dir: "asc" },{ field: "SUBJECTCODE", dir: "asc" })
         });
     }
 
@@ -154,7 +155,8 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TCHNAME: {type: "string"},
                     }
                 }
-            }
+            },
+            sort: ({ field: "FACULTYNAME", dir: "asc" },{ field: "SUBJECTCODE", dir: "asc" })
         });
     }
 
