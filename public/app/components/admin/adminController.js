@@ -97,7 +97,8 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
 
-            }
+            },
+            
         ]
     };
 
@@ -125,7 +126,8 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
         var user = {
             userName: $scope.NewUsername,
             password: $scope.Password,
-            roleId: 2, //1 :Dean ,2 : Teacher, 5 : Admin
+            roleId: $('#ddlRole').val()
+            //roleId: 2, //1 :Dean ,2 : Teacher, 5 : Admin
 
         };
         //
@@ -135,11 +137,13 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
                 message: "Save success."
             });
             $scope.NewUsername = "";
+            $scope.Password = "";
         }, function (err) {
             $scope.notificationCenter.error({
                 message: err.message
             });
             $scope.NewUsername = "";
+            $scope.Password = "";
         });
     };
 

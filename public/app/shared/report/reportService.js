@@ -98,6 +98,10 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                     dataType: "json"
                 }
             },
+           /* group: {
+                field: "PERCENTAGE",
+                //dir: "desc"
+            },*/
             //serverPaging: true,
             schema: {
                 model: {
@@ -114,11 +118,19 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                     }
                 }
             },
+
             pageSize: 20,
+            group: {
+                field: "PERCENTAGE", aggregates: [
+                    { field: "PERCENTAGE", aggregate: "count" }
+                ]
+            },
+
             /* serverPaging: true,
              serverFiltering: true,
              serverSorting: true*/
-            sort: ({ field: "FACULTYNAME", dir: "asc" },{ field: "SUBJECTCODE", dir: "asc" })
+            sort: ({ field: "FACULTYNAME", dir: "asc" },{ field: "SUBJECTCODE", dir: "asc" }),
+
         });
     }
 
@@ -155,6 +167,11 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TCHNAME: {type: "string"},
                     }
                 }
+            },
+            group: {
+                field: "PERCENTAGE", aggregates: [
+                    { field: "PERCENTAGE", aggregate: "count" }
+                ]
             },
             sort: ({ field: "FACULTYNAME", dir: "asc" },{ field: "SUBJECTCODE", dir: "asc" })
         });
