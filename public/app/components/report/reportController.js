@@ -95,7 +95,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
 
     $scope.grdSubjectByPeriodOptions = {
 
-        dataSource: reportService.getSubjectListByPeriodCodeDs('2%2F58'),
+        dataSource: reportService.getSubjectListByPeriodCodeDs('3%2F58'),
         //dataSource: reportService.getSubjectListByPeriodCodeDs(currentPeriodUniCode),
         height: 500,
         sortable: true,
