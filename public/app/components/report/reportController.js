@@ -144,6 +144,14 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 //attributes: {"class": "text-center"}
             },
             {
+                field: "DEGREENAME",
+                title: "ระดับ",
+                width: 100,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                
+            },
+            {
                 field: "PERIODCODE",
                 title: "ภาคการศึกษา",
                 width: 120,
@@ -208,7 +216,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 field: "PERCENTAGE",
                 title: "เปอร์เซ็น",
                 aggregates: ["count"],
-                groupHeaderTemplate: "เปอร์เซ็นที่ <div style='width: 120px;' kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(value, 'n2')#' style='width: 100%;'></div> ( Total Count:  #=count# )",
+                //groupHeaderTemplate: "เปอร์เซ็นที่ <div style='width: 120px;' kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(value, 'n2')#' style='width: 100%;'></div> ( Total Count:  #=count# )",
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
@@ -954,7 +962,16 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 width: 200,
                 headerAttributes: {style: "text-align:center"},
                 //attributes: {"class": "text-center"}
-            }, {
+            },
+            {
+                field: "DEGREENAME",
+                title: "ระดับ",
+                width: 100,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
                 field: "PERIODCODE",
                 title: "ภาคการศึกษา",
                 width: 120,
@@ -1029,7 +1046,7 @@ app.controller("reportSubjectAllController", function ($scope, $uibModal, $locat
                 title: "เปอร์เซ็น",
                 width: 150,
                 aggregates: ["count"],
-                groupHeaderTemplate: "เปอร์เซ็นที่ <div style='width: 120px;' kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(value, 'n2')#' style='width: 100%;'></div> ( Total Count:  #=count# )",
+                //groupHeaderTemplate: "เปอร์เซ็นที่ <div style='width: 120px;' kendo-progress-bar='progressBar' k-min='0'  k-max='100' k-value='#:kendo.toString(value, 'n2')#' style='width: 100%;'></div> ( Total Count:  #=count# )",
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
                 template: kendo.template($("#unitWithPeriod").html()),

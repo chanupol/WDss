@@ -1,0 +1,25 @@
+<div id="appendto"></div>
+<span kendo-notification="notificationCenter" k-options="notificationCenterOptions"></span>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <div class="form-group">
+            <h3 class="panel-title">รายชื่ออาจารย์ที่มีการสอนในคณะอื่น
+                <div class="pull-right">
+                    <button class="btn btn-default" id="btnCreateNew" ng-click="redirectToCreate()">
+                        <span class="glyphicon glyphicon-plus" aria-hidden="true"> เพิ่มข้อมูล</span>
+                    </button>
+                    &nbsp;
+                </div>
+            </h3>
+        </div>
+    </div>
+    <div class="panel-body">
+        <div class="row">
+            <div class="col-md-12">
+                <div id="grdAnotherTeacherFac" kendo-grid="grdAnotherTeacherFac"
+                     k-options="grdAnotherTeacherFacOptions">
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

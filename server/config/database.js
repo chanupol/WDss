@@ -43,6 +43,25 @@ module.exports = function () {
     // Fetch data form cursor
     //
     //--------------------------------------------------------------------------------
+    Database.prototype.FetchRow = function (resultSet, resultRows, callback) {
+        resultSet.getRows(100, function (err, rows) {
+            if (err) {
+                callback(err, resultRows);
+            } else if (rows.length === 0) {
+                callback(null, resultRows);
+            } else if (rows.length > 0) {
+                resultRows.push.apply(resultRows, rows);
+
+                Database.prototype.FetchRow(resultSet, resultRows, callback);
+            }
+        });
+    };
+
+    //--------------------------------------------------------------------------------
+    //
+    // Fetch data form cursor
+    //
+    //--------------------------------------------------------------------------------
     Database.prototype.FetchCursorRow = function(resultSet, resultRows, callback) {
         resultSet.getRows(100, function (err, rows) {
             if (err) {

@@ -28,7 +28,11 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 callback(err, null);
             }
 
-            connection.execute("Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;", {
+            //var strSql = 'Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;';
+
+            var strSql = 'Begin SP_GETUSER_FOR_DEANWITHANO(:userName,:curUserLevel); End;';
+
+            connection.execute(strSql, {
                 userName: userName,
                 curUserLevel: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
             }, function (err, result) {
@@ -54,20 +58,20 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                         }
                     );
                     /*var obj = result.outBinds;
-                    obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
-                            if (err) {
-                                console.log(err);
-                            }
+                     obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
+                     if (err) {
+                     console.log(err);
+                     }
 
-                            var userData = {
-                                users: curUserLevel
-                            };
+                     var userData = {
+                     users: curUserLevel
+                     };
 
 
-                            database.DoRelease(connection);
-                            callback(err, curUserLevel);
-                        }
-                    );*/
+                     database.DoRelease(connection);
+                     callback(err, curUserLevel);
+                     }
+                     );*/
                 }
             });
         });
@@ -105,7 +109,7 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 }
             });
         });
-    } else { // admin role
+    } else if (roleId === 5) { // admin role
 
         oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
@@ -140,6 +144,44 @@ ReportModel.prototype.getAllSubject = function (roleId, userName, callback) {
                 });
         });
 
+    } else if (roleId === 3) {  //associate dean (fix the filter user in SPROC)
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+            var strSql = 'Begin SP_GET_SUB_FOR_ASSDEAN(:userName,:curUserLevel); End;';
+
+            connection.execute(strSql, {
+                userName: userName,
+                curUserLevel: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
+            }, function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+
+                    var obj = result.outBinds;
+
+                    database.FetchCursorRow(obj.curUserLevel, [], function (err, curUserLevel) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            var userData = {
+                                subjects: curUserLevel
+                            };
+
+                            database.DoCloses(connection, [obj.curUserLevel]);
+                            callback(err, userData.subjects);
+                        }
+                    );
+                }
+            });
+        });
     }
 
 
@@ -158,7 +200,10 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 callback(err, null);
             }
 
-            var strSql = "Begin SP_GETSUBJECT_PERIOD_FOR_DEAN(:userName,:periodCode,:curUserLevel); End;"; //"Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;"
+
+            //var strSql = "Begin SP_GETSUBJECT_PERIOD_FOR_DEAN(:userName,:periodCode,:curUserLevel); End;"; //"Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;"
+
+            var strSql = "Begin SP_GETSUB_PERIOD_FOR_DEANANO(:userName,:periodCode,:curUserLevel); End;"; //"Begin SP_GETUSER_FOR_DEAN(:userName,:curUserLevel); End;"
             connection.execute(strSql, {
                 userName: userName,
                 periodCode: periodCode,
@@ -184,19 +229,19 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                         }
                     );
                     /*obj.curUserLevel.getRows(database.MaximumCursorRows(), function (err, curUserLevel) {
-                            if (err) {
-                                console.log(err);
-                            }
+                     if (err) {
+                     console.log(err);
+                     }
 
-                            var userData = {
-                                users: curUserLevel
-                            };
+                     var userData = {
+                     users: curUserLevel
+                     };
 
 
-                            database.DoRelease(connection);
-                            callback(err, curUserLevel);
-                        }
-                    );*/
+                     database.DoRelease(connection);
+                     callback(err, curUserLevel);
+                     }
+                     );*/
                 }
             });
         });
@@ -226,7 +271,7 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 }
             });
         });
-    } else { // admin role
+    } else if (roleId === 5) { // admin role
 
         oracledb.getConnection(database.oracleConfig(), function (err, connection) {
             if (err) {
@@ -270,6 +315,45 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
                 });
         });
 
+    } else if (roleId === 3) {  //associate dean  (fix the filter user in SPROC)
+        oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            }
+
+            var strSql = 'Begin SP_GET_SUB_PERIOD_FOR_ASSDEAN(:userName,:periodCode,:curUserLevel); End;';
+
+            connection.execute(strSql, {
+                userName: userName,
+                periodCode: periodCode,
+                curUserLevel: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
+            }, function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+
+                    var obj = result.outBinds;
+
+                    database.FetchCursorRow(obj.curUserLevel, [], function (err, curUserLevel) {
+                            if (err) {
+                                console.log(err);
+                            }
+
+                            var userData = {
+                                subjects: curUserLevel
+                            };
+
+                            database.DoCloses(connection, [obj.curUserLevel]);
+                            callback(err, userData.subjects);
+                        }
+                    );
+                }
+            });
+        });
     }
 
 
@@ -518,14 +602,14 @@ ReportModel.prototype.getTopicBySubjectPeriodTeacher = function (subjectCode, pe
                 } else {
                     var obj = result.outBinds;
                     /*obj.curSumTopic.getRows(database.MaximumCursorRows(), function (err, curSumTopic) {
-                            if (err) {
-                                console.log(err);
-                            }
+                     if (err) {
+                     console.log(err);
+                     }
 
-                            database.DoRelease(connection);
-                            callback(err, curSumTopic);
-                        }
-                    );*/
+                     database.DoRelease(connection);
+                     callback(err, curSumTopic);
+                     }
+                     );*/
 
                     database.FetchCursorRow(obj.curSumTopic, [], function (err, curSumTopic) {
                         if (err) {
@@ -614,8 +698,6 @@ ReportModel.prototype.getCurrentPeriod = function (callback) {
     });
 
 };
-
-
 
 
 module.exports = ReportModel;

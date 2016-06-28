@@ -29,6 +29,26 @@ app.config(function ($routeProvider) {
         templateUrl: "app/components/admin/user.html"
     });
 
+    //==================================================
+    //  Admin Page
+    //      - Another Teacher Faculty Page
+    //
+    //==================================================
+    $routeProvider.when("/" + routeAdmin + "/teacher/another/faculty/list", {
+        controller: "anotherTeacherFacultyController",
+        templateUrl: "app/components/admin/anothertchfac.html"
+    });
+
+    $routeProvider.when("/" + routeAdmin + "/teacher/another/faculty/create", {
+        controller: "anotherTeacherFacultyController",
+        templateUrl: "app/components/admin/anothertchfacedit.html"
+    });
+
+    $routeProvider.when("/" + routeAdmin + "/teacher/another/faculty/update/:tchCode/:subjectCode/:facultyName", {
+        controller: "anotherTeacherFacultyController",
+        templateUrl: "app/components/admin/anothertchfacedit.html"
+    });
+
 
     //==================================================
     //
@@ -62,7 +82,6 @@ app.config(function ($routeProvider) {
     });
 
 
-
     $routeProvider.when("/import/report/subject/list/teacher/period/:subjectCode/:periodCode", {
         controller: "reportTeacherBySubjectAPeriodController",
         templateUrl: "app/components/report/teacherbysubject.html"
@@ -88,8 +107,6 @@ app.config(function ($routeProvider) {
         controller: "reportTopicBySubjectTchCodeUnitController",
         templateUrl: "app/components/report/topic.html"
     });
-
-
 
 
     //==================================================

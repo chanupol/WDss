@@ -37,6 +37,9 @@ var plugins = [
     },
     {
         register: require('./server/routes/report/report.js')
+    },
+    {
+        register: require('./server/routes/teacher/anotherteacherfaculty.js')
     }];
 
 server.register(plugins, function (err) {

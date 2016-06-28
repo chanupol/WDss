@@ -98,16 +98,18 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                     dataType: "json"
                 }
             },
-           /* group: {
-                field: "PERCENTAGE",
-                //dir: "desc"
-            },*/
+            /* group: {
+             field: "PERCENTAGE",
+             //dir: "desc"
+             },*/
             //serverPaging: true,
             schema: {
                 model: {
                     id: "PERIODCODE",
                     fields: {
                         FACULTYNAME: {type: "string"},
+                        DEGREECODE: {type: "string"},
+                        DEGREENAME: {type: "string"},
                         PERIODCODE: {type: "string"},
                         SUBJECTCODE: {type: "string"},
                         SUBJECTNAME: {type: "string"},
@@ -115,21 +117,22 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         PERCENTAGE: {type: "number"},
                         TCHCODE: {type: "string"},
                         TCHNAME: {type: "string"},
+
                     }
                 }
             },
 
             pageSize: 20,
-            group: {
-                field: "PERCENTAGE", aggregates: [
-                    { field: "PERCENTAGE", aggregate: "count" }
-                ]
-            },
+            /*group: {
+             field: "PERCENTAGE", aggregates: [
+             { field: "PERCENTAGE", aggregate: "count" }
+             ]
+             },*/
 
             /* serverPaging: true,
              serverFiltering: true,
              serverSorting: true*/
-            sort: ({ field: "FACULTYNAME", dir: "asc" },{ field: "SUBJECTCODE", dir: "asc" }),
+            sort: ({field: "FACULTYNAME", dir: "asc"}, {field: "SUBJECTCODE", dir: "asc"}),
 
         });
     }
@@ -158,6 +161,8 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                     id: "PERIODCODE",
                     fields: {
                         FACULTYNAME: {type: "string"},
+                        DEGREECODE: {type: "string"},
+                        DEGREENAME: {type: "string"},
                         PERIODCODE: {type: "string"},
                         SUBJECTCODE: {type: "string"},
                         SUBJECTNAME: {type: "string"},
@@ -165,15 +170,17 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         PERCENTAGE: {type: "number"},
                         TCHCODE: {type: "string"},
                         TCHNAME: {type: "string"},
+
+
                     }
                 }
             },
-            group: {
-                field: "PERCENTAGE", aggregates: [
-                    { field: "PERCENTAGE", aggregate: "count" }
-                ]
-            },
-            sort: ({ field: "FACULTYNAME", dir: "asc" },{ field: "SUBJECTCODE", dir: "asc" })
+            /* group: {
+             field: "PERCENTAGE", aggregates: [
+             { field: "PERCENTAGE", aggregate: "count" }
+             ]
+             },*/
+            sort: ({field: "FACULTYNAME", dir: "asc"}, {field: "SUBJECTCODE", dir: "asc"})
         });
     }
 
@@ -335,10 +342,10 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         StandardTotalVideoInMinute: {type: "number"},
                         Percentage: {type: "number"},
                         IMPORTDATE: {type: "string"},
-                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
-                        TCHFORTAPEUNIT:{type: "string"},
-                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
-                        TCHFORTAPETOPIC:{type: "string"}
+                        TCHFORCOURSEOUTLINEUNIT: {type: "string"},
+                        TCHFORTAPEUNIT: {type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC: {type: "string"},
+                        TCHFORTAPETOPIC: {type: "string"}
 
                     }
                 }
@@ -387,11 +394,10 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         StandardTotalVideoInMinute: {type: "number"},
                         Percentage: {type: "number"},
                         IMPORTDATE: {type: "string"},
-                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
-                        TCHFORTAPEUNIT:{type: "string"},
-                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
-                        TCHFORTAPETOPIC:{type: "string"}
-
+                        TCHFORCOURSEOUTLINEUNIT: {type: "string"},
+                        TCHFORTAPEUNIT: {type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC: {type: "string"},
+                        TCHFORTAPETOPIC: {type: "string"}
 
 
                     }
@@ -445,10 +451,10 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TotalVideoInMinute: {type: "number"},
                         PERCENTAGE: {type: "number"},
                         IMPORTDATE: {type: "string"},
-                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
-                        TCHFORTAPEUNIT:{type: "string"},
-                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
-                        TCHFORTAPETOPIC:{type: "string"}
+                        TCHFORCOURSEOUTLINEUNIT: {type: "string"},
+                        TCHFORTAPEUNIT: {type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC: {type: "string"},
+                        TCHFORTAPETOPIC: {type: "string"}
 
                     }
                 }
@@ -495,10 +501,10 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                         TotalVideoInMinute: {type: "number"},
                         PERCENTAGE: {type: "number"},
                         IMPORTDATE: {type: "string"},
-                        TCHFORCOURSEOUTLINEUNIT:{type: "string"},
-                        TCHFORTAPEUNIT:{type: "string"},
-                        TCHFORCOURSEOUTLINETOPIC:{type: "string"},
-                        TCHFORTAPETOPIC:{type: "string"}
+                        TCHFORCOURSEOUTLINEUNIT: {type: "string"},
+                        TCHFORTAPEUNIT: {type: "string"},
+                        TCHFORCOURSEOUTLINETOPIC: {type: "string"},
+                        TCHFORTAPETOPIC: {type: "string"}
 
                     }
                 }

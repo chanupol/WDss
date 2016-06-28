@@ -50,4 +50,6 @@ app.controller("loginController", function ($scope, $uibModal) {
         //size: "lg",
         backdrop: "static"
     });
+
+
 });
