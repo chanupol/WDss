@@ -293,13 +293,23 @@ ReportModel.prototype.getSubjectByPeriod = function (periodCode, token, roleId, 
              "where vSubject.PeriodCode=(SELECT CURRENTLEARNPERIOD " +
              "FROM (SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
              "FROM CYBERUPERIODCONFIG ORDER BY CYBERUPERIODCONFIG.ID DESC )) "*/
-            var strSql = "select distinct VSUBJECT.* from " +
-                "vSubject where PeriodCode IS NOT NULL " +
-                "and  vSubject.PeriodCode  = " +
+
+            /*var strSql = "select distinct VSUBJECT.* from " +
+             "vSubject where PeriodCode IS NOT NULL " +
+             "and  vSubject.PeriodCode  = " +
+             "(SELECT CURRENTLEARNPERIOD FROM " +
+             "(SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
+             "FROM CYBERUPERIODCONFIG " +
+             "ORDER BY CYBERUPERIODCONFIG.ID DESC ))";*/
+
+            var strSql = "SELECT DISTINCT VSUBJECT.*  " +
+                "FROM vSubject WHERE PeriodCode IS NOT NULL AND vSubject.PeriodCode = " +
                 "(SELECT CURRENTLEARNPERIOD FROM " +
-                "(SELECT MAX(CYBERUPERIODCONFIG.CURRENTLEARNPERIOD) CURRENTLEARNPERIOD " +
-                "FROM CYBERUPERIODCONFIG " +
-                "ORDER BY CYBERUPERIODCONFIG.ID DESC ))";
+                "( SELECT CYBERUPERIODCONFIG.CURRENTLEARNPERIOD CURRENTLEARNPERIOD " +
+                "FROM CYBERUPERIODCONFIG WHERE CYBERUPERIODCONFIG.ID = " +
+                "(SELECT max(CYBERUPERIODCONFIG.ID) " +
+                "FROM CYBERUPERIODCONFIG) " +
+                "ORDER BY CYBERUPERIODCONFIG.ID DESC))";
             connection.execute(strSql,
                 [],
                 {maxRows: 2000},
@@ -695,6 +705,43 @@ ReportModel.prototype.getCurrentPeriod = function (callback) {
                 callback(err, result.rows);
             }
         });
+    });
+
+};
+
+// Get Zero VDO Data
+ReportModel.prototype.getZeroVdoData = function (callback) {
+
+    var database = new Database();
+
+    //oracledb.outFormat = oracledb.OBJECT;
+
+    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+        if (err) {
+            console.error(err.message);
+            database.DoRelease(connection);
+            callback(err, null);
+        } else {
+            connection.execute("begin SP_GET_ZEROVDOSUBJECTDATA(:cursorZeroVdoSubject); end;",
+                {
+                    cursorZeroVdoSubject: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
+                }, function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        database.DoRelease(connection);
+                        callback(err, null);
+                    } else {
+                        var obj = result.outBinds;
+                        database.FetchRow(obj.cursorZeroVdoSubject, [], function (err, cursorZeroVdoSubject) {
+                            if (err) {
+                                console.error(err);
+                            }
+                            database.DoRelease(connection);
+                            callback(err, cursorZeroVdoSubject);
+                        })
+                    }
+                });
+        }
     });
 
 };

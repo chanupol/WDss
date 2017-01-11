@@ -49,6 +49,11 @@ app.config(function ($routeProvider) {
         templateUrl: "app/components/admin/anothertchfacedit.html"
     });
 
+    $routeProvider.when("/" + routeAdmin + "/subject/graph", {
+        controller: "graphReportPercentOfSubjectController",
+        templateUrl: "app/components/report/graph.html"
+    });
+
 
     //==================================================
     //

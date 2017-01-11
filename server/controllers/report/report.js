@@ -182,4 +182,15 @@ ReportController.prototype.getTopicBySubjectTeacher = function (request, reply) 
     });
 };
 
+
+ReportController.prototype.getZeroVdoData = function (request, reply) {
+    reportModel.getZeroVdoData(function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get Zero VDO Data.", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
 module.exports = ReportController;

@@ -21,7 +21,9 @@ module.exports = function () {
             password: "WTUDSS12345678",
             //connectString : "wstock.dyndns.org/orcl.localdomain",
             //connectString : "10.1.10.16/orcl.localdomain",
-            connectString: "113.53.249.27/orcl.localdomain"
+            //connectString: "113.53.249.27/orcl.localdomain"
+            connectString: "113.53.249.27/orcl" //Dev
+            //connectString: "113.53.249.21/orcl" //PROD
         };
 
         return oracleConfig;
@@ -62,7 +64,7 @@ module.exports = function () {
     // Fetch data form cursor
     //
     //--------------------------------------------------------------------------------
-    Database.prototype.FetchCursorRow = function(resultSet, resultRows, callback) {
+    Database.prototype.FetchCursorRow = function (resultSet, resultRows, callback) {
         resultSet.getRows(100, function (err, rows) {
             if (err) {
                 callback(err, resultRows);

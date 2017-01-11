@@ -9,11 +9,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "boom": "^3.1.2",
-    "hapi": "^13.2.2",
-    "inert": "^3.2.0",
-    "joi": "^8.0.5",
+    "boom": "^3.2.2",
+    "hapi": "^13.5.3",
+    "inert": "^3.2.1",
+    "joi": "^8.4.2",
     "nipple": "^2.5.6",
-    "node-uuid": "^1.4.7"
+    "node-uuid": "^1.4.7",
+    "oracledb": "^1.12.2"
   }
 }

@@ -95,7 +95,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
 
     $scope.grdSubjectByPeriodOptions = {
 
-        dataSource: reportService.getSubjectListByPeriodCodeDs('3%2F58'),
+        dataSource: reportService.getSubjectListByPeriodCodeDs('1%2F59'),
         //dataSource: reportService.getSubjectListByPeriodCodeDs(currentPeriodUniCode),
         height: 500,
         sortable: true,
@@ -149,7 +149,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
                 width: 100,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                
+
             },
             {
                 field: "PERIODCODE",
@@ -1663,5 +1663,38 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
 
         ]
     };
+
+});
+
+
+//----------------------------------------
+//
+// Graph Report Percent Of Subject
+//
+//----------------------------------------
+app.controller('graphReportPercentOfSubjectController', function ($scope, $routeParams, $location, reportService) {
+
+
+    $scope.$on('$viewContentLoaded', function (event) {
+
+        console.log('On Load');
+
+        $scope.electricity = {
+
+            dataSource: reportService.getEightyPercentDs()
+
+        };
+
+        console.log('Initial viewer');
+
+    });
+
+    $scope.$on('$destroy', function () {
+
+    });
+
+
+
+
 
 });

@@ -6,7 +6,7 @@
  */
 "use strict";
 
-app.controller("userController", function ($scope, $uibModal, $location, notificationService, securityService) {
+app.controller("userController", function ($scope, $uibModal, $location, notificationService, securityService, reportService) {
     //------------------------------------------------
     //
     // KendoUi Configurations
@@ -14,6 +14,9 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
     //------------------------------------------------
     $scope.notificationCenterOptions = notificationService.options;
 
+    $scope.zerotitle = 'รายการ VDO ที่มีจำนวนเปอร์เซ็นเป็น 0';
+
+    // Users
     $scope.grdUserOptions = {
         dataSource: securityService.getUsersDs(),
         //height: 500,
@@ -98,7 +101,133 @@ app.controller("userController", function ($scope, $uibModal, $location, notific
                 attributes: {"class": "text-center"},
 
             },
-            
+
+        ]
+    };
+
+
+    // Zero VDO
+    $scope.grdZeroVdoOptions =
+    {
+        toolbar: ["excel"],
+        excel: {
+            fileName: "Zero VDO Data.xlsx",
+            allPages: true,
+            filterable: true
+        },
+        dataSource: reportService.getZeroVdoDataDs(),
+        //height: 500,
+        sortable: true,
+        //selectable: "row",
+        scrollable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "contains"
+                }
+            }
+        },
+        pageable: {
+            buttonCount: 5,
+            refresh: true,
+            messages: {
+                morePages: "More pages"
+            }
+        },
+        // change: onGridMasterOrderChange,
+        dataBound: function (e) {
+            //
+            // Set defautl first row selected
+            /*var row = e.sender.tbody.find(" > tr:not(.k-grouping-row)").eq(0);
+             e.sender.select(row);*/
+        },
+        columns: [
+            {
+                field: "RN",
+                title: "#",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                hidden: true
+            },
+            {
+                field: "FACULTYNAME",
+                title: "FACULTY NAME",
+                width: 200,
+                headerAttributes: {style: "text-align:center"},
+                groupHeaderTemplate: "คณะ : #=value# (มีจำนวน : #=count# )",
+            },
+            {
+                field: "PERIODCODE",
+                title: "PERIOD",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+            },
+            {
+                field: "DEGREECODE",
+                title: "DEGREE CODE",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+            },
+            {
+                field: "DEGREENAME",
+                title: "DEGREE NAME",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+            },
+            {
+                field: "SUBJECTGROUPCODE",
+                title: "SUBJECT GROUP CODE",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "SUBJECTCODE",
+                title: "SUBJECT CODE",
+                width: 150,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "SUBJECTNAME",
+                title: "SUBJECT NAME",
+                width: 180,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "IMPORTDATE",
+                title: "IMPORT DATE",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "TCHCODE",
+                title: "TEACHER CODE",
+                width: 80,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            },
+            {
+                field: "TCHNAME",
+                title: "TEACHER NAME",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+
+            }
+
         ]
     };
 

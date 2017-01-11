@@ -517,6 +517,69 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
     }
 
 
+    // Get ZERO VDO
+    function getZeroVdoDataDs() {
+        return new kendo.data.DataSource({
+            batch: true,
+            transport: {
+                read: {
+                    url: uri + "/subject/zerovdo",
+                    dataType: "json"
+                }
+            },
+            group: {
+                field: "FACULTYNAME", aggregates: [
+                    {field: "FACULTYNAME", aggregate: "count"},
+                ]
+            },
+            pageSize: 20,
+            schema: {
+                model: {
+                    id: "RN",
+                    fields: {
+                        FACULTYNAME: {type: "string"},
+                        PERIODCODE: {type: "string"},
+                        SUBJECTGROUPCODE: {type: "string"},
+                        SUBJECTCODE: {type: "string"},
+                        SUBJECTNAME: {type: "string"},
+                        IMPORTDATE: {type: "string"},
+                        TotalVideoInMinute: {type: "number"},
+                        TotalVDOInMinuteForPercentage: {type: "number"},
+                        TOTALVDODEFICITINMINUTE: {type: "number"},
+                        STANDARDTOTALVIDEOINMINUTE: {type: "number"},
+                        PERCENTAGE: {type: "number"},
+                        TCHCODE: {type: "string"},
+                        TCHNAME: {type: "string"},
+                        COURSEOUTLINEOPENTCHCODE: {type: "string"},
+                        COURSEOUTLINEOPENTCHNAME: {type: "string"},
+                        DEGREECODE: {type: "string"},
+                        DEGREENAME: {type: "string"},
+                        RN: {type: "number"},
+
+                    }
+                }
+            }
+        });
+    }
+
+
+    //Summary Percent Report
+    function getEightyPercentDs() {
+        return new kendo.data.DataSource({
+            transport: {
+                read: {
+                    url: "/subject/zerovdo",
+                    dataType: "json"
+                }
+            },
+            sort: {
+                field: "SUBJECTCODE",
+                dir: "asc"
+            }
+        });
+    }
+
+
     //--------------------------------------------------------------------------------
     //
     // Add data
@@ -546,7 +609,12 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         getTopicBySubjectTeacherUnitDs: getTopicBySubjectTeacherUnitDs,
 
         getTeacherBySubjectWithPeriod: getTeacherBySubjectWithPeriod,
-        getTeacherBySubjectWithPeriodDs: getTeacherBySubjectWithPeriodDs
+        getTeacherBySubjectWithPeriodDs: getTeacherBySubjectWithPeriodDs,
+
+
+        getZeroVdoDataDs: getZeroVdoDataDs,
+
+        getEightyPercentDs: getEightyPercentDs
 
     });
 });

@@ -1,0 +1,17 @@
+<div class="row" ng-controller="graphReportPercentOfSubjectController">
+
+    <!--<div class="k-content wide">
+        <div id="chart" kendo-chart="chart" k-options="testGraphDs"></div>
+    </div>-->
+
+    <div kendo-chart
+         k-legend="{ position: 'bottom' }"
+         k-series-defaults="{ type: 'bar' }"
+         k-series="[
+                                 { field: 'RN', name: 'Row Number 2222' },
+                                 { field: 'TOTALVDODEFICITINMINUTE', name: 'Row Number' },
+                             ]"
+         k-data-source="electricity"
+         style="height: 400px;" ></div>
+
+</div>

@@ -159,6 +159,11 @@ exports.register = function (server, options, next) {
             method: "GET",
             path: "/api/report/period/currentperiod",
             handler: reportController.getCurrentPeriod,
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/zerovdo",
+            handler: reportController.getZeroVdoData,
         }
     ]);
 

@@ -40,7 +40,7 @@
         <div class="form-group">
             <label class="control-label col-sm-2" for="ddlRole">Password:</label>
             <div class="col-sm-10">
-                <select id="ddlRole" name="ddlRole" class="form-control" >
+                <select id="ddlRole" name="ddlRole" class="form-control">
                     <option value="5">Admin</option>
                     <option value="1">คณะบดี</option>
                     <option value="2">อาจารย์</option>
@@ -59,6 +59,15 @@
 <div class="row">
     <div class="col-md-12">
         <div id="grdUser" kendo-grid="grdUser" k-options="grdUserOptions"></div>
+    </div>
+</div>
+<br/>
+<hr/>
+<h1 class="page-title" data-ng-bind="zerotitle"></h1>
+<hr/>
+<div class="row">
+    <div class="col-md-12">
+        <div id="grdZeroVdo" kendo-grid="grdZeroVdo" k-options="grdZeroVdoOptions"></div>
     </div>
 </div>
 <span kendo-notification="notificationCenter" k-options="notificationCenterOptions"></span>
