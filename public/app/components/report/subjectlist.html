@@ -5,20 +5,23 @@
         height: 100%; /* DO NOT USE !important for setting the Grid height! */
     }
 </style>-->
+<br/>
 <div class="row" ng-controller="reportSubjectByPeriodController">
     <div class="col-md-12">
         <div class="panel panel-primary">
             <div class="panel-heading">
                 <h3 class="panel-title align-center">รายวิชาที่เปิดสอนประจำภาค {{CurrentPeriod}} </h3>
             </div>
-            <div class="panel-body">
-                <br/>
+
+            <!--<div class="panel-body">-->
+                <!--<br/>-->
                 <div class="row">
                     <div class="col-md-12">
                         <div id="grdSubjectByPeriod" kendo-grid="grdSubjectByPeriod"
-                             k-options="grdSubjectByPeriodOptions"></div>
-
-                        <!--  <script type="text/x-kendo-template" id="periodTemplate">
+                             k-options="grdSubjectByPeriodOptions">
+                        </div>
+<!--
+                         <script type="text/x-kendo-template" id="periodTemplate">
                               <div class="toolbar">
                                   <div class="form-inline">
                                       <div class="form-group pull-right">
@@ -33,10 +36,10 @@
                                   </div>
                               </div>
                           </script>
-  -->
+                        -->
                     </div>
                 </div>
-            </div>
+            <!--</div>-->
         </div>
     </div>
 </div>
@@ -47,7 +50,7 @@
             <div class="panel-heading">
                 <h3 class="panel-title align-center">รายวิชาตลอดหลักสูตร</h3>
             </div>
-            <div class="panel-body">
+            <!--<div class="panel-body">-->
                 <div class="row">
                     <div class="col-md-12">
                         <div id="grdSubjectAll" kendo-grid="grdSubjectAll" k-options="grdSubjectAllOptions"></div>
@@ -127,7 +130,7 @@
 
                     </div>
                 </div>
-            </div>
+            <!--</div>-->
         </div>
     </div>
 </div>

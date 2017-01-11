@@ -1,17 +1,27 @@
-<div class="row" ng-controller="graphReportPercentOfSubjectController">
+<br/>
+<div ng-controller="graphReportPercentOfSubjectController">
 
-    <!--<div class="k-content wide">
-        <div id="chart" kendo-chart="chart" k-options="testGraphDs"></div>
-    </div>-->
+    <div class="row">
+        <div class="col-md-2">
+            <div class="form-group">
+                <label for="ddlPeriodCode">Period</label>
+                <select class="form-control"
+                        id="ddlPeriodCode" ng-model="periodCode"
+                        name="ddlPeriodCode" required
+                        kendo-drop-down-list="ddlPeriodCode"
+                        k-options="ddlPeriodCodeOptions">
 
-    <div kendo-chart
-         k-legend="{ position: 'bottom' }"
-         k-series-defaults="{ type: 'bar' }"
-         k-series="[
-                                 { field: 'RN', name: 'Row Number 2222' },
-                                 { field: 'TOTALVDODEFICITINMINUTE', name: 'Row Number' },
-                             ]"
-         k-data-source="electricity"
-         style="height: 400px;" ></div>
+                </select>
+            </div>
+        </div>
+    </div>
 
+    <div class="row">
+        <div class="col-md-12">
+            <div id="sampleChart"
+                 kendo-chart="sampleChart"
+                 k-options="samepleChartOptions">
+            </div>
+        </div>
+    </div>
 </div>

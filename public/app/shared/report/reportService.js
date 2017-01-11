@@ -568,7 +568,7 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         return new kendo.data.DataSource({
             transport: {
                 read: {
-                    url: "/subject/zerovdo",
+                    url: uri +"/subject/zerovdo",
                     dataType: "json"
                 }
             },
@@ -577,6 +577,11 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
                 dir: "asc"
             }
         });
+    }
+
+    function getEightyPercent() {
+        var request = $http.get(uri + "/subject/zerovdo");
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 
 
@@ -614,7 +619,8 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
 
         getZeroVdoDataDs: getZeroVdoDataDs,
 
-        getEightyPercentDs: getEightyPercentDs
+        getEightyPercentDs: getEightyPercentDs,
+        getEightyPercent: getEightyPercent
 
     });
 });

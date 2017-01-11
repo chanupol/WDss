@@ -1672,20 +1672,83 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
 // Graph Report Percent Of Subject
 //
 //----------------------------------------
-app.controller('graphReportPercentOfSubjectController', function ($scope, $routeParams, $location, reportService) {
+app.controller('graphReportPercentOfSubjectController', function ($scope, $routeParams, $location, reportService, localStorageService) {
+
+
+    $scope.currentPeriod = BLANK;
+    $scope.periodCode = BLANK;
+
+    //------------------------------------------------
+    //
+    // KendoUi Configurations
+    //
+    //------------------------------------------------
+
+    $scope.ddlPeriodCodeOptions = {
+        dataSource: reportService.getPeriodDs(),
+        dataTextField: "Period",
+        dataValueField: "PeriodValue",
+        dataBound: function () {
+            // var dataSource = this.dataSource;
+            // var data = dataSource.data();
+            //
+            // if (!this._adding) {
+            //     this._adding = true;
+            //
+            //     data.splice(0, 0, {
+            //         "Period": "All",
+            //         "PeriodValue": "All"
+            //     });
+            //
+            //     this._adding = false;
+            // }
+            // // set selected value after bind
+            // $("#ddlPeriodCode").data('kendoDropDownList').value("All");
+        },
+        index: -1,
+        // change: ddlPeriodCodeOnChange
+
+    };
+
+
+
+
 
 
     $scope.$on('$viewContentLoaded', function (event) {
 
-        console.log('On Load');
+        // Get Current Period
+        reportService.getCurrentPeriod().then(function (response) {
+            console.log("getCurrentPeriod response " + response);
+            $scope.currentPeriod = response[0].CURRENTLEARNPERIOD;
+            console.log("getCurrentPeriod currentPeriod = " + $scope.currentPeriod);
 
-        $scope.electricity = {
+            var periodCodeSplit = $scope.currentPeriod.split('/');
+            console.log(periodCodeSplit);
+            if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
+                $scope.currentPeriod = periodCodeSplit[0] + "_" + periodCodeSplit[1];
+            }
+        }, function (err) {
+            if (err) {
+                console.log("getCurrentPeriod err " + err.message);
+            }
+        });
 
-            dataSource: reportService.getEightyPercentDs()
+        // reportService.getEightyPercent().then(function (result) {
+        //     console.log("result");
+        //     console.dir(result);
+        //     if (result) {
+        //         $scope.genChart(result);
+        //     }
+        // }, function (err) {
+        //     //
+        // });
+        //
+        // reportService.getEightyPercentDs()
+        //
 
-        };
+        $scope.genChart("");
 
-        console.log('Initial viewer');
 
     });
 
@@ -1695,6 +1758,82 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
 
 
+    $scope.returnTchCode = function () {
+        return localStorageService.get("UserName");
+    };
+
+    function ddlPeriodCodeOnChange(e) {
+        var value = this.value();
+        console.log(value);
+        if (value) {
+            //
+            //filter chart
+
+        }
+    }
+
+
+    $scope.genChart = function (dataSource) {
+        $scope.samepleChartOptions = {
+            dataSource: reportService.getEightyPercentDs(),
+            title: {
+                //
+                //teacher name
+                text: "Spain electricity production (GWh)"
+            },
+            legend: {
+                position: "top"
+            },
+            seriesDefaults: {
+                type: "column"
+            },
+            series:[
+                //
+                //percent range
+                {
+                    field: "TOTALVDODEFICITINMINUTE",
+                    name: "TOTALVDODEFICITINMINUTE",
+                    color: "red"
+                }, {
+                    field: "STANDARDTOTALVIDEOINMINUTE",
+                    name: "STANDARDTOTALVIDEOINMINUTE",
+                    color: "blue"
+                }, {
+                    field: "PERCENTAGE",
+                    name: "PERCENTAGE",
+                    color: "green"
+                }
+            ],
+            chartArea: {
+                height: 600
+            },
+            categoryAxis: {
+                //
+                //subject
+                field: "FACULTYNAME",
+                labels: {
+                    rotation: -90
+                },
+                majorGridLines: {
+                    visible: false
+                }
+            },
+            valueAxis: {
+                labels: {
+                    template: "#: value #%"
+                },
+                majorUnit: 100,
+                line: {
+                    visible: false
+                }
+            },
+            tooltip: {
+                visible: true,
+                // format: "N0"
+                template: "#: value #%"
+            }
+        };
+    };
 
 
 });
