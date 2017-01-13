@@ -584,6 +584,10 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 
+    function getDataForChart(tchCode, period) {
+        var request = $http.get(uri + "/subject/zerovdo/period/teachercode/" + tchCode + "/" + period);
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
 
     //--------------------------------------------------------------------------------
     //
@@ -620,7 +624,8 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         getZeroVdoDataDs: getZeroVdoDataDs,
 
         getEightyPercentDs: getEightyPercentDs,
-        getEightyPercent: getEightyPercent
+        getEightyPercent: getEightyPercent,
+        getDataForChart: getDataForChart
 
     });
 });

@@ -1674,9 +1674,8 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
 //----------------------------------------
 app.controller('graphReportPercentOfSubjectController', function ($scope, $routeParams, $location, reportService, localStorageService) {
 
-
-    $scope.currentPeriod = BLANK;
-    $scope.periodCode = BLANK;
+    $scope.periodCode = "";
+    $scope.tchCode = "";
 
     //------------------------------------------------
     //
@@ -1687,68 +1686,46 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
     $scope.ddlPeriodCodeOptions = {
         dataSource: reportService.getPeriodDs(),
         dataTextField: "Period",
-        dataValueField: "PeriodValue",
-        dataBound: function () {
-            // var dataSource = this.dataSource;
-            // var data = dataSource.data();
-            //
-            // if (!this._adding) {
-            //     this._adding = true;
-            //
-            //     data.splice(0, 0, {
-            //         "Period": "All",
-            //         "PeriodValue": "All"
-            //     });
-            //
-            //     this._adding = false;
-            // }
-            // // set selected value after bind
-            // $("#ddlPeriodCode").data('kendoDropDownList').value("All");
-        },
-        index: -1,
-        // change: ddlPeriodCodeOnChange
-
+        dataValueField: "PeriodValue"
     };
-
-
-
-
-
 
     $scope.$on('$viewContentLoaded', function (event) {
 
         // Get Current Period
         reportService.getCurrentPeriod().then(function (response) {
-            console.log("getCurrentPeriod response " + response);
-            $scope.currentPeriod = response[0].CURRENTLEARNPERIOD;
-            console.log("getCurrentPeriod currentPeriod = " + $scope.currentPeriod);
+            $scope.periodCode = response[0].CURRENTLEARNPERIOD;
 
-            var periodCodeSplit = $scope.currentPeriod.split('/');
-            console.log(periodCodeSplit);
+            //
+            // change %2F to /
+            var periodCodeSplit = $scope.periodCode.split('/');
             if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
-                $scope.currentPeriod = periodCodeSplit[0] + "_" + periodCodeSplit[1];
+                $scope.periodCode = periodCodeSplit[0] + "%2F" + periodCodeSplit[1];
             }
+
+            $("#ddlPeriodCode").data('kendoDropDownList').value($scope.periodCode);
+            // $scope.ddlPeriodCode.value($scope.periodCode);
+
+            $scope.tchCode = $scope.getTchCode();
+
+            //
+            // add 2 parameter
+            // tchCode period
+            // reportService.getDataForChart($scope.tchCode, $scope.getPeriod()).then(function (result) {
+            reportService.getEightyPercent().then(function (result) {
+                console.log("result");
+                console.dir(result);
+                if (result) {
+                    $scope.genChart(result);
+                }
+            }, function (err) {
+                console.dir(err.message);
+            });
+
         }, function (err) {
             if (err) {
                 console.log("getCurrentPeriod err " + err.message);
             }
         });
-
-        // reportService.getEightyPercent().then(function (result) {
-        //     console.log("result");
-        //     console.dir(result);
-        //     if (result) {
-        //         $scope.genChart(result);
-        //     }
-        // }, function (err) {
-        //     //
-        // });
-        //
-        // reportService.getEightyPercentDs()
-        //
-
-        $scope.genChart("");
-
 
     });
 
@@ -1756,26 +1733,48 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     });
 
+    //------------------------------------------------
+    //
+    // Page Function
+    //
+    //------------------------------------------------
 
+    $scope.ddlPeriodChanged = function() {
 
-    $scope.returnTchCode = function () {
+        // reportService.getDataForChart($scope.tchCode, $scope.getPeriod()).then(function (result) {
+        //     if (result) {
+        //         $scope.sampleChart.dataSource.data(result);
+        //     }
+        // }, function (err) {
+        //     console.dir(err.message);
+        // });
+
+    };
+
+    //------------------------------------------------
+    //
+    // Private Function
+    //
+    //------------------------------------------------
+
+    $scope.getTchCode = function () {
         return localStorageService.get("UserName");
     };
 
-    function ddlPeriodCodeOnChange(e) {
-        var value = this.value();
-        console.log(value);
-        if (value) {
-            //
-            //filter chart
+    $scope.getPeriod = function(){
 
+        var period = "";
+        var periodCodeSplit = $scope.periodCode.split('%2F');
+        if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
+            period = periodCodeSplit[0] + "/" + periodCodeSplit[1];
         }
-    }
+        return period;
 
+    };
 
     $scope.genChart = function (dataSource) {
         $scope.samepleChartOptions = {
-            dataSource: reportService.getEightyPercentDs(),
+            dataSource: dataSource,
             title: {
                 //
                 //teacher name
@@ -1834,6 +1833,5 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             }
         };
     };
-
 
 });

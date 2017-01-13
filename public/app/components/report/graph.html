@@ -2,12 +2,18 @@
 <div ng-controller="graphReportPercentOfSubjectController">
 
     <div class="row">
-        <div class="col-md-2">
+        <div class="col-md-1">
             <div class="form-group">
                 <label for="ddlPeriodCode">Period</label>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <div class="form-group">
                 <select class="form-control"
                         id="ddlPeriodCode" ng-model="periodCode"
-                        name="ddlPeriodCode" required
+                        name="ddlPeriodCode"
+                        ng-model="currentPeriod"
+                        ng-change="ddlPeriodChanged()"
                         kendo-drop-down-list="ddlPeriodCode"
                         k-options="ddlPeriodCodeOptions">
 
