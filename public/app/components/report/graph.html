@@ -22,12 +22,15 @@
         </div>
     </div>
 
-    <div class="row">
+
+    <div class="row" data-ng-repeat="options in chartArr">
+        <span>{{options}}</span>
         <div class="col-md-12">
-            <div id="sampleChart"
-                 kendo-chart="sampleChart"
-                 k-options="samepleChartOptions">
+            <div kendo-chart
+                 k-options="options">
             </div>
         </div>
     </div>
+
+
 </div>
