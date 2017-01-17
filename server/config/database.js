@@ -84,11 +84,13 @@ module.exports = function () {
     //
     //--------------------------------------------------------------------------------
     Database.prototype.DoRelease = function (connection) {
-        connection.release(function (err) {
-            if (err) {
-                console.error(err.message);
-            }
-        });
+        if (connection) {
+            connection.release(function (err) {
+                if (err) {
+                    console.error(err.message);
+                }
+            });
+        }
     };
 
     //
