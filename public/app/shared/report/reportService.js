@@ -584,7 +584,7 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 
-    function getDataForChart(tchCode, period) {
+    function getDataForChart(subjectCode, tchCode, period) {
         var request = $http.get(uri + "/subject/zerovdo/period/teachercode/" + tchCode + "/" + period);
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }

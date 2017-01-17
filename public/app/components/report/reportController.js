@@ -1674,10 +1674,9 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
 //----------------------------------------
 app.controller('graphReportPercentOfSubjectController', function ($scope, $routeParams, $location, reportService, localStorageService) {
 
+    $scope.dataArr = [];
     $scope.periodCode = "";
     $scope.tchCode = "";
-    $scope.chartArr = [];
-
 
     $scope.tempData1 = [
         {
@@ -2096,6 +2095,416 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     ];
 
+    $scope.tempData4 = [
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 0,
+            "count100Percent": 2,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH2108",
+            "UnitID": 1,
+            "UnitName": "ปรัชญาและการบริหารกับการบริการสาธารณสุข",
+            "tmpSubjectUnitPre": "PH210813/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 0,
+            "count100Percent": 1,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH2108",
+            "UnitID": 2,
+            "UnitName": "แผนงานบริการสาธารณสุขระดับต้น",
+            "tmpSubjectUnitPre": "PH210823/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 0,
+            "count100Percent": 1,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH2108",
+            "UnitID": 3,
+            "UnitName": "การจัดองค์การ",
+            "tmpSubjectUnitPre": "PH210833/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 0,
+            "count100Percent": 1,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH2108",
+            "UnitID": 4,
+            "UnitName": "การบริหารงานบุคคล",
+            "tmpSubjectUnitPre": "PH210843/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 0,
+            "count100Percent": 1,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH2108",
+            "UnitID": 5,
+            "UnitName": "การอำนวยการ",
+            "tmpSubjectUnitPre": "PH210853/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 0,
+            "count100Percent": 1,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH2108",
+            "UnitID": 6,
+            "UnitName": "การควบคุมกำกับงาน",
+            "tmpSubjectUnitPre": "PH210863/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 1,
+            "count100Percent": 0,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH2108",
+            "UnitID": 7,
+            "UnitName": "การบริหารจัดการทรัพยากรบุคคล",
+            "tmpSubjectUnitPre": "PH210873/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 2,
+            "countEightyPercent": 3,
+            "count100Percent": 47,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 1,
+            "UnitName": "แนวคิดเกี่ยวกับการจัดการเชิงกลยุทธ์ในการพัฒนาระบบสุขภาพ",
+            "tmpSubjectUnitPre": "PH311113/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 2,
+            "countEightyPercent": 1,
+            "count100Percent": 45,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 2,
+            "UnitName": "กระบวนการจัดทำกลยุทธ์",
+            "tmpSubjectUnitPre": "PH311123/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 2,
+            "countEightyPercent": 1,
+            "count100Percent": 44,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 3,
+            "UnitName": "หลักการและเทคนิคการวิเคราะห์เชิงกลยุทธ์",
+            "tmpSubjectUnitPre": "PH311133/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 3,
+            "countEightyPercent": 1,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 4,
+            "UnitName": "กระบวนการวางแผนกลยุทธ์ด้านสุขภาพ",
+            "tmpSubjectUnitPre": "PH311143/58"
+        },
+        {
+            "countZeroPercent": 2,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 0,
+            "count100Percent": 42,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 5,
+            "UnitName": "การนำกลยุทธ์ไปสู่การปฏิบัติ",
+            "tmpSubjectUnitPre": "PH311153/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 0,
+            "count100Percent": 42,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 6,
+            "UnitName": "การประเมินและควบคุมกลยุทธ์",
+            "tmpSubjectUnitPre": "PH311163/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 0,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 7,
+            "UnitName": "การประสานงานกับประสิทธิภาพการบริหารงานในทางกลยุทธ์",
+            "tmpSubjectUnitPre": "PH311173/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 1,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 8,
+            "UnitName": "การบริหารเชิงกลยุทธ์",
+            "tmpSubjectUnitPre": "PH311183/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 1,
+            "count100Percent": 40,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 9,
+            "UnitName": "แนวคิดเกี่ยวกับกระบวนทัศน์ในการพัฒนาระบบสุขภาพ",
+            "tmpSubjectUnitPre": "PH311193/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 1,
+            "count100Percent": 40,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 10,
+            "UnitName": "กลยุทธ์การสร้างองค์กรแห่งการเรียนรู้",
+            "tmpSubjectUnitPre": "PH3111103/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 0,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 11,
+            "UnitName": "กลยุทธ์การวิจัยและพัฒนา",
+            "tmpSubjectUnitPre": "PH3111113/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 0,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 12,
+            "UnitName": "กลยุทธ์การนำเทคโนโลยีและพัฒนาเทคโนโลยีสารสนเทศมาใช้ในโรงพยาบาล",
+            "tmpSubjectUnitPre": "PH3111123/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 1,
+            "count100Percent": 40,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 13,
+            "UnitName": "การจัดการเชิงกลยุทธ์โรงพยาบาลในประเทศและต่างประเทศ",
+            "tmpSubjectUnitPre": "PH3111133/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 0,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 14,
+            "UnitName": "แนวโน้มการจัดการเชิงกลยุทธ์ในการพัฒนาสุขภาพในอนาคต",
+            "tmpSubjectUnitPre": "PH3111143/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 0,
+            "countEightyPercent": 1,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3111",
+            "UnitID": 15,
+            "UnitName": "กลยุทธ์ทางการสาธารณสุข",
+            "tmpSubjectUnitPre": "PH3111153/58"
+        },
+        {
+            "countZeroPercent": 3,
+            "countFiftyPercent": 4,
+            "countEightyPercent": 2,
+            "count100Percent": 45,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 1,
+            "UnitName": "ความรู้เบื้องต้นเกี่ยวกับกฎหมาย",
+            "tmpSubjectUnitPre": "PH321013/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 7,
+            "countEightyPercent": 2,
+            "count100Percent": 44,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 2,
+            "UnitName": "กฎหมายเกี่ยวกับบุคลากรและสถานบริการสาธารณสุข",
+            "tmpSubjectUnitPre": "PH321023/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 4,
+            "countEightyPercent": 2,
+            "count100Percent": 43,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 3,
+            "UnitName": "กฎหมายเกี่ยวกับการสาธารณสุข การป้องกันและควบคุมโรค และคุ้มครองสุขภาพอนามัย",
+            "tmpSubjectUnitPre": "PH321033/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 3,
+            "countEightyPercent": 0,
+            "count100Percent": 43,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 4,
+            "UnitName": "กฎหมายเกี่ยวกับยา วัตถุออกฤทธิ์ต่อจิตประสาท ยาเสพติดให้โทษ และเครื่องมือแพทย์",
+            "tmpSubjectUnitPre": "PH321043/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 3,
+            "countEightyPercent": 0,
+            "count100Percent": 42,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 5,
+            "UnitName": "กฎหมายเกี่ยวกับอาหาร เครื่องสำอางและวัตถุอันตราย",
+            "tmpSubjectUnitPre": "PH321053/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 3,
+            "countEightyPercent": 1,
+            "count100Percent": 41,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 6,
+            "UnitName": "กฎหมายเกี่ยวกับอาชีวอนามัยและความปลอดภัย",
+            "tmpSubjectUnitPre": "PH321063/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 4,
+            "countEightyPercent": 1,
+            "count100Percent": 39,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 7,
+            "UnitName": "กฎหมายเกี่ยวกับสิ่งแวดล้อม (๑)",
+            "tmpSubjectUnitPre": "PH321073/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 3,
+            "countEightyPercent": 1,
+            "count100Percent": 38,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 8,
+            "UnitName": "กฎหมายเกี่ยวกับสิ่งแวดล้อม (๒)",
+            "tmpSubjectUnitPre": "PH321083/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 3,
+            "countEightyPercent": 0,
+            "count100Percent": 38,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 9,
+            "UnitName": "ความรู้ทั่วไปเกี่ยวกับนิติเวชศาสตร์",
+            "tmpSubjectUnitPre": "PH321093/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 3,
+            "countEightyPercent": 0,
+            "count100Percent": 37,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 10,
+            "UnitName": "การตายและการเปลี่ยนแปลงหลังตาย",
+            "tmpSubjectUnitPre": "PH3210103/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 0,
+            "count100Percent": 37,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 11,
+            "UnitName": "การพิสูจน์บุคคล",
+            "tmpSubjectUnitPre": "PH3210113/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 2,
+            "countEightyPercent": 4,
+            "count100Percent": 33,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 12,
+            "UnitName": "การพิสูจน์เหตุและพฤติกรรมการตาย",
+            "tmpSubjectUnitPre": "PH3210123/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 0,
+            "count100Percent": 36,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 13,
+            "UnitName": "การตรวจพิสูจน์อาชญากรรมทางเพศและอาชญากรรมต่อเด็ก",
+            "tmpSubjectUnitPre": "PH3210133/58"
+        },
+        {
+            "countZeroPercent": 0,
+            "countFiftyPercent": 1,
+            "countEightyPercent": 2,
+            "count100Percent": 34,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 14,
+            "UnitName": "การเป็นพยานและการเขียนรายงานทางการแพทย์",
+            "tmpSubjectUnitPre": "PH3210143/58"
+        },
+        {
+            "countZeroPercent": 1,
+            "countFiftyPercent": 2,
+            "countEightyPercent": 0,
+            "count100Percent": 36,
+            "Teacher": "5589000022 อาจารย์ กิตติศักดิ์ หลวงพันเทา",
+            "SubjectCode": "PH3210",
+            "UnitID": 15,
+            "UnitName": "จริยธรรมในวิชาชีพ",
+            "tmpSubjectUnitPre": "PH3210153/58"
+        }
+    ];
+
     //------------------------------------------------
     //
     // KendoUi Configurations
@@ -2108,41 +2517,66 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         dataValueField: "PeriodValue"
     };
 
-    $scope.$on('$viewContentLoaded', function (event) {
+    $scope.grdTeacherOptions = {
+        //dataSource: reportService.getTeacherBySubjectDs($routeParams.subjectCode),
+        dataSource: reportService.getTeacherBySubjectWithPeriodDs($routeParams.subjectCode, $routeParams.periodCode),
+        height: 500,
+        sortable: true,
+        //selectable: "row",
+        scrollable: true,
+        filterable: {
+            extra: false,
+            operators: {
+                string: {
+                    startswith: "Starts with",
+                    contains: "contains"
+                }
+            }
+        },
+        pageable: {
+            buttonCount: 5,
+            refresh: true,
+            messages: {
+                morePages: "More pages"
+            }
+        },
+        columns: [
+            {
+                field: "FACULTYNAME",
+                title: "คณะ",
+                width: 250,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"}
+            },
+            {
+                field: null,
+                title: "ชื่ออาจารย์ผู้สอน",
+                width: 255,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //template: "<a href='\\#/import/report/subject/list/unit/#=SUBJECTCODE#/#=TCHCODE#'> #= TCHCODE #-#=TCHNAME#</a>"
+                //template: "<span>#= TCHCODE #-#=TCHNAME#</span>"
+                template: kendo.template($("#displayTeacherName").html()),
+            },
+            {
+                field: "DEGREENAME",
+                title: "ระดับ",
+                width: 120,
+                headerAttributes: {style: "text-align:center"},
+                attributes: {"class": "text-center"},
+                //hidden: true
+            }
+        ]
+    };
 
+
+    $scope.$on('$viewContentLoaded', function (event) {
         // Get Current Period
         reportService.getCurrentPeriod().then(function (response) {
-            $scope.periodCode = response[0].CURRENTLEARNPERIOD;
-
-            //
-            // change %2F to /
-            var periodCodeSplit = $scope.periodCode.split('/');
-            if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
-                $scope.periodCode = periodCodeSplit[0] + "%2F" + periodCodeSplit[1];
-            }
+            $scope.tchCode = $scope.getTchCode();
+            $scope.periodCode = response[0].CURRENTLEARNPERIOD.replace("/","%2F");
 
             $("#ddlPeriodCode").data('kendoDropDownList').value($scope.periodCode);
-            // $scope.ddlPeriodCode.value($scope.periodCode);
-
-            $scope.tchCode = $scope.getTchCode();
-
-            console.dir("start gen chart");
-            $scope.genDynamicChart();
-            console.dir("finish gen chart");
-
-            //
-            // add 2 parameter
-            // tchCode period
-            // reportService.getDataForChart($scope.tchCode, $scope.getPeriod()).then(function (result) {
-            /*reportService.getEightyPercent().then(function (result) {
-                console.log("result");
-                console.dir(result);
-                if (result) {
-                    $scope.genChart(result);
-                }
-            }, function (err) {
-                console.dir(err.message);
-            });*/
 
         }, function (err) {
             if (err) {
@@ -2164,13 +2598,28 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     $scope.ddlPeriodChanged = function() {
 
+        if($scope.periodCode === "1%2F59"){
+            $scope.genDynamicChart($scope.tempData4);
+        }else if($scope.periodCode === "1%2F58"){
+            $scope.genDynamicChart($scope.tempData1);
+        }else if($scope.periodCode === "2%2F58"){
+            $scope.genDynamicChart($scope.tempData2);
+        }else if($scope.periodCode === "3%2F58"){
+            $scope.genDynamicChart($scope.tempData3);
+        }
+
+        //
+        //if user is not teacher get from selected item
+
+
         // reportService.getDataForChart($scope.tchCode, $scope.getPeriod()).then(function (result) {
         //     if (result) {
-        //         $scope.sampleChart.dataSource.data(result);
+        //         $scope.genDynamicChart(result);
         //     }
         // }, function (err) {
         //     console.dir(err.message);
         // });
+
 
     };
 
@@ -2180,13 +2629,17 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
     //
     //------------------------------------------------
 
-    $scope.genDynamicChart = function () {
+    $scope.genDynamicChart = function (data) {
+        kendo.ui.progress($(document.body), true);
+        console.log("start loop");
+        $scope.chartArr = [];
+        var groupedArr = _.groupBy(data, 'SubjectCode');
 
-        $scope.chartArr.push($scope.genChart($scope.tempData1, $scope.tempData1[0].SubjectCode));
-        $scope.chartArr.push($scope.genChart($scope.tempData2, $scope.tempData2[0].SubjectCode));
-        $scope.chartArr.push($scope.genChart($scope.tempData3, $scope.tempData3[0].SubjectCode));
-
-        console.dir($scope.chartArr);
+        _.each(groupedArr, function(arr){
+            var sortedArr = _.sortBy(arr, "UnitID");
+            $scope.chartArr.push($scope.genChartOption(sortedArr, sortedArr[0].SubjectCode));
+        });
+        kendo.ui.progress($(document.body), false);
     };
 
 
@@ -2195,19 +2648,110 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
     };
 
     $scope.getPeriod = function(){
+        return $scope.periodCode.replace("%2F","/");
+    };
 
-        var period = "";
-        var periodCodeSplit = $scope.periodCode.split('%2F');
-        if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
-            period = periodCodeSplit[0] + "/" + periodCodeSplit[1];
-        }
-        return period;
+    $scope.genChartOption = function (dataSource, subjectName) {
+        return {
+        // $scope.samepleChartOptions = {
+            dataSource: dataSource,
+            title: {
+                //
+                //teacher name
+                text: "จำนวนนักเรียนที่เข้าเรียนในรายวิชา: " + subjectName
+            },
+            legend: {
+                position: "top",
+                item: {
+                    visual: createLegendItem
+                }
+            },
+            seriesDefaults: {
+                type: "column",
+                // stack: true,
+                highlight: {
+                    toggle: function (e) {
+                        // Don't create a highlight overlay,
+                        // we'll modify the existing visual instead
+                        e.preventDefault();
 
+                        var visual = e.visual;
+                        var opacity = e.show ? 0.8 : 1;
+
+                        visual.opacity(opacity);
+                    }
+                },
+                visual: function (e) {
+                    return createColumn(e.rect, e.options.color);
+                }
+            },
+            series:[
+                //
+                //percent range
+                {
+                    field: "countZeroPercent",
+                    name: "0 Percent",
+                    color: "#d92800"
+                },
+                {
+                    field: "countFiftyPercent",
+                    name: "1-50 Percent",
+                    color: "#65c4e0"
+                },
+                {
+                    field: "countEightyPercent",
+                    name: "51-80 Percent",
+                    color: "#428bca"
+                },
+                {
+                    field: "count100Percent",
+                    name: "81-100 Percent",
+                    color: "#1045ca"
+                }
+
+            ],
+            panes: [{
+                clip: false
+            }],
+            chartArea: {
+                height: 400
+            },
+            categoryAxis: {
+                //
+                //Unit
+                field: "UnitID",
+                // field: "UnitName",
+                // labels: {
+                //     rotation: -45
+                // },
+                majorGridLines: {
+                    visible: false
+                },
+                title: {
+                    text: "หน่วยเรียน"
+                }
+            },
+            valueAxis: {
+                labels: {
+                    template: "#: value# คน"
+                },
+                majorUnit: 10,
+                line: {
+                    visible: false
+                },
+                title: {
+                    text: "จำนวนนิสิต"
+                }
+            },
+            tooltip: {
+                visible: true,
+                template: "#: value# คน"
+            }
+        };
     };
 
     $scope.genChart = function (dataSource, subjectName) {
-        return {
-        // $scope.samepleChartOptions = {
+        $scope.samepleChartOptions = {
             dataSource: dataSource,
             title: {
                 //

@@ -164,7 +164,20 @@ exports.register = function (server, options, next) {
             method: "GET",
             path: "/api/report/subject/zerovdo",
             handler: reportController.getZeroVdoData,
-        }
+        },
+        {
+            method: "GET",
+            path: "/api/report/subject/zerovdo/period/teachercode/{period}/{tchCode}",
+            config: {
+                handler: reportController.getDataForChart,
+                validate: {
+                    params: {
+                        tchCode: Joi.string().required(),
+                        period: Joi.string().required(),
+                    }
+                }
+            }
+        },
     ]);
 
     next();

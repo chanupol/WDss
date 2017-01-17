@@ -193,4 +193,21 @@ ReportController.prototype.getZeroVdoData = function (request, reply) {
     });
 };
 
+
+ReportController.prototype.getDataForChart = function (request, reply) {
+
+    var tchCode = request.params.tchCode;
+    var period = request.params.period;
+
+
+    reportModel.getDataForChart(tchCode, period, function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get unit list information", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
+
 module.exports = ReportController;
