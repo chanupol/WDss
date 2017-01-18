@@ -201,7 +201,6 @@ GraphModel.prototype.getGraphDataInClassPercentage = function (criteria, callbac
 
     var database = new Database();
 
-    // connect to your database
     mssql.connect(database.mssqlConfig(), function (err) {
 
         var subjectCodeCondition = " ";
@@ -276,7 +275,6 @@ GraphModel.prototype.getGraphDataInClassPercentage = function (criteria, callbac
             "gg.UnitID";
 
 
-
         request.query(declareTableVariable + insertIntoTbVarDataStatement + getDataStatement).then(function (result) {
 
             callback(null, result);
@@ -292,14 +290,113 @@ GraphModel.prototype.getGraphDataInClassPercentage = function (criteria, callbac
 };
 
 
-GraphModel.prototype.getGraphDataPreTestPercentage = function (criteria, callback) {
+GraphModel.prototype.getGraphDataPreTestPostTestPercentage = function (criteria, callback) {
+
+
+    var database = new Database();
+
+    mssql.connect(database.mssqlConfig(), function (err) {
+
+        var subjectCodeCondition = " ";
+        var isPreTestCondition = " ";
+
+        if (err) console.log(err);
+
+        var request = new mssql.Request();
+
+        request.input('tchCode', mssql.NVarChar(10), criteria.tchCode);
+        request.input('periodCode', mssql.NVarChar(5), criteria.periodCode);
+
+        if (criteria.subjectCode != 0) {
+            request.input('subjectCode', mssql.NVarChar(10), criteria.subjectCode);
+            subjectCodeCondition = " AND sut.SubjectCode = @subjectCode  ";
+        }
+
+        if (criteria.isPreTest != undefined || criteria.isPreTest != "undefined") {
+            // 1: Pre-Test , 3: Post-Test
+            request.input('isPreTest', mssql.NVarChar(1), (criteria.isPreTest == "Y") ? 1 : 3);
+
+            isPreTestCondition = " AND sut.LearnTypeCode = @isPreTest  ";
+        }
+
+
+        var getDataStatement = ";WITH DataForGraph ( " +
+            "Teacher, StuCode, SubjectCode, UnitID, " +
+            "tmpSubjectUnitPre, LearnTypeCode, ExpectScore, " +
+            "TotalScore, PeriodCode, IsDone ) " +
+            "AS ( SELECT DISTINCT " +
+            "( q.TchCode + ' ' + tch.TchPName + ' ' + tch.TchFName + ' ' + tch.TchLName ) Teacher ,  sut.StuCode , " +
+            "sut.SubjectCode , sut.UnitID , " +
+            "( sut.SubjectCode + CAST(sut.UnitID AS NVARCHAR(10)) + sut.PeriodCode ) tmpSubjectUnitPre , " +
+            "sut.LearnTypeCode ,sut.ExpectScore ,  sut.TotalScore ,sut.PeriodCode ,sut.IsDone " +
+            "FROM     wtuuser.tbStuUnitTest sut " +
+            "JOIN wtuuser.tbStuUnitQuestion suq ON sut.Idx = suq.StuUnitTest_Idx " +
+            "AND sut.PeriodCode = @periodCode " +
+            isPreTestCondition +
+            subjectCodeCondition +
+            "JOIN wtuuser.tbQuestion q ON suq.Question_Idx = q.Idx " +
+            "AND q.TchCode = @tchCode " +
+            "JOIN wtuuser.tbTeacher tch ON tch.Idx = q.Teacher_Idx " +
+            ") " +
+            "   SELECT  " +
+            "   CountZeroScore = ( SELECT   COUNT(g.StuCode) " +
+            "       FROM  DataForGraph g " +
+            "       WHERE  ( g.TotalScore <= g.ExpectScore*1/100  " +
+            GraphModel.prototype.andConditonInTestData() +
+            ") ," +
+
+            "   CountFiftyPercent = ( SELECT    COUNT(g.StuCode) " +
+            "       FROM      DataForGraph g " +
+            "       WHERE     ( ( g.TotalScore > g.ExpectScore*1/100 " +
+            "                   AND g.TotalScore <= g.ExpectScore*50/100 ) " +
+            GraphModel.prototype.andConditonInTestData() +
+            ") ," +
+
+            "   CountEightyPercent = ( SELECT    COUNT(g.StuCode) " +
+            "       FROM      DataForGraph g " +
+            "       WHERE     ( ( g.TotalScore > g.ExpectScore*50/100 " +
+            "                   AND g.TotalScore <= g.ExpectScore*80/100 ) " +
+            GraphModel.prototype.andConditonInTestData() +
+            ") ," +
+            "   Count100Percent = ( SELECT    COUNT(g.StuCode) " +
+            "       FROM      DataForGraph g " +
+            "       WHERE     ( ( g.TotalScore > g.ExpectScore*80/100 " +
+            "                   AND g.TotalScore <= g.ExpectScore*100/100 ) " +
+            GraphModel.prototype.andConditonInTestData() +
+            ") ," +
+            " gg.Teacher , gg.SubjectCode , gg.UnitID , gg.ExpectScore , gg.tmpSubjectUnitPre , " +
+            "CASE WHEN gg.LearnTypeCode = 1 THEN 'Pre-Test' " +
+            "     WHEN gg.LearnTypeCode = 3 THEN 'Post-Test' END LearnTypeCode , " +
+            "CASE WHEN gg.IsDone = 1 THEN 'Done' " +
+            "     WHEN gg.IsDone = 0 THEN 'Not Done' END IsDone " +
+            "FROM    DataForGraph gg " +
+            "GROUP BY gg.SubjectCode , gg.UnitID , gg.ExpectScore , gg.tmpSubjectUnitPre , gg.Teacher , gg.LearnTypeCode , gg.IsDone " +
+            "ORDER BY gg.Teacher , gg.SubjectCode ,  gg.UnitID;";
+
+
+        request.query(getDataStatement).then(function (result) {
+
+            callback(null, result);
+
+        }).catch(function (err) {
+            console.log(err.message);
+            //console.log(result);
+            callback(err, null);
+        });
+    });
+
 
 };
 
 
-GraphModel.prototype.getGraphDataPostTestPercentage = function (criteria, callback) {
+GraphModel.prototype.andConditonInTestData = function () {
+
+    var andCondition = " AND ( g.tmpSubjectUnitPre = gg.tmpSubjectUnitPre )) " +
+        " AND ( g.LearnTypeCode = gg.LearnTypeCode  " +
+        " AND g.IsDone = gg.IsDone  " +
+        "AND g.ExpectScore = gg.ExpectScore ) ";
+    return andCondition;
 
 };
-
 
 module.exports = GraphModel;

@@ -77,31 +77,14 @@ GraphController.prototype.getGraphDataInClassPercentage = function (request, rep
 
 };
 
-GraphController.prototype.getGraphDataPreTestPercentage = function (request, reply) {
+GraphController.prototype.getGraphDataPreTestPostTestPercentage = function (request, reply) {
 
     var criteria = GraphController.prototype.returnCriteria(request);
 
-    graphModel.getGraphDataPreTestPercentage(criteria, function (err, result) {
+    graphModel.getGraphDataPreTestPostTestPercentage(criteria, function (err, result) {
 
         if (err) {
-            reply(Boom.internal("Cannot get Pre-Test information", err));
-        } else {
-            reply(result);
-        }
-
-    });
-
-};
-
-
-GraphController.prototype.getGraphDataPostTestPercentage = function (request, reply) {
-
-    var criteria = GraphController.prototype.returnCriteria(request);
-
-    graphModel.getGraphDataPostTestPercentage(criteria, function (err, result) {
-
-        if (err) {
-            reply(Boom.internal("Cannot get Post-Test information", err));
+            reply(Boom.internal("Cannot get Pre-Test,Post-Test information", err));
         } else {
             reply(result);
         }
@@ -112,10 +95,12 @@ GraphController.prototype.getGraphDataPostTestPercentage = function (request, re
 
 
 GraphController.prototype.returnCriteria = function (request, reply) {
+
     var criteria = {
         tchCode: request.params.tchCode,
         periodCode: decodeURIComponent(request.params.periodCode),
         subjectCode: request.params.subjectCode,
+        isPreTest: request.params.isPreTest,
     };
 
     return criteria;
