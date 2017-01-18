@@ -13,6 +13,12 @@ function GraphController() {
 
 }
 
+//--------------------------------------------------------------------------------
+//
+// Get section (Oracle WTUDSS Database)
+//
+//--------------------------------------------------------------------------------
+
 GraphController.prototype.getTeacher = function (request, reply) {
 
     var roleId = request.params.roleId;
@@ -45,6 +51,73 @@ GraphController.prototype.getSubjectInTeacherWithPeriod = function (request, rep
 
     });
 
+};
+
+
+//--------------------------------------------------------------------------------
+//
+// Get section (MSSQL CyberU  Database)
+//
+//--------------------------------------------------------------------------------
+
+GraphController.prototype.getGraphDataInClassPercentage = function (request, reply) {
+
+    var criteria = GraphController.prototype.returnCriteria(request);
+
+    graphModel.getGraphDataInClassPercentage(criteria, function (err, result) {
+
+        if (err) {
+            reply(Boom.internal("Cannot get Student In Class information", err));
+        } else {
+            reply(result);
+        }
+
+    });
+
+};
+
+GraphController.prototype.getGraphDataPreTestPercentage = function (request, reply) {
+
+    var criteria = GraphController.prototype.returnCriteria(request);
+
+    graphModel.getGraphDataPreTestPercentage(criteria, function (err, result) {
+
+        if (err) {
+            reply(Boom.internal("Cannot get Pre-Test information", err));
+        } else {
+            reply(result);
+        }
+
+    });
+
+};
+
+
+GraphController.prototype.getGraphDataPostTestPercentage = function (request, reply) {
+
+    var criteria = GraphController.prototype.returnCriteria(request);
+
+    graphModel.getGraphDataPostTestPercentage(criteria, function (err, result) {
+
+        if (err) {
+            reply(Boom.internal("Cannot get Post-Test information", err));
+        } else {
+            reply(result);
+        }
+
+    });
+
+};
+
+
+GraphController.prototype.returnCriteria = function (request, reply) {
+    var criteria = {
+        tchCode: request.params.tchCode,
+        periodCode: decodeURIComponent(request.params.periodCode),
+        subjectCode: request.params.subjectCode,
+    };
+
+    return criteria;
 };
 
 

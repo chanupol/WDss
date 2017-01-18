@@ -15,7 +15,7 @@ function GraphModel() {
 
 //--------------------------------------------------------------------------------
 //
-// Get section
+// Get section (Oracle WTUDSS Database)
 //
 //--------------------------------------------------------------------------------
 
@@ -188,5 +188,117 @@ GraphModel.prototype.getSubjectInTeacherWithPeriod = function (criteria, callbac
 
 
 };
+
+
+//--------------------------------------------------------------------------------
+//
+// Get section (MSSQL CyberU  Database)
+//
+//--------------------------------------------------------------------------------
+
+GraphModel.prototype.getGraphDataInClassPercentage = function (criteria, callback) {
+
+
+    var database = new Database();
+
+    // connect to your database
+    mssql.connect(database.mssqlConfig(), function (err) {
+
+        var subjectCodeCondition = " ";
+
+        if (err) console.log(err);
+
+        var request = new mssql.Request();
+
+        request.input('tchCode', mssql.NVarChar(10), criteria.tchCode);
+        request.input('periodCode', mssql.NVarChar(5), criteria.periodCode);
+
+        if (criteria.subjectCode != 0) {
+            request.input('subjectCode', mssql.NVarChar(10), criteria.subjectCode);
+            subjectCodeCondition = "AND sed.SubjectCode = @subjectCode  ";
+        }
+
+
+        var declareTableVariable = "DECLARE @DataForGraph TABLE ( " +
+            "Teacher NVARCHAR(255) NOT NULL ," +
+            "StuCode NVARCHAR(10) NOT NULL ," +
+            "SubjectCode NVARCHAR(10) NOT NULL ," +
+            "tmpSubjectUnitPre NVARCHAR(20) NOT NULL ," +
+            "UnitID INT NOT NULL ," +
+            "UnitName NVARCHAR(255) NOT NULL ," +
+            "LearnPCT DECIMAL NOT NULL ," +
+            "PeriodCode NVARCHAR(4) NOT NULL);";
+
+
+        var insertIntoTbVarDataStatement = "INSERT  INTO @DataForGraph " +
+            "SELECT  DISTINCT " +
+            "( sed.TchCode + ' ' + tch.TchPName + ' ' + tch.TchFName + ' ' + tch.TchLName ) Teacher ," +
+            "sed.StuCode ,sed.SubjectCode ," +
+            "( sed.SubjectCode + CAST(l.UnitID AS NVARCHAR(10)) + SUBSTRING(sed.EnrollNo, 0, CHARINDEX('-', sed.EnrollNo)) ) tmpSubjectUnitPre ," +
+            "l.UnitID ,vsu.UnitName ,l.LearnPCT ,SUBSTRING(sed.EnrollNo, 0, CHARINDEX('-', sed.EnrollNo)) AS PeriodCode " +
+            "FROM    wtuuser.tbStuUnitLearn l " +
+            "JOIN wtuuser.tbStuEnrollDetail sed ON l.StuEnrollDetail_Idx = sed.Idx " +
+            "AND sed.TchCode = @tchCode " +
+            subjectCodeCondition +
+            "JOIN wtuuser.tbStuUnitVdoTopic suvt ON l.Idx = suvt.StuUnitLearn_Idx " +
+            "JOIN wtuuser.tbVdoSet_Unit vsu ON vsu.Idx = suvt.VdoSet_Unit_Idx " +
+            "JOIN wtuuser.tbTeacher tch ON tch.Idx = sed.Teacher_Idx " +
+            "WHERE   SUBSTRING(sed.EnrollNo, 0, CHARINDEX('-', sed.EnrollNo)) = @periodCode " +
+            "ORDER BY SUBSTRING(sed.EnrollNo, 0, CHARINDEX('-', sed.EnrollNo)) ," +
+            "sed.StuCode ,sed.SubjectCode ,l.UnitID; ";
+
+
+        var getDataStatement = "SELECT  countZeroPercent = " +
+            "( SELECT COUNT(g.StuCode) " +
+            "    FROM   @DataForGraph g " +
+            "    WHERE  ( g.LearnPCT < 0.0 AND g.tmpSubjectUnitPre = gg.tmpSubjectUnitPre ) " +
+            "), " +
+            "countFiftyPercent = " +
+            "( SELECT    COUNT(g.StuCode) " +
+            "   FROM      @DataForGraph g " +
+            "   WHERE     ( ( g.LearnPCT > 1 AND g.LearnPCT <= 50.0 ) AND ( g.tmpSubjectUnitPre = gg.tmpSubjectUnitPre ) ) " +
+            "), " +
+            "countEightyPercent = " +
+            "( SELECT    COUNT(g.StuCode) " +
+            "   FROM      @DataForGraph g " +
+            "   WHERE     ( ( g.LearnPCT > 50.0 AND g.LearnPCT <= 80.0 )  AND ( g.tmpSubjectUnitPre = gg.tmpSubjectUnitPre ) ) " +
+            "), " +
+            "count100Percent = " +
+            "( SELECT    COUNT(g.StuCode) " +
+            "   FROM      @DataForGraph g " +
+            "   WHERE     ( ( g.LearnPCT > 80.0 AND g.LearnPCT <= 100.0 ) AND ( g.tmpSubjectUnitPre = gg.tmpSubjectUnitPre ) ) " +
+            "), " +
+            "gg.Teacher ,gg.SubjectCode , gg.UnitID , gg.UnitName , gg.tmpSubjectUnitPre " +
+            "   FROM    @DataForGraph gg " +
+            "   GROUP BY gg.SubjectCode , gg.UnitID , gg.UnitName ,gg.tmpSubjectUnitPre ,gg.Teacher " +
+            "order by gg.Teacher , " +
+            "gg.SubjectCode , " +
+            "gg.UnitID";
+
+
+        request.query(declareTableVariable + insertIntoTbVarDataStatement + getDataStatement).then(function (result) {
+
+            callback(null, result);
+
+        }).catch(function (err) {
+            console.log(err.message);
+            //console.log(result);
+            callback(err, null);
+        });
+    });
+
+
+};
+
+
+GraphModel.prototype.getGraphDataPreTestPercentage = function (criteria, callback) {
+
+};
+
+
+GraphModel.prototype.getGraphDataPostTestPercentage = function (criteria, callback) {
+
+};
+
 
 module.exports = GraphModel;
