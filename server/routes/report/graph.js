@@ -79,6 +79,21 @@ exports.register = function (server, options, next) {
                 }
             }
         },
+        {
+            method: "GET",
+            path: "/api/graph/tch/period/pretestposttest/list/{tchCode}/{periodCode}/{subjectCode}",
+
+            config: {
+                handler: graphController.getGraphDataPreTestPostTestPercentage,
+                validate: {
+                    params: {
+                        tchCode: Joi.string().required(),
+                        periodCode: Joi.string().required(),
+                        subjectCode: Joi.string().required()
+                    }
+                }
+            }
+        },
     ]);
 
     next();

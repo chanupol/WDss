@@ -312,7 +312,7 @@ GraphModel.prototype.getGraphDataPreTestPostTestPercentage = function (criteria,
             subjectCodeCondition = " AND sut.SubjectCode = @subjectCode  ";
         }
 
-        if (criteria.isPreTest != undefined || criteria.isPreTest != "undefined") {
+        if (criteria.isPreTest != undefined) {
             // 1: Pre-Test , 3: Post-Test
             request.input('isPreTest', mssql.NVarChar(1), (criteria.isPreTest == "Y") ? 1 : 3);
 
