@@ -105,6 +105,7 @@ module.exports = function () {
     // Fetch data form cursor
     //
     //--------------------------------------------------------------------------------
+
     Database.prototype.FetchRow = function (resultSet, resultRows, callback) {
         resultSet.getRows(100, function (err, rows) {
             if (err) {

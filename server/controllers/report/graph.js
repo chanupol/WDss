@@ -62,6 +62,7 @@ GraphController.prototype.getSubjectInTeacherWithPeriod = function (request, rep
 
 GraphController.prototype.getGraphDataInClassPercentage = function (request, reply) {
 
+
     var criteria = GraphController.prototype.returnCriteria(request);
 
     graphModel.getGraphDataInClassPercentage(criteria, function (err, result) {

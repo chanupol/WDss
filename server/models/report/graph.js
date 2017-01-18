@@ -276,6 +276,7 @@ GraphModel.prototype.getGraphDataInClassPercentage = function (criteria, callbac
             "gg.UnitID";
 
 
+
         request.query(declareTableVariable + insertIntoTbVarDataStatement + getDataStatement).then(function (result) {
 
             callback(null, result);

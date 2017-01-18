@@ -47,7 +47,8 @@ exports.register = function (server, options, next) {
                     }
                 }
             }
-        }, {
+        },
+        {
             method: "GET",
             path: "/api/graph/tch/period/subjects/list/{tchCode}/{periodCode}/{subjectCode}",
 
