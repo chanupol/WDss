@@ -371,7 +371,7 @@ GraphModel.prototype.getGraphDataPreTestPostTestPercentage = function (criteria,
             "     WHEN gg.IsDone = 0 THEN 'Not Done' END IsDone " +
             "FROM    DataForGraph gg " +
             "GROUP BY gg.SubjectCode , gg.UnitID , gg.ExpectScore , gg.tmpSubjectUnitPre , gg.Teacher , gg.LearnTypeCode , gg.IsDone " +
-            "ORDER BY gg.Teacher , gg.SubjectCode ,  gg.UnitID;";
+            "ORDER BY gg.Teacher , gg.SubjectCode ,gg.LearnTypeCode,  gg.UnitID;";
 
 
         request.query(getDataStatement).then(function (result) {
