@@ -4,7 +4,9 @@
 
 "use strict";
 var oracledb = require("oracledb");
+var mssql = require('mssql');
 var Database = require("../../config/database");
+var async = require('async');
 
 oracledb.autoCommit = true;
 
@@ -144,6 +146,46 @@ GraphModel.prototype.getTeacher = function (roleId, userName, callback) {
         });
 
     }
+
+};
+
+GraphModel.prototype.getSubjectInTeacherWithPeriod = function (criteria, callback) {
+
+    var database = new Database();
+    oracledb.outFormat = oracledb.OBJECT;
+
+    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+        if (err) {
+            console.error(err.message);
+            database.doRelease(connection);
+            callback(err, null);
+        } else {
+
+            database.addParameter("tchCode", criteria.tchCode);
+            database.addParameter("periodCode", criteria.periodCode);
+            database.addParameter("cursorSubjects", {type: oracledb.CURSOR, dir: oracledb.BIND_OUT});
+
+            connection.execute(database.getProcedureCommand("SP_GET_SUBJECTS_IN_TCH_PERIOD"), database.getParameter(), function (err, result) {
+                if (err) {
+                    console.error(err.message);
+                    database.DoRelease(connection);
+                    callback(err, null);
+                } else {
+                    var obj = result.outBinds;
+
+                    database.FetchRow(obj.cursorSubjects, [], function (err, cursorSubjects) {
+                        if (err) {
+                            console.error(err);
+                        }
+
+                        database.DoRelease(connection);
+                        callback(err, cursorSubjects);
+                    })
+                }
+            });
+        }
+    });
+
 
 };
 

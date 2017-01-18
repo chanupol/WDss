@@ -33,6 +33,20 @@ exports.register = function (server, options, next) {
                     }
                 }
             }
+        },
+        {
+            method: "GET",
+            path: "/api/graph/tch/subjects/list/{tchCode}/{periodCode}",
+
+            config: {
+                handler: graphController.getSubjectInTeacherWithPeriod,
+                validate: {
+                    params: {
+                        tchCode: Joi.string().required(),
+                        periodCode: Joi.string().required()
+                    }
+                }
+            }
         }
     ]);
 

@@ -6,6 +6,7 @@
 module.exports = function () {
 
     var async = require("async");
+    var parameters = [];
 
     function Database() {
     }
@@ -27,6 +28,65 @@ module.exports = function () {
         };
 
         return oracleConfig;
+    };
+
+
+    Database.prototype.mssqlConfig = function () {
+
+        var mssqlConfig = {
+
+            server: '113.53.249.20',
+            user: 'sa',
+            password: 'ouj8nv@,boSRV',
+            database: 'cyberu_db'
+
+        };
+        return mssqlConfig;
+
+    };
+
+    //--------------------------------------------------------------------------------
+    //
+    // Generate oracle parameter and call store procedure command.
+    //
+    //--------------------------------------------------------------------------------
+    Database.prototype.addParameter = function (parameter, value) {
+        var obj = {};
+        obj[parameter] = value;
+
+        parameters.push(obj);
+    };
+
+    Database.prototype.clearParameter = function () {
+        parameters = [];
+    };
+
+    Database.prototype.getParameter = function () {
+        return parameters.reduce(function (result, item) {
+            var key = Object.keys(item)[0]; //first property: a, b, c
+            result[key] = item[key];
+            return result;
+        }, {});
+    };
+
+    Database.prototype.getParameterArr = function () {
+        return parameters;
+    };
+
+    Database.prototype.getProcedureCommand = function (name) {
+        var parameterName = "";
+        var comma = "";
+
+        parameters.reduce(function (result, item) {
+            if (parameterName != "") {
+                comma = ", ";
+            }
+
+            parameterName += comma + ":" + Object.keys(item)[0];
+            return parameterName;
+        }, "");
+
+        return "BEGIN " + name + "(" + parameterName + "); END;";
     };
 
     //--------------------------------------------------------------------------------

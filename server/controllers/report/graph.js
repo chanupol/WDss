@@ -20,11 +20,31 @@ GraphController.prototype.getTeacher = function (request, reply) {
 
     graphModel.getTeacher(roleId, userName, function (err, result) {
         if (err) {
-            reply(Boom.internal("Cannot get subject list information", err));
+            reply(Boom.internal("Cannot get Teacher list information", err));
         } else {
             reply(result);
         }
     });
+};
+
+
+GraphController.prototype.getSubjectInTeacherWithPeriod = function (request, reply) {
+
+    var criteria = {
+        tchCode: request.params.tchCode,
+        periodCode: decodeURIComponent(request.params.periodCode)
+    };
+
+    graphModel.getSubjectInTeacherWithPeriod(criteria, function (err, result) {
+
+        if (err) {
+            reply(Boom.internal("Cannot get Subject list information", err));
+        } else {
+            reply(result);
+        }
+
+    });
+
 };
 
 
