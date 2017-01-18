@@ -112,7 +112,9 @@
                             <a id="navanotchfac"
                                href="#/admin/teacher/another/faculty/list">อาจารย์ที่มีสอนในคณะอื่น</a>
                             <a id="navsubjectpercentgraph"
-                               href="#/admin/subject/graph">สรุปผลการเข้าเรียนรายวิชาแบบกราฟ</a>
+                               href="#/admin/subject/graphadmin">สรุปผลการเข้าเรียนรายแยกวิชา</a>
+                            <a id="navsubjectpretestposttest"
+                               href="#/admin/subject/pretestposttestadmin">สรุปผลการสอบ Pretest Posttest</a>
                         </li>
                     </ul>
                     <!-- /.nav-second-level -->
@@ -150,6 +152,8 @@
 
 <script src="assets/libs/angular-ui/ui-bootstrap-tpls.min.js"></script>
 
+<script src="assets/libs/async/async.min.js"></script>
+
 <!-- Kendo Ui -->
 <script src="assets/libs/kendo/2016.1.112/Scripts/jszip.min.js"></script>
 <script src="assets/libs/kendo/2016.1.112/Scripts/kendo.all.min.js"></script>
@@ -178,6 +182,7 @@
 <script src="app/shared/import/videolengthService.js"></script>
 <script src="app/shared/import/teacherService.js"></script>
 <script src="app/shared/report/reportService.js"></script>
+<script src="app/shared/report/graphService.js"></script>
 <script src="app/shared/utility/commonStatusService.js"></script>
 <script src="app/shared/teacher/anotherteacherfacultyService.js"></script>
 
@@ -194,6 +199,8 @@
 <script src="app/components/import/teacherController.js"></script>
 
 <script src="app/components/report/reportController.js"></script>
+<script src="app/components/report/reportPretestPostTestController.js"></script>
+
 <script src="app/components/main/mainController.js"></script>
 
 <script src="app/components/admin/anotherteacherfacultyController.js"></script>

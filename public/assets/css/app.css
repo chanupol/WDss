@@ -150,3 +150,7 @@ button {
     -moz-box-sizing: border-box;
     -webkit-box-sizing: border-box;
 }
+
+.panel-label-title {
+    padding-top: 8px;
+}

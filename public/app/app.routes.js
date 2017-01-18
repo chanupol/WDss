@@ -49,12 +49,25 @@ app.config(function ($routeProvider) {
         templateUrl: "app/components/admin/anothertchfacedit.html"
     });
 
-    $routeProvider.when("/" + routeAdmin + "/subject/graph", {
+    $routeProvider.when("/" + routeAdmin + "/subject/graph/:tchCode/:tchFullName", {
         controller: "graphReportPercentOfSubjectController",
         templateUrl: "app/components/report/graph.html"
     });
 
+    $routeProvider.when("/" + routeAdmin + "/subject/graphadmin", {
+        controller: "graphReportPercentOfSubjectForAdminController",
+        templateUrl: "app/components/report/chooseTeacherForGraph.html"
+    });
 
+    $routeProvider.when("/" + routeAdmin + "/subject/pretestposttest/:tchCode/:tchFullName", {
+        controller: "reportPretestPostTestController",
+        templateUrl: "app/components/report/pretestPosttestChart.html"
+    });
+
+    $routeProvider.when("/" + routeAdmin + "/subject/pretestposttestadmin", {
+        controller: "reportPretestPostTestForAdminController",
+        templateUrl: "app/components/report/pretestPosttestChartList.html"
+    });
 
     //==================================================
     //
