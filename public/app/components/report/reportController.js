@@ -1672,11 +1672,10 @@ app.controller("reportTopicBySubjectTchCodeUnitController", function ($scope, $r
 // Graph Report Percent Of Subject
 //
 //----------------------------------------
-app.controller('graphReportPercentOfSubjectForAdminController', function ($scope, $routeParams, $location, reportService, localStorageService) {
+app.controller('graphReportPercentOfSubjectForAdminController', function ($scope, $routeParams, $location, graphService, localStorageService) {
 
-    console.dir("graphReportPercentOfSubjectForAdminController");
     $scope.roleId = localStorageService.get("RoleId");
-    console.dir($scope.roleId);
+    $scope.userName = localStorageService.get("UserName");
     //------------------------------------------------
     //
     // KendoUi Configurations
@@ -1715,9 +1714,7 @@ app.controller('graphReportPercentOfSubjectForAdminController', function ($scope
     $scope.genGrdTeacher = function () {
 
         $scope.grdTeacherOptions = {
-            //dataSource: reportService.getTeacherBySubjectDs($routeParams.subjectCode),
-            // dataSource: reportService.getTeacherBySubjectWithPeriodDs($routeParams.subjectCode, $routeParams.periodCode),
-            dataSource: reportService.getTeacherBySubjectWithPeriodDs("PH2108", "2%2F58"),
+            dataSource: graphService.getTeacherDs($scope.roleId, $scope.userName),
             height: 500,
             sortable: true,
             scrollable: true,
@@ -1739,13 +1736,13 @@ app.controller('graphReportPercentOfSubjectForAdminController', function ($scope
                 }
             },
             columns: [
-                {
-                    field: "FACULTYNAME",
-                    title: "คณะ",
-                    width: 250,
-                    headerAttributes: {style: "text-align:center"},
-                    attributes: {"class": "text-center"}
-                },
+                // {
+                //     field: "FACULTYNAME",
+                //     title: "คณะ",
+                //     width: 250,
+                //     headerAttributes: {style: "text-align:center"},
+                //     attributes: {"class": "text-center"}
+                // },
                 {
                     field: "TCHCODE",
                     title: "รหัสอาจารย์ผู้สอน",
@@ -1762,13 +1759,13 @@ app.controller('graphReportPercentOfSubjectForAdminController', function ($scope
                     attributes: {"class": "text-center"},
                     template: "<a href='\\#/admin/subject/graph/#=TCHCODE#/#=TCHNAME#'> #=TCHNAME#</a>"
                 },
-                {
-                    field: "DEGREENAME",
-                    title: "ระดับ",
-                    width: 120,
-                    headerAttributes: {style: "text-align:center"},
-                    attributes: {"class": "text-center"}
-                }
+                // {
+                //     field: "DEGREENAME",
+                //     title: "ระดับ",
+                //     width: 120,
+                //     headerAttributes: {style: "text-align:center"},
+                //     attributes: {"class": "text-center"}
+                // }
             ]
         };
 
@@ -3166,21 +3163,26 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     $scope.loadData = function () {
 
+        kendo.ui.progress($(document.body), true);
+
         graphService.getGraphDataInClassPercentage($scope.tchCode, $scope.periodCode, $scope.subjectCode).then(function (dataStudy) {
 
             graphService.getGraphDataPretestPosttest($scope.tchCode, $scope.periodCode, $scope.subjectCode).then(function (dataPrePost) {
-
+                console.log("dataStudy");
+                console.dir(dataStudy);
+                console.log("dataPrePost");
+                console.dir(dataPrePost);
                 $scope.genDynamicChart(dataStudy, dataPrePost);
 
+                kendo.ui.progress($(document.body), false);
+
             }, function (err) {
-                if (err) {
-                    console.log(err.message);
-                }
+                kendo.ui.progress($(document.body), false);
+                console.log(err.message);
             });
         }, function (err) {
-            if (err) {
-                console.log(err.message);
-            }
+            kendo.ui.progress($(document.body), false);
+            console.log(err.message);
         });
 
     };
@@ -3315,41 +3317,38 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         //
         //group by subject
         var groupSubjectArr = _.groupBy(data, 'SubjectCode');
-        _.each(groupSubjectArr, function(outerSubjectArr){
+        _.each(groupSubjectArr, function(innerSubjectArr){
             //
             //iterator through Subject Group Object
-            _.each(outerSubjectArr, function(innerSubjectArr){
-                var arr = {
-                    "Pre-Test":[],
-                    "Post-Test":[]
-                };
+            var arr = {
+                "Pre-Test":[],
+                "Post-Test":[]
+            };
+            //
+            //group by LearnTypeCode >> Pretest / PostTest
+            var groupPrePostArr = _.groupBy(innerSubjectArr, 'LearnTypeCode');
+            //
+            //iterator through Pretest Posttest Group Object
+            _.each(groupPrePostArr, function(prePostArr){
                 //
-                //group by LearnTypeCode >> Pretest / PostTest
-                var groupPrePostArr = _.groupBy(innerSubjectArr, 'LearnTypeCode');
-                //
-                //iterator through Pretest Posttest Group Object
-                _.each(groupPrePostArr, function(prePostArr){
+                //group by IsDone >> Done / Not Done
+                var groupedArr = _.groupBy(prePostArr, 'IsDone');
+                _.each(groupedArr["Not Done"], function(notDone){
                     //
-                    //group by IsDone >> Done / Not Done
-                    var groupedArr = _.groupBy(prePostArr, 'IsDone');
-                    _.each(groupedArr["Not Done"], function(notDone){
-                        //
-                        //add 'Not Done' Key to 'Done' array for display in chart
-                        var done = _.find(groupedArr["Done"], ["UnitID", notDone.UnitID]);
-                        done.NotDone = notDone.CountZeroScore;
-                    });
-                    arr[prePostArr[0].LearnTypeCode] = _.concat(arr[prePostArr[0].LearnTypeCode], groupedArr["Done"])
+                    //add 'Not Done' Key to 'Done' array for display in chart
+                    var done = _.find(groupedArr["Done"], ["UnitID", notDone.UnitID]);
+                    done.NotDone = notDone.CountZeroScore;
                 });
-
-                //end onf subject loop here
-                //create chart here
-                var result = _.find(resultArr, ["subjectCode", $scope.subjectCode]);
-                if(result){
-                    result.preTestOptions = $scope.genPretestPosttestChartOption(arr["Pre-Test"], $scope.subjectCode);
-                    result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode);
-                }
-
+                arr[prePostArr[0].LearnTypeCode] = _.concat(arr[prePostArr[0].LearnTypeCode], groupedArr["Done"])
             });
+
+            //end onf subject loop here
+            //create chart here
+            var result = _.find(resultArr, ["subjectCode", $scope.subjectCode]);
+            if(result){
+                result.preTestOptions = $scope.genPretestPosttestChartOption(arr["Pre-Test"], $scope.subjectCode);
+                result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode);
+            }
         });
     };
 
