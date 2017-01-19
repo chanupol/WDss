@@ -47,62 +47,85 @@
             </div>
         </div>
 
+        <!--<div class="panel-body">-->
+            <!--<div data-ng-repeat="chart in chartArr">-->
+
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12" >-->
+                        <!--<div class="panel panel-default">-->
+                            <!--<div class="panel-heading">-->
+                               <!--<i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตที่เข้าเรียนรายวิชา {{chart.subjectCode}}-->
+                            <!--</div>-->
+
+                            <!--<div class="panel-body">-->
+                                <!--<div kendo-chart-->
+                                     <!--k-options="chart.studyOptions">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div id="studyChart" class="overlay"><div>No data available</div></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12" >-->
+                        <!--<div class="panel panel-default">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตข้อสอบ Pretest ของรายวิชา {{chart.subjectCode}}-->
+                            <!--</div>-->
+
+                            <!--<div class="panel-body">-->
+                                <!--<div kendo-chart-->
+                                     <!--k-options="chart.preTestOptions">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div id="pretestChart" class="overlay"><div>No data available</div></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+                <!--<div class="row">-->
+                    <!--<div class="col-md-12" >-->
+                        <!--<div class="panel panel-default">-->
+                            <!--<div class="panel-heading">-->
+                                <!--<i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตที่ทำข้อสอบ Posttest ของรายวิชา {{chart.subjectCode}}-->
+                            <!--</div>-->
+
+                            <!--<div class="panel-body">-->
+                                <!--<div kendo-chart-->
+                                     <!--k-options="chart.postTestOptions">-->
+                                <!--</div>-->
+                            <!--</div>-->
+                            <!--<div id="posttestChart" class="overlay"><div>No data available</div></div>-->
+                        <!--</div>-->
+                    <!--</div>-->
+                <!--</div>-->
+
+            <!--</div>-->
+        <!--</div>-->
+
         <div class="panel-body">
-            <div data-ng-repeat="chart in chartArr">
-
-                <div class="row">
-                    <div class="col-md-12" >
+            <div class="row">
+                <div data-ng-repeat="chart in chartDonutArr">
+                    <div class="col-md-4" >
                         <div class="panel panel-default">
                             <div class="panel-heading">
-                               <i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตที่เข้าเรียนรายวิชา {{chart.subjectCode}}
+                                <i class="fa fa-book fa-fw panel-label-title"></i> Pretest/Posttest ของหน่วยเรียนที่ {{chart.unitId}}
                             </div>
 
                             <div class="panel-body">
-                                <div kendo-chart
-                                     k-options="chart.studyOptions">
+                                <div ng-show="!chart.noRecord"
+                                     kendo-chart
+                                     k-options="chart.chartOptions">
                                 </div>
                             </div>
-                            <div id="studyChart" class="overlay"><div>No data available</div></div>
+                            <div class="overlay overlay-donut prepostDonutChart{{chart.unitId}}" ng-show="chart.noRecord"><div>No data available</div></div>
                         </div>
                     </div>
                 </div>
-
-                <div class="row">
-                    <div class="col-md-12" >
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตที่ทำข้อสอบ Pretest ของรายวิชา {{chart.subjectCode}}
-                            </div>
-
-                            <div class="panel-body">
-                                <div kendo-chart
-                                     k-options="chart.preTestOptions">
-                                </div>
-                            </div>
-                            <div id="pretestChart" class="overlay"><div>No data available</div></div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="row">
-                    <div class="col-md-12" >
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตที่ทำข้อสอบ Posttest ของรายวิชา {{chart.subjectCode}}
-                            </div>
-
-                            <div class="panel-body">
-                                <div kendo-chart
-                                     k-options="chart.postTestOptions">
-                                </div>
-                            </div>
-                            <div id="posttestChart" class="overlay"><div>No data available</div></div>
-                        </div>
-                    </div>
-                </div>
-
             </div>
         </div>
+
 
     </div>
 

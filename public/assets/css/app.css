@@ -167,6 +167,18 @@ button {
     text-align: center;
 }
 
+.overlay-donut {
+    width: 100%;
+    height: 312px;
+    /*position: absolute;*/
+    top: 0;
+    left: 0;
+    opacity: .2;
+    filter: alpha(opacity=60);
+    /*background-color: #6495ed;*/
+    text-align: center;
+}
+
 .overlay div {
     position: relative;
     font-size: 34px;
