@@ -157,7 +157,7 @@ GraphModel.prototype.getSubjectInTeacherWithPeriod = function (criteria, callbac
     oracledb.getConnection(database.oracleConfig(), function (err, connection) {
         if (err) {
             console.error(err.message);
-            database.doRelease(connection);
+            database.DoRelease(connection);
             callback(err, null);
         } else {
 
