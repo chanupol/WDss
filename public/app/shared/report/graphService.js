@@ -83,7 +83,6 @@ app.factory("graphService", function ($http, $q, $rootScope, localStorageService
     }
 
 
-
     //--------------------------------------------------------------------------------
     //
     // Add data

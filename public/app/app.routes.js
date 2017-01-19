@@ -59,16 +59,6 @@ app.config(function ($routeProvider) {
         templateUrl: "app/components/report/chooseTeacherForGraph.html"
     });
 
-    $routeProvider.when("/" + routeAdmin + "/subject/pretestposttest/:tchCode/:tchFullName", {
-        controller: "reportPretestPostTestController",
-        templateUrl: "app/components/report/pretestPosttestChart.html"
-    });
-
-    $routeProvider.when("/" + routeAdmin + "/subject/pretestposttestadmin", {
-        controller: "reportPretestPostTestForAdminController",
-        templateUrl: "app/components/report/pretestPosttestChartList.html"
-    });
-
     //==================================================
     //
     //  Report Page

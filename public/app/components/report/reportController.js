@@ -3298,7 +3298,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 labels: {
                     template: "#: value# คน"
                 },
-                majorUnit: 10,
+                // majorUnit: 10,
                 line: {
                     visible: false
                 },
@@ -3309,6 +3309,10 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             tooltip: {
                 visible: true,
                 template: "#: value# คน"
+            },
+            dataBound: function(e) {
+                var view = e.sender.dataSource.view();
+                $("#studyChart").toggle(view.length === 0);
             }
         };
     };
@@ -3346,13 +3350,13 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             //create chart here
             var result = _.find(resultArr, ["subjectCode", $scope.subjectCode]);
             if(result){
-                result.preTestOptions = $scope.genPretestPosttestChartOption(arr["Pre-Test"], $scope.subjectCode);
-                result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode);
+                result.preTestOptions = $scope.genPretestPosttestChartOption(arr["Pre-Test"], $scope.subjectCode, "#pretestChart");
+                result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode, "$posttestChart");
             }
         });
     };
 
-    $scope.genPretestPosttestChartOption = function (dataSource, subjectName) {
+    $scope.genPretestPosttestChartOption = function (dataSource, subjectName, prePostDiv) {
         return {
             // $scope.samepleChartOptions = {
             // title: {
@@ -3441,7 +3445,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 labels: {
                     template: "#: value# คน"
                 },
-                majorUnit: 10,
+                // majorUnit: 10,
                 line: {
                     visible: false
                 },
@@ -3452,6 +3456,10 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             tooltip: {
                 visible: true,
                 template: "#: value# คน"
+            },
+            dataBound: function(e) {
+                var view = e.sender.dataSource.view();
+                $(prePostDiv).toggle(view.length === 0);
             }
         };
     };
