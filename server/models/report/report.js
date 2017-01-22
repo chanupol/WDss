@@ -747,8 +747,45 @@ ReportModel.prototype.getZeroVdoData = function (callback) {
 };
 
 
+// Get Zero VDO Data
+ReportModel.prototype.getZeroVdoData = function (callback) {
+
+    var database = new Database();
+
+    //oracledb.outFormat = oracledb.OBJECT;
+
+    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+        if (err) {
+            console.error(err.message);
+            database.DoRelease(connection);
+            callback(err, null);
+        } else {
+            connection.execute("begin SP_GET_ZEROVDOSUBJECTDATA(:cursorZeroVdoSubject); end;",
+                {
+                    cursorZeroVdoSubject: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
+                }, function (err, result) {
+                    if (err) {
+                        console.error(err.message);
+                        database.DoRelease(connection);
+                        callback(err, null);
+                    } else {
+                        var obj = result.outBinds;
+                        database.FetchRow(obj.cursorZeroVdoSubject, [], function (err, cursorZeroVdoSubject) {
+                            if (err) {
+                                console.error(err);
+                            }
+                            database.DoRelease(connection);
+                            callback(err, cursorZeroVdoSubject);
+                        })
+                    }
+                });
+        }
+    });
+
+};
+
 // Get Data for chart
-ReportModel.prototype.getZeroVdoData = function (tchCode, period, callback) {
+/*ReportModel.prototype.getZeroVdoData = function (tchCode, period, callback) {
 
     var database = new Database();
 
@@ -784,5 +821,5 @@ ReportModel.prototype.getZeroVdoData = function (tchCode, period, callback) {
         }
     });
 
-};
+};*/
 module.exports = ReportModel;

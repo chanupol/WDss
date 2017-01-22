@@ -37,6 +37,21 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
         }
     });
 
+    $scope.$on('$viewContentLoaded', function (event) {
+
+        console.log('On Load');
+
+        //viewer = new $window.Stimulsoft.Viewer.StiViewer(options, "StiViewer", false);
+        currentPeriodUniCode = reportService.getCurrentPeriod();
+
+        //console.log('Initial viewer');
+
+    });
+
+    $scope.$on('$destroy', function () {
+
+    });
+
 
     //------------------------------------------------
     //
@@ -95,7 +110,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
 
     $scope.grdSubjectByPeriodOptions = {
 
-        dataSource: reportService.getSubjectListByPeriodCodeDs('1%2F59'),
+        dataSource: reportService.getSubjectListByPeriodCodeDs('2%2F59'),
         //dataSource: reportService.getSubjectListByPeriodCodeDs(currentPeriodUniCode),
         height: 500,
         sortable: true,
@@ -1686,9 +1701,9 @@ app.controller('graphReportPercentOfSubjectForAdminController', function ($rootS
     $scope.$on('$viewContentLoaded', function (event) {
 
         //if role is Admin or คณะบดี
-        if($scope.roleId == "1" || $scope.roleId == "5"){
+        if ($scope.roleId == "1" || $scope.roleId == "5") {
             $scope.genGrdTeacher();
-        }else{
+        } else {
             //
             //redirect to graph page
             $location.path('/admin/subject/graph/' + $scope.user.tchCode + "/" + $scope.user.tchFullName);
@@ -1787,10 +1802,10 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
     $scope.roleId = localStorageService.get("RoleId");
 
     //if role is 5=Admin or 1=คณะบดี
-    if($scope.roleId === 1 || $scope.roleId === 5){
+    if ($scope.roleId === 1 || $scope.roleId === 5) {
         $scope.isAdmin = true;
         $scope.tchName = $routeParams.tchFullName;
-    }else{
+    } else {
         //
         //hide link
         $scope.isAdmin = false;
@@ -1814,7 +1829,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         // Get Current Period
         reportService.getCurrentPeriod().then(function (response) {
 
-            $scope.periodCode = response[0].CURRENTLEARNPERIOD.replace("/","%2F");
+            $scope.periodCode = response[0].CURRENTLEARNPERIOD.replace("/", "%2F");
 
             $("#ddlPeriodCode").data('kendoDropDownList').value($scope.periodCode);
 
@@ -1846,9 +1861,9 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
     //
     //------------------------------------------------
 
-    $scope.ddlPeriodChanged = function() {
+    $scope.ddlPeriodChanged = function () {
 
-        if($scope.ddlSubject.dataSource){
+        if ($scope.ddlSubject.dataSource) {
             graphService.getSubjectInTeacherWithPeriod($scope.tchCode, $scope.periodCode).then(function (dataSubject) {
 
                 $scope.ddlSubject.dataSource.data(dataSubject);
@@ -1874,9 +1889,9 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         //     $scope.genDynamicChart($scope.tempData4, $scope.tempDataPrePost4);
         // }
 
-        if($scope.subjectCode){
+        if ($scope.subjectCode) {
             $scope.loadData();
-        }else{
+        } else {
             $scope.chartArr = [];
             $scope.chartDonutArr = [];
         }
@@ -1916,7 +1931,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         $scope.genDynamicStudyChart(dataStudy, arr);
         $scope.genDynamicPretestPosttestChart(dataPrePost, arr);
 
-        if(arr.length === 0){
+        if (arr.length === 0) {
             arr.push({});
         }
         $scope.chartArr = arr;
@@ -1925,7 +1940,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
     $scope.genDynamicStudyChart = function (data, resultArr) {
         var groupedArr = _.groupBy(data, 'SubjectCode');
 
-        _.each(groupedArr, function(arr){
+        _.each(groupedArr, function (arr) {
             var sortedArr = _.sortBy(arr, "UnitID");
 
             resultArr.push(
@@ -1937,13 +1952,13 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         });
     };
 
-    $scope.getPeriod = function(){
-        return $scope.periodCode.replace("%2F","/");
+    $scope.getPeriod = function () {
+        return $scope.periodCode.replace("%2F", "/");
     };
 
     $scope.genChartOption = function (dataSource, subjectName) {
         return {
-        // $scope.samepleChartOptions = {
+            // $scope.samepleChartOptions = {
             // title: {
             //     //
             //     //teacher name
@@ -1975,7 +1990,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     return createColumn(e.rect, e.options.color);
                 }
             },
-            series:[
+            series: [
                 //
                 //percent range
                 {
@@ -2048,7 +2063,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     lock: "y"
                 }
             },
-            dataBound: function(e) {
+            dataBound: function (e) {
                 var view = e.sender.dataSource.view();
                 $("#studyChart").toggle(view.length === 0);
             }
@@ -2059,29 +2074,29 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         //
         //group by subject
         var groupSubjectArr = _.groupBy(data, 'SubjectCode');
-        _.each(groupSubjectArr, function(innerSubjectArr){
+        _.each(groupSubjectArr, function (innerSubjectArr) {
             //
             //iterator through Subject Group Object
             var arr = {
-                "Pre-Test":[],
-                "Post-Test":[]
+                "Pre-Test": [],
+                "Post-Test": []
             };
             //
             //group by LearnTypeCode >> Pretest / PostTest
             var groupPrePostArr = _.groupBy(innerSubjectArr, 'LearnTypeCode');
             //
             //iterator through Pretest Posttest Group Object
-            _.each(groupPrePostArr, function(prePostArr){
+            _.each(groupPrePostArr, function (prePostArr) {
                 //
                 //group by IsDone >> Done / Not Done
                 var groupedArr = _.groupBy(prePostArr, 'IsDone');
-                _.each(groupedArr["Done"], function(done){
+                _.each(groupedArr["Done"], function (done) {
                     //
                     //add 'Not Done' Key to 'Done' array for display in chart
                     var notDone = _.find(groupedArr["Not Done"], ["UnitID", done.UnitID]);
-                    if(notDone){
+                    if (notDone) {
                         done.NotDone = notDone.CountZeroScore;
-                    }else{
+                    } else {
                         done.NotDone = 0;
                     }
                 });
@@ -2091,7 +2106,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             //end onf subject loop here
             //create chart here
             var result = _.find(resultArr, ["subjectCode", $scope.subjectCode]);
-            if(result){
+            if (result) {
                 result.preTestOptions = $scope.genPretestPosttestChartOption(arr["Pre-Test"], $scope.subjectCode, "#pretestChart");
                 result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode, "#posttestChart");
 
@@ -2134,7 +2149,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     return createColumn(e.rect, e.options.color);
                 }
             },
-            series:[
+            series: [
                 //
                 //percent range
                 {
@@ -2212,22 +2227,22 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     lock: "y"
                 }
             },
-            dataBound: function(e) {
+            dataBound: function (e) {
                 var view = e.sender.dataSource.view();
                 $(prePostDiv).toggle(view.length === 0);
             }
         };
     };
 
-    $scope.genDynamicPretestPosttestDonutChart = function (dataPretest, dataPosttest, subjectName){
+    $scope.genDynamicPretestPosttestDonutChart = function (dataPretest, dataPosttest, subjectName) {
         var arr = [];
         var maxUnit = 15;
 
-        for(var i = 1; i <= maxUnit; i++){
+        for (var i = 1; i <= maxUnit; i++) {
             var series = [];
             var pretest = _.find(dataPretest, ["UnitID", i]);
             var posttest = _.find(dataPosttest, ["UnitID", i]);
-            if(pretest){
+            if (pretest) {
                 series.push({
                     name: "Pretest",
                     data: [
@@ -2235,19 +2250,19 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                             category: "ไม่ได้ทำ",
                             value: pretest.NotDone,
                             color: "#9de219"
-                        },{
+                        }, {
                             category: "0 Percent",
                             value: pretest.CountZeroScore,
                             color: "#90cc38"
-                        },{
+                        }, {
                             category: "1-50 Percent",
                             value: pretest.CountFiftyPercent,
                             color: "#068c35"
-                        },{
+                        }, {
                             category: "51-80 Percent",
                             value: pretest.CountEightyPercent,
                             color: "#006634"
-                        },{
+                        }, {
                             category: "81-100 Percent",
                             value: pretest.Count100Percent,
                             color: "#004d38"
@@ -2255,7 +2270,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     ]
                 });
             }
-            if(posttest){
+            if (posttest) {
                 series.push({
                     name: "Posttest",
                     visibleInLegend: false,
@@ -2265,22 +2280,22 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                             category: "ไม่ได้ทำ",
                             value: posttest.NotDone,
                             color: "#9de219"
-                        },{
+                        }, {
                             visibleInLegend: false,
                             category: "0 Percent",
                             value: posttest.CountZeroScore,
                             color: "#90cc38"
-                        },{
+                        }, {
                             visibleInLegend: false,
                             category: "1-50 Percent",
                             value: posttest.CountFiftyPercent,
                             color: "#068c35"
-                        },{
+                        }, {
                             visibleInLegend: false,
                             category: "51-80 Percent",
                             value: posttest.CountEightyPercent,
                             color: "#006634"
-                        },{
+                        }, {
                             visibleInLegend: false,
                             category: "81-100 Percent",
                             value: posttest.Count100Percent,
@@ -2293,7 +2308,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 subjectCode: subjectName,
                 unitId: i,
                 chartOptions: $scope.genPretestPosttestDonutChartOption(series),
-                noRecord: series.length > 0 ? false:true
+                noRecord: series.length > 0 ? false : true
             });
         }
 
