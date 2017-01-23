@@ -2236,6 +2236,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     $scope.genDynamicPretestPosttestDonutChart = function (dataPretest, dataPosttest, subjectName) {
         var arr = [];
+        var outerArr = [];
         var maxUnit = 15;
 
         for (var i = 1; i <= maxUnit; i++) {
@@ -2308,11 +2309,15 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 subjectCode: subjectName,
                 unitId: i,
                 chartOptions: $scope.genPretestPosttestDonutChartOption(series),
-                noRecord: series.length > 0 ? false : true
+                noRecord: series.length > 0 ? false : true,
             });
+            if(arr.length === 3){
+                outerArr.push(arr);
+                arr = [];
+            }
         }
-
-        $scope.chartDonutArr = arr;
+        console.dir(outerArr);
+        $scope.chartDonutArr = outerArr;
     };
 
     $scope.genPretestPosttestDonutChartOption = function (series) {

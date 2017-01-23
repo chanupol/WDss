@@ -105,21 +105,25 @@
         <!--</div>-->
 
         <div class="panel-body">
-            <div class="row">
-                <div data-ng-repeat="chart in chartDonutArr">
-                    <div class="col-md-4" >
-                        <div class="panel panel-default">
-                            <div class="panel-heading">
-                                <i class="fa fa-book fa-fw panel-label-title"></i> Pretest/Posttest ของหน่วยเรียนที่ {{chart.unitId}}
-                            </div>
+            <div data-ng-repeat="outerChart in chartDonutArr">
+                <div class="row">
+                    <div data-ng-repeat="chart in outerChart">
+                        <div class="col-md-4" >
+                            <div class="panel panel-default">
+                                <div class="panel-heading">
+                                    <i class="fa fa-book fa-fw panel-label-title"></i> Pretest/Posttest ของหน่วยเรียนที่ {{chart.unitId}}
+                                </div>
 
-                            <div class="panel-body">
-                                <div ng-show="!chart.noRecord"
-                                     kendo-chart
-                                     k-options="chart.chartOptions">
+                                <div class="panel-body">
+                                    <div ng-show="!chart.noRecord"
+                                         kendo-chart
+                                         k-options="chart.chartOptions">
+                                    </div>
+                                    <div class="overlay overlay-donut" ng-show="chart.noRecord">
+                                        <div>No data available</div>
+                                    </div>
                                 </div>
                             </div>
-                            <div class="overlay overlay-donut prepostDonutChart{{chart.unitId}}" ng-show="chart.noRecord"><div>No data available</div></div>
                         </div>
                     </div>
                 </div>
