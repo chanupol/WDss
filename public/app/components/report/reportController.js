@@ -2453,7 +2453,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             valueAxis: {
                 labels: {
                     format: "{0.0}%",
-                    template: "#: value# %"
+                    template: "#: kendo.toString(value, 'n2')# %"
                 },
                 // majorUnit: 10,
                 // max: 100,
@@ -2465,7 +2465,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             tooltip: {
                 visible: true,
                 format: "{0.00}%",
-                template: "#: value# %"
+                template: "#: kendo.toString(value, 'n2')# %"
             }
         };
     };
