@@ -19,7 +19,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
     var currentPeriodUniCode = "";
 
     // Get Current Period
-    reportService.getCurrentPeriod().then(function (response) {
+    /*reportService.getCurrentPeriod().then(function (response) {
         console.log("getCurrentPeriod response " + response);
         currentPeriod = response[0].CURRENTLEARNPERIOD;
         $scope.CurrentPeriod = response[0].CURRENTLEARNPERIOD;
@@ -35,14 +35,33 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
         if (err) {
             console.log("getCurrentPeriod err " + err.message);
         }
-    });
+    });*/
 
     $scope.$on('$viewContentLoaded', function (event) {
 
         console.log('On Load');
 
         //viewer = new $window.Stimulsoft.Viewer.StiViewer(options, "StiViewer", false);
-        currentPeriodUniCode = reportService.getCurrentPeriod();
+        //currentPeriodUniCode = reportService.getCurrentPeriod();
+
+
+        reportService.getCurrentPeriod().then(function (response) {
+            console.log("getCurrentPeriod response " + response);
+            currentPeriod = response[0].CURRENTLEARNPERIOD;
+            $scope.CurrentPeriod = response[0].CURRENTLEARNPERIOD;
+            console.log("getCurrentPeriod currentPeriod = " + currentPeriod);
+
+            var periodCodeSplit = currentPeriod.split('/');
+            console.log(periodCodeSplit);
+            if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
+                currentPeriod = periodCodeSplit[0] + "_" + periodCodeSplit[1];
+                //currentPeriodUniCode = periodCodeSplit[0] + "%2F" + periodCodeSplit[1];
+            }
+        }, function (err) {
+            if (err) {
+                console.log("getCurrentPeriod err " + err.message);
+            }
+        });
 
         //console.log('Initial viewer');
 

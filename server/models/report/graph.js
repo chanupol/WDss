@@ -342,27 +342,27 @@ GraphModel.prototype.getGraphDataPreTestPostTestPercentage = function (criteria,
             "   CountZeroScore = ( SELECT   COUNT(g.StuCode) " +
             "       FROM  DataForGraph g " +
             "       WHERE  ( g.TotalScore <= g.ExpectScore*1/100  " +
-            GraphModel.prototype.andConditonInTestData() +
+            GraphModel.prototype.andConditionInTestData() +
             ") ," +
 
             "   CountFiftyPercent = ( SELECT    COUNT(g.StuCode) " +
             "       FROM      DataForGraph g " +
             "       WHERE     ( ( g.TotalScore > g.ExpectScore*1/100 " +
             "                   AND g.TotalScore <= g.ExpectScore*50/100 ) " +
-            GraphModel.prototype.andConditonInTestData() +
+            GraphModel.prototype.andConditionInTestData() +
             ") ," +
 
             "   CountEightyPercent = ( SELECT    COUNT(g.StuCode) " +
             "       FROM      DataForGraph g " +
             "       WHERE     ( ( g.TotalScore > g.ExpectScore*50/100 " +
             "                   AND g.TotalScore <= g.ExpectScore*80/100 ) " +
-            GraphModel.prototype.andConditonInTestData() +
+            GraphModel.prototype.andConditionInTestData() +
             ") ," +
             "   Count100Percent = ( SELECT    COUNT(g.StuCode) " +
             "       FROM      DataForGraph g " +
             "       WHERE     ( ( g.TotalScore > g.ExpectScore*80/100 " +
             "                   AND g.TotalScore <= g.ExpectScore*100/100 ) " +
-            GraphModel.prototype.andConditonInTestData() +
+            GraphModel.prototype.andConditionInTestData() +
             ") ," +
             " gg.Teacher , gg.SubjectCode , gg.UnitID , gg.ExpectScore , gg.tmpSubjectUnitPre , " +
             "CASE WHEN gg.LearnTypeCode = 1 THEN 'Pre-Test' " +
@@ -389,13 +389,131 @@ GraphModel.prototype.getGraphDataPreTestPostTestPercentage = function (criteria,
 };
 
 
-GraphModel.prototype.andConditonInTestData = function () {
+GraphModel.prototype.andConditionInTestData = function () {
 
     var andCondition = " AND ( g.tmpSubjectUnitPre = gg.tmpSubjectUnitPre )) " +
         " AND ( g.LearnTypeCode = gg.LearnTypeCode  " +
         " AND g.IsDone = gg.IsDone  " +
         "AND g.ExpectScore = gg.ExpectScore ) ";
     return andCondition;
+
+};
+
+
+GraphModel.prototype.getIncreaseDecreasePercentage = function (criteria, callback) {
+
+    var database = new Database();
+
+    mssql.connect(database.mssqlConfig(), function (err) {
+
+        var subjectCodeCondition = " ";
+
+        if (err) console.log(err);
+
+        var request = new mssql.Request();
+
+        request.input('tchCode', mssql.NVarChar(10), criteria.tchCode);
+        request.input('periodCode', mssql.NVarChar(5), criteria.periodCode);
+
+        if (criteria.subjectCode != 0) {
+            request.input('subjectCode', mssql.NVarChar(10), criteria.subjectCode);
+            subjectCodeCondition = " AND sut.SubjectCode = @subjectCode  ";
+        }
+
+
+        var createTableVariable = "DECLARE @DataForGraph TABLE ( " +
+            "Teacher NVARCHAR(255) NOT NULL , " +
+            "StuCode NVARCHAR(10) NOT NULL , " +
+            "SubjectCode NVARCHAR(10) NOT NULL , " +
+            "UnitID INT NOT NULL , " +
+            "tmpSubjectUnitPre NVARCHAR(20) NOT NULL ," +
+            "LearnTypeCode INT NOT NULL , " +
+            "ExpectScore INT NOT NULL , " +
+            "TotalScore INT NOT NULL , " +
+            "PeriodCode NVARCHAR(5) NOT NULL , " +
+            "IsDone BIT NOT NULL DEFAULT 0 ) ";
+
+        var insertDataToTableVariable = "INSERT  INTO @DataForGraph " +
+            "SELECT DISTINCT ( q.TchCode + ' ' + tch.TchPName + ' ' + tch.TchFName + ' ' + tch.TchLName ) Teacher , " +
+            "sut.StuCode ,sut.SubjectCode ,sut.UnitID ," +
+            "( sut.SubjectCode + CAST(sut.UnitID AS NVARCHAR(10)) + sut.PeriodCode ) tmpSubjectUnitPre , " +
+            "sut.LearnTypeCode ,  sut.ExpectScore , sut.TotalScore , sut.PeriodCode , sut.IsDone  " +
+            "FROM  wtuuser.tbStuUnitTest sut " +
+            "JOIN wtuuser.tbStuUnitQuestion suq ON sut.Idx = suq.StuUnitTest_Idx " +
+            "AND sut.PeriodCode = @periodCode " +
+            subjectCodeCondition +
+            "AND sut.IsDone = 1 " +
+            "JOIN wtuuser.tbQuestion q ON suq.Question_Idx = q.Idx " +
+            "AND q.TchCode = @tchCode " +
+            "JOIN wtuuser.tbTeacher tch ON tch.Idx = q.Teacher_Idx " +
+            "ORDER BY sut.SubjectCode , sut.PeriodCode ,sut.UnitID ,sut.LearnTypeCode; ";
+
+        var createTableVaribaleCoutedDataForGraph = "DECLARE @CoutedDataForGraph TABLE ( " +
+            "CountFiftyPercent DECIMAL NOT NULL , " +
+            "CountEightyPercent DECIMAL NOT NULL , " +
+            "Count100Percent DECIMAL NOT NULL , " +
+            "Teacher NVARCHAR(255) NOT NULL , " +
+            "SubjectCode NVARCHAR(10) NOT NULL , " +
+            "UnitID INT NOT NULL , " +
+            "ExpectScore INT NOT NULL , " +
+            "tmpSubjectUnitPre NVARCHAR(20) NOT NULL , " +
+            "LearnTypeCode INT NOT NULL , " +
+            "IsDone BIT NOT NULL DEFAULT 0 ); ";
+
+        var insertCoutedDataToTableVariable = "INSERT  INTO @CoutedDataForGraph " +
+            "SELECT  CountFiftyPercent =  ( SELECT    COUNT(g.StuCode) " +
+            "                               FROM      @DataForGraph g " +
+            "                               WHERE     ( ( g.TotalScore > g.ExpectScore* 1 / 100 AND g.TotalScore <= g.ExpectScore * 50 / 100) " +
+            GraphModel.prototype.andConditionInTestData() +
+            ") ," +
+            "CountEightyPercent = ( SELECT   COUNT(g.StuCode) " +
+            "                       FROM      @DataForGraph g " +
+            "                       WHERE    ( ( g.TotalScore > g.ExpectScore * 50 / 100 AND g.TotalScore <= g.ExpectScore * 80 / 100) " +
+            GraphModel.prototype.andConditionInTestData() +
+            ") ," +
+            "Count100Percent = ( SELECT   COUNT(g.StuCode) " +
+            "                       FROM      @DataForGraph g " +
+            "                       WHERE    ( ( g.TotalScore > g.ExpectScore * 80 / 100 AND g.TotalScore <= g.ExpectScore * 100 / 100) " +
+            GraphModel.prototype.andConditionInTestData() +
+            ") ," +
+            "gg.Teacher , gg.SubjectCode , gg.UnitID , gg.ExpectScore ," +
+            "gg.tmpSubjectUnitPre ,  gg.LearnTypeCode , gg.IsDone " +
+            "FROM    @DataForGraph gg " +
+            "GROUP BY gg.SubjectCode , gg.UnitID ,gg.ExpectScore , " +
+            "gg.tmpSubjectUnitPre , gg.Teacher , gg.LearnTypeCode , gg.IsDone " +
+            "ORDER BY gg.Teacher ,  gg.SubjectCode , gg.UnitID;  ";
+
+        var getDataStatement = "SELECT DISTINCT " +
+            " COALESCE(100 * ( curr.CountFiftyPercent - prev.CountFiftyPercent ) / NULLIF(prev.CountFiftyPercent, 0), 0) AS FiftyPercentDiff , " +
+            "COALESCE(100 * ( curr.CountEightyPercent - prev.CountEightyPercent ) / NULLIF(prev.CountEightyPercent, 0), 0) AS EightyPercentDiff ," +
+            "COALESCE(100 * ( curr.Count100Percent - prev.Count100Percent ) / NULLIF(prev.Count100Percent, 0), 0) AS HundredPercentDiff , " +
+            "curr.Teacher , curr.SubjectCode , curr.UnitID ," +
+            "curr.ExpectScore , curr.LearnTypeCode , curr.tmpSubjectUnitPre " +
+            "FROM    @CoutedDataForGraph curr " +
+            "JOIN @CoutedDataForGraph prev ON curr.LearnTypeCode = 3 " +
+            "AND prev.LearnTypeCode = 1 " +
+            "AND curr.tmpSubjectUnitPre = prev.tmpSubjectUnitPre " +
+            " AND curr.ExpectScore = prev.ExpectScore " +
+            "AND curr.IsDone = 1 " +
+            " AND prev.IsDone = 1 " +
+            "ORDER BY curr.SubjectCode , " +
+            "curr.UnitID , " +
+            "curr.ExpectScore , " +
+            "curr.tmpSubjectUnitPre; ";
+
+
+        request.query(createTableVariable + insertDataToTableVariable +
+            createTableVaribaleCoutedDataForGraph + insertCoutedDataToTableVariable +
+            getDataStatement).then(function (result) {
+
+            callback(null, result);
+
+        }).catch(function (err) {
+            console.log(err.message);
+            //console.log(result);
+            callback(err, null);
+        });
+    });
 
 };
 

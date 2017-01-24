@@ -93,6 +93,22 @@ GraphController.prototype.getGraphDataPreTestPostTestPercentage = function (requ
 
 };
 
+GraphController.prototype.getIncreaseDecreasePercentage = function (request, reply) {
+
+    var criteria = GraphController.prototype.returnCriteria(request);
+
+    graphModel.getIncreaseDecreasePercentage(criteria, function (err, result) {
+
+        if (err) {
+            reply(Boom.internal("Cannot get Increase Decrease of Post-Test Percentage information", err));
+        } else {
+            reply(result);
+        }
+
+    });
+
+};
+
 
 GraphController.prototype.returnCriteria = function (request, reply) {
 
