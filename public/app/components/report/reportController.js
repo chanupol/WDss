@@ -2041,16 +2041,19 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 //
                 //Unit
                 field: "UnitID",
-                // field: "UnitName",
-                // labels: {
-                //     rotation: -45
-                // },
+                labels: {
+                    margin: {
+                        top: 20
+                    },
+                    template: "หน่วยที่ #: value#",
+                    rotation: -45
+                },
                 majorGridLines: {
                     visible: false
                 },
-                title: {
-                    text: "หน่วยเรียน"
-                }
+                // title: {
+                //     text: "หน่วยเรียน"
+                // }
             },
             valueAxis: {
                 labels: {
@@ -2207,15 +2210,19 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 //Unit
                 field: "UnitID",
                 // field: "UnitName",
-                // labels: {
-                //     rotation: -45
-                // },
+                labels: {
+                    margin: {
+                        top: 20
+                    },
+                    template: "หน่วยที่ #: value#",
+                    rotation: -45
+                },
                 majorGridLines: {
                     visible: false
                 },
-                title: {
-                    text: "หน่วยเรียน"
-                }
+                // title: {
+                //     text: "หน่วยเรียน"
+                // }
             },
             valueAxis: {
                 labels: {
