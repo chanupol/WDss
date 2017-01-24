@@ -1758,7 +1758,6 @@ app.controller('graphReportPercentOfSubjectForAdminController', function ($rootS
                 extra: false,
                 operators: {
                     string: {
-                        startswith: "Starts with",
                         contains: "contains"
                     }
                 }
@@ -1814,7 +1813,6 @@ app.controller('graphReportPercentOfSubjectForAdminController', function ($rootS
 
 app.controller('graphReportPercentOfSubjectController', function ($scope, $routeParams, $location, reportService, graphService, localStorageService) {
 
-    $scope.dataArr = [];
     $scope.periodCode = "";
     $scope.subjectCode = "";
     $scope.tchCode = $routeParams.tchCode;
@@ -1888,6 +1886,8 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 $scope.ddlSubject.dataSource.data(dataSubject);
                 $scope.subjectCode = "";
                 $scope.chartArr = [];
+                $scope.chartDonutArr = [];
+                $scope.chartCompareArr = [];
             }, function (err) {
                 if (err) {
                     console.log(err.message);
@@ -1897,16 +1897,6 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
     };
 
     $scope.ddlSubjectChanged = function () {
-
-        // if($scope.periodCode === "1%2F59"){
-        //     $scope.genDynamicChart($scope.tempData1, $scope.tempDataPrePost4);
-        // }else if($scope.periodCode === "1%2F58"){
-        //     $scope.genDynamicChart($scope.tempData2, $scope.tempDataPrePost4);
-        // }else if($scope.periodCode === "2%2F58"){
-        //     $scope.genDynamicChart($scope.tempData3, $scope.tempDataPrePost4);
-        // }else if($scope.periodCode === "3%2F58"){
-        //     $scope.genDynamicChart($scope.tempData4, $scope.tempDataPrePost4);
-        // }
 
         if ($scope.subjectCode) {
             $scope.loadData();
@@ -1930,10 +1920,16 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         graphService.getGraphDataInClassPercentage($scope.tchCode, $scope.periodCode, $scope.subjectCode).then(function (dataStudy) {
 
             graphService.getGraphDataPretestPosttest($scope.tchCode, $scope.periodCode, $scope.subjectCode).then(function (dataPrePost) {
-                $scope.genDynamicChart(dataStudy, dataPrePost);
 
-                kendo.ui.progress($(document.body), false);
+                graphService.getGraphDataComparePretestPosttest($scope.tchCode, $scope.periodCode, $scope.subjectCode).then(function (dataComparePrePost) {
+                    $scope.genDynamicChart(dataStudy, dataPrePost, dataComparePrePost);
 
+                    kendo.ui.progress($(document.body), false);
+
+                }, function (err) {
+                    kendo.ui.progress($(document.body), false);
+                    console.log(err.message);
+                });
             }, function (err) {
                 kendo.ui.progress($(document.body), false);
                 console.log(err.message);
@@ -1945,11 +1941,12 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     };
 
-    $scope.genDynamicChart = function (dataStudy, dataPrePost) {
+    $scope.genDynamicChart = function (dataStudy, dataPrePost, dataComparePrePost) {
         var arr = [];
         $scope.genDynamicStudyChart(dataStudy, arr);
-        $scope.genDynamicPretestPosttestChart(dataPrePost, arr);
-
+        $scope.genDynamicPretestPosttestChart(dataPrePost, dataComparePrePost, arr);
+        // $scope.genDynamicPretestPosttestCompareChart(dataComparePrePost);
+        // $scope.genDynamicCompareChart(dataPretest, dataPosttest, dataComparePrePost, subjectName);
         if (arr.length === 0) {
             arr.push({});
         }
@@ -2089,7 +2086,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         };
     };
 
-    $scope.genDynamicPretestPosttestChart = function (data, resultArr) {
+    $scope.genDynamicPretestPosttestChart = function (data, dataComparePrePost, resultArr) {
         //
         //group by subject
         var groupSubjectArr = _.groupBy(data, 'SubjectCode');
@@ -2130,6 +2127,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode, "#posttestChart");
 
                 $scope.genDynamicPretestPosttestDonutChart(arr["Pre-Test"], arr["Post-Test"], $scope.subjectCode);
+                $scope.genDynamicCompareChart(arr["Pre-Test"], arr["Post-Test"], dataComparePrePost, $scope.subjectCode);
             }
         });
     };
@@ -2255,7 +2253,6 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     $scope.genDynamicPretestPosttestDonutChart = function (dataPretest, dataPosttest, subjectName) {
         var arr = [];
-        var outerArr = [];
         var maxUnit = 15;
 
         for (var i = 1; i <= maxUnit; i++) {
@@ -2264,6 +2261,9 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             var posttest = _.find(dataPosttest, ["UnitID", i]);
             if (pretest) {
                 series.push({
+                    overlay: {
+                        gradient: "none"
+                    },
                     name: "Pretest",
                     data: [
                         {
@@ -2292,6 +2292,9 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             }
             if (posttest) {
                 series.push({
+                    overlay: {
+                        gradient: "none"
+                    },
                     name: "Posttest",
                     visibleInLegend: false,
                     data: [
@@ -2330,13 +2333,8 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 chartOptions: $scope.genPretestPosttestDonutChartOption(series),
                 noRecord: series.length > 0 ? false : true,
             });
-            if(arr.length === 3){
-                outerArr.push(arr);
-                arr = [];
-            }
         }
-        console.dir(outerArr);
-        $scope.chartDonutArr = outerArr;
+        $scope.chartDonutArr = arr;
     };
 
     $scope.genPretestPosttestDonutChartOption = function (series) {
@@ -2366,6 +2364,214 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
             }
         };
     };
+
+    $scope.genDynamicPretestPosttestCompareChart = function(dataComparePrePost, subjectName){
+        console.dir(dataComparePrePost);
+        var arr = [];
+        var outerArr = [];
+        var maxUnit = 15;
+        var noRecord = false;
+        for (var i = 1; i <= maxUnit; i++) {
+            var series = [];
+            var data = _.find(dataComparePrePost, ["UnitID", i]);
+            if (data) {
+                noRecord = false;
+
+                series.push({
+                    overlay: {
+                        gradient: "none"
+                    },
+                    name: "1-50 Percent",
+                    data: [data.FiftyPercentDiff],
+                    color: "#65c4e0"
+                }, {
+                    overlay: {
+                        gradient: "none"
+                    },
+                    name: "1-50 Percent",
+                    data: [data.EightyPercentDiff],
+                    color: "#428bca"
+                },{
+                    overlay: {
+                        gradient: "none"
+                    },
+                    name: "81-100 Percent",
+                    data: [data.HundredPercentDiff],
+                    color: "#1045ca"
+                });
+            }else{
+                noRecord = true;
+            }
+
+            arr.push({
+                subjectCode: subjectName,
+                unitId: i,
+                chartOptions: $scope.genPretestPosttestCompareChartOption(series),
+                noRecord: noRecord
+            });
+            if(arr.length === 2){
+                outerArr.push(arr);
+                arr = [];
+            }
+        }
+        $scope.chartCompareArr = outerArr;
+    };
+
+    $scope.genPretestPosttestCompareChartOption = function (data) {
+        return {
+            legend: {
+                position: "top",
+                // item: {
+                //     visual: createLegendItem
+                // }
+            },
+            seriesDefaults: {
+                type: "column",
+                // highlight: {
+                //     toggle: function (e) {
+                //         // Don't create a highlight overlay,
+                //         // we'll modify the existing visual instead
+                //         e.preventDefault();
+                //
+                //         var visual = e.visual;
+                //         var opacity = e.show ? 0.8 : 1;
+                //
+                //         visual.opacity(opacity);
+                //     }
+                // },
+                // visual: function (e) {
+                //     return createColumn(e.rect, e.options.color);
+                // }
+            },
+            series: data,
+            panes: [{
+                clip: false
+            }],
+            chartArea: {
+                height: 300
+            },
+            valueAxis: {
+                labels: {
+                    format: "{0.0}%",
+                    template: "#: value# %"
+                },
+                // majorUnit: 10,
+                // max: 100,
+                line: {
+                    visible: false
+                },
+                axisCrossingValue: 0
+            },
+            tooltip: {
+                visible: true,
+                format: "{0.00}%",
+                template: "#: value# %"
+            }
+        };
+    };
+
+    $scope.genDynamicCompareChart = function (dataPretest, dataPosttest, dataComparePrePost, subjectName) {
+        var arr = [];
+        var maxUnit = 15;
+        var noRecord = false;
+        for (var i = 1; i <= maxUnit; i++) {
+            var seriesDonut = [];
+            var seriesCompare = [];
+            var pretest = _.find(dataPretest, ["UnitID", i]);
+            var posttest = _.find(dataPosttest, ["UnitID", i]);
+            var compare = _.find(dataComparePrePost, ["UnitID", i]);
+            if (pretest) {
+                seriesDonut.push({
+                    name: "Pretest",
+                    data: [
+                        {
+                            category: "ไม่ได้ทำ",
+                            value: pretest.NotDone,
+                            color: "#9de219"
+                        }, {
+                            category: "0 Percent",
+                            value: pretest.CountZeroScore,
+                            color: "#90cc38"
+                        }, {
+                            category: "1-50 Percent",
+                            value: pretest.CountFiftyPercent,
+                            color: "#068c35"
+                        }, {
+                            category: "51-80 Percent",
+                            value: pretest.CountEightyPercent,
+                            color: "#006634"
+                        }, {
+                            category: "81-100 Percent",
+                            value: pretest.Count100Percent,
+                            color: "#004d38"
+                        }
+                    ]
+                });
+            }
+            if (posttest) {
+                seriesDonut.push({
+                    name: "Posttest",
+                    visibleInLegend: false,
+                    data: [
+                        {
+                            visibleInLegend: false,
+                            category: "ไม่ได้ทำ",
+                            value: posttest.NotDone,
+                            color: "#9de219"
+                        }, {
+                            visibleInLegend: false,
+                            category: "0 Percent",
+                            value: posttest.CountZeroScore,
+                            color: "#90cc38"
+                        }, {
+                            visibleInLegend: false,
+                            category: "1-50 Percent",
+                            value: posttest.CountFiftyPercent,
+                            color: "#068c35"
+                        }, {
+                            visibleInLegend: false,
+                            category: "51-80 Percent",
+                            value: posttest.CountEightyPercent,
+                            color: "#006634"
+                        }, {
+                            visibleInLegend: false,
+                            category: "81-100 Percent",
+                            value: posttest.Count100Percent,
+                            color: "#004d38"
+                        }
+                    ]
+                });
+            }
+            if (compare) {
+                seriesCompare.push({
+                    name: "1-50 Percent",
+                    data: [compare.FiftyPercentDiff],
+                    color: "#65c4e0"
+                }, {
+                    name: "1-50 Percent",
+                    data: [compare.EightyPercentDiff],
+                    color: "#428bca"
+                },{
+                    name: "81-100 Percent",
+                    data: [compare.HundredPercentDiff],
+                    color: "#1045ca"
+                });
+            }else{
+                noRecord = true;
+            }
+
+            arr.push({
+                subjectCode: subjectName,
+                unitId: i,
+                chartCompareOptions: $scope.genPretestPosttestCompareChartOption(seriesCompare),
+                chartDonutOptions: $scope.genPretestPosttestDonutChartOption(seriesDonut),
+                noRecordCompare: noRecord,
+                noRecordDonut: seriesDonut.length > 0 ? false : true,
+            });
+        }
+        $scope.chartCompareArr = arr;
+    };
+
 
     var drawing = kendo.drawing;
 

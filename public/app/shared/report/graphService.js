@@ -40,6 +40,11 @@ app.factory("graphService", function ($http, $q, $rootScope, localStorageService
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 
+    function getGraphDataComparePretestPosttest(tchCode, periodCode, subjectCode) {
+        var request = $http.get(uri + "/tch/period/increasedecrease/posttest/list/" + tchCode + "/" + periodCode + "/" + subjectCode);
+        return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
+    }
+
     function getTeacherDs(roleId, userName) {
         return new kendo.data.DataSource({
             batch: true,
@@ -95,7 +100,8 @@ app.factory("graphService", function ($http, $q, $rootScope, localStorageService
         getSubjectInTeacherWithPeriod: getSubjectInTeacherWithPeriod,
         getSubjectInTeacherWithPeriodDs: getSubjectInTeacherWithPeriodDs,
         getGraphDataInClassPercentage: getGraphDataInClassPercentage,
-        getGraphDataPretestPosttest: getGraphDataPretestPosttest
+        getGraphDataPretestPosttest: getGraphDataPretestPosttest,
+        getGraphDataComparePretestPosttest: getGraphDataComparePretestPosttest
 
     });
 });

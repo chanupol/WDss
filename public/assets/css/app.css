@@ -185,3 +185,7 @@ button {
     margin-top: -17px;
     top: 30%;
 }
+
+.tab-pane {
+    padding-top: 15px;
+}
