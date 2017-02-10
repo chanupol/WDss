@@ -5,8 +5,9 @@
 "use strict";
 
 app.factory("graphService", function ($http, $q, $rootScope, localStorageService, handlerService) {
-    var uri = serverApiUrl + "graph";
-    var securityUri = serverApiUrl + "security";
+    //var uri = serverApiUrl + "graph";
+    //var securityUri = serverApiUrl + "security";
+    var uri = cyberUApiUrl + "graph";
 
     //--------------------------------------------------------------------------------
     //

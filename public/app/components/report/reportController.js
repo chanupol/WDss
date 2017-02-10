@@ -19,7 +19,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
     var currentPeriodUniCode = "";
 
     // Get Current Period
-    /*reportService.getCurrentPeriod().then(function (response) {
+    reportService.getCurrentPeriod().then(function (response) {
         console.log("getCurrentPeriod response " + response);
         currentPeriod = response[0].CURRENTLEARNPERIOD;
         $scope.CurrentPeriod = response[0].CURRENTLEARNPERIOD;
@@ -35,9 +35,9 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
         if (err) {
             console.log("getCurrentPeriod err " + err.message);
         }
-    });*/
+    });
 
-    $scope.$on('$viewContentLoaded', function (event) {
+   /* $scope.$on('$viewContentLoaded', function (event) {
 
         console.log('On Load');
 
@@ -69,7 +69,7 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
 
     $scope.$on('$destroy', function () {
 
-    });
+    });*/
 
 
     //------------------------------------------------

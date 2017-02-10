@@ -23,8 +23,10 @@ module.exports = function () {
             //connectString : "wstock.dyndns.org/orcl.localdomain",
             //connectString : "10.1.10.16/orcl.localdomain",
             //connectString: "113.53.249.27/orcl.localdomain"
-            connectString: "113.53.249.27/orcl" //Dev
+            //connectString: "113.53.249.27/orcl" //Dev
             //connectString: "113.53.249.21/orcl" //PROD
+            //connectString: "WTU-ORACLE01.western.ac.th/orcl"
+            connectString: "wtu-oracle01.western.ac.th/orcl.western.ac.th"
         };
 
         return oracleConfig;
@@ -35,9 +37,11 @@ module.exports = function () {
 
         var mssqlConfig = {
 
-            server: '113.53.249.20',
-            user: 'sa',
-            password: 'ouj8nv@,boSRV',
+            //server: '113.53.249.20',
+            //user: 'sa',
+            server: '27.254.43.145',
+            user: 'wtuuser',
+            password: '123qwe,.0216',
             database: 'cyberu_db'
 
         };
