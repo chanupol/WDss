@@ -78,7 +78,7 @@
                             <div class="col-md-12" >
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตที่ทำข้อสอบ Pretest
+                                        <i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนคะแนนข้อสอบ Pretest
                                     </div>
 
                                     <div class="panel-body">
@@ -95,7 +95,7 @@
                             <div class="col-md-12" >
                                 <div class="panel panel-default">
                                     <div class="panel-heading">
-                                        <i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนจำนวนนิสิตที่ทำข้อสอบ Posttest
+                                        <i class="fa fa-book fa-fw panel-label-title"></i> สัดส่วนคะแนนข้อสอบ Posttest
                                     </div>
 
                                     <div class="panel-body">
@@ -131,12 +131,41 @@
                                             </div>
                                         </div>
 
-
                                         <div class="col-md-6">
-                                            <div ng-show="!chart.noRecordCompare"
-                                                 kendo-chart
-                                                 k-options="chart.chartCompareOptions">
+                                            <div class="company-trends" ng-show="!chart.noRecordCompare">
+                                                <div class="example-subtitle">
+                                                    อัตรการเปลี่ยนแปลงจาก Pretest ไป PostTest
+                                                    <span class="metric">throughout the year</span>
+                                                </div>
+                                                <dl class="stat trend-container highest-container">
+                                                    <dt class="example-subtitle">ยังไม่ได้ทำ</dt>
+                                                    <dd class="{{chart.growthRate.notDone < 0 ? 'lowest':'highest'}}">
+                                                        {{chart.growthRate.notDone | number:2}}%
+                                                    </dd>
+                                                </dl>
+                                                <dl class="stat trend-container lowest-container">
+                                                    <dt class="example-subtitle">0%-50%</dt>
+                                                    <dd class="{{chart.growthRate.fiftyPercent < 0 ? 'lowest':'highest'}}">
+                                                        {{chart.growthRate.fiftyPercent | number:2}}%
+                                                    </dd>
+                                                </dl>
+                                                <dl class="stat trend-container">
+                                                    <dt class="example-subtitle">51%-80%e</dt>
+                                                    <dd class="{{chart.growthRate.eightyPercent < 0 ? 'lowest':'highest'}}">
+                                                        {{chart.growthRate.eightyPercent | number:2}}%
+                                                    </dd>
+                                                </dl>
+                                                <dl class="stat trend-container">
+                                                    <dt class="example-subtitle">81%-100%e</dt>
+                                                    <dd class="{{chart.growthRate.oneHundredPercent < 0 ? 'lowest':'highest'}}">
+                                                        {{chart.growthRate.oneHundredPercent | number:2}}%
+                                                    </dd>
+                                                </dl>
                                             </div>
+                                            <!--<div ng-show="!chart.noRecordCompare"-->
+                                                 <!--kendo-chart-->
+                                                 <!--k-options="chart.chartCompareOptions">-->
+                                            <!--</div>-->
                                             <div class="overlay overlay-donut" ng-show="chart.noRecordCompare">
                                                 <div>No data available</div>
                                             </div>
@@ -151,8 +180,6 @@
             </div>
 
         </div>
-
-
 
 
         <!--<div class="panel-body">-->
@@ -206,11 +233,5 @@
                 <!--</div>-->
             <!--</div>-->
         <!--</div>-->
-
-
     </div>
-
-
-
-
 </div>

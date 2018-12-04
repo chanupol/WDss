@@ -1961,7 +1961,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
             resultArr.push(
                 {
-                    studyOptions: $scope.genChartOption(sortedArr, sortedArr[0].SubjectCode),
+                    studyOptions: $scope.genChartOption(sortedArr),
                     subjectCode: sortedArr[0].SubjectCode
                 }
             );
@@ -1972,14 +1972,8 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         return $scope.periodCode.replace("%2F", "/");
     };
 
-    $scope.genChartOption = function (dataSource, subjectName) {
+    $scope.genChartOption = function (dataSource) {
         return {
-            // $scope.samepleChartOptions = {
-            // title: {
-            //     //
-            //     //teacher name
-            //     text: "จำนวนนักเรียนที่เข้าเรียนในรายวิชา: " + subjectName
-            // },
             dataSource: dataSource,
             legend: {
                 position: "top",
@@ -2129,7 +2123,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 result.preTestOptions = $scope.genPretestPosttestChartOption(arr["Pre-Test"], $scope.subjectCode, "#pretestChart");
                 result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode, "#posttestChart");
 
-                $scope.genDynamicPretestPosttestDonutChart(arr["Pre-Test"], arr["Post-Test"], $scope.subjectCode);
+                $scope.genDynamicPretestPosttestColumnChart(arr["Pre-Test"], arr["Post-Test"], $scope.subjectCode);
                 $scope.genDynamicCompareChart(arr["Pre-Test"], arr["Post-Test"], dataComparePrePost, $scope.subjectCode);
             }
         });
@@ -2137,12 +2131,6 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     $scope.genPretestPosttestChartOption = function (dataSource, subjectName, prePostDiv) {
         return {
-            // $scope.samepleChartOptions = {
-            // title: {
-            //     //
-            //     //teacher name
-            //     text: "จำนวนนักเรียนที่เข้าเรียนในรายวิชา: " + subjectName
-            // },
             dataSource: dataSource,
             legend: {
                 position: "top",
@@ -2258,116 +2246,140 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         };
     };
 
-    $scope.genDynamicPretestPosttestDonutChart = function (dataPretest, dataPosttest, subjectName) {
+    $scope.genDynamicPretestPosttestColumnChart = function (dataPretest, dataPosttest, subjectName) {
         var arr = [];
         var maxUnit = 15;
 
         for (var i = 1; i <= maxUnit; i++) {
-            var series = [];
+            var dataSource = [];
             var pretest = _.find(dataPretest, ["UnitID", i]);
             var posttest = _.find(dataPosttest, ["UnitID", i]);
-            if (pretest) {
-                series.push({
-                    overlay: {
-                        gradient: "none"
-                    },
-                    name: "Pretest",
-                    data: [
-                        {
-                            category: "ไม่ได้ทำ",
-                            value: pretest.NotDone,
-                            color: "#9de219"
-                        }, {
-                            category: "0 Percent",
-                            value: pretest.CountZeroScore,
-                            color: "#90cc38"
-                        }, {
-                            category: "1-50 Percent",
-                            value: pretest.CountFiftyPercent,
-                            color: "#068c35"
-                        }, {
-                            category: "51-80 Percent",
-                            value: pretest.CountEightyPercent,
-                            color: "#006634"
-                        }, {
-                            category: "81-100 Percent",
-                            value: pretest.Count100Percent,
-                            color: "#004d38"
-                        }
-                    ]
-                });
-            }
-            if (posttest) {
-                series.push({
-                    overlay: {
-                        gradient: "none"
-                    },
-                    name: "Posttest",
-                    visibleInLegend: false,
-                    data: [
-                        {
-                            visibleInLegend: false,
-                            category: "ไม่ได้ทำ",
-                            value: posttest.NotDone,
-                            color: "#9de219"
-                        }, {
-                            visibleInLegend: false,
-                            category: "0 Percent",
-                            value: posttest.CountZeroScore,
-                            color: "#90cc38"
-                        }, {
-                            visibleInLegend: false,
-                            category: "1-50 Percent",
-                            value: posttest.CountFiftyPercent,
-                            color: "#068c35"
-                        }, {
-                            visibleInLegend: false,
-                            category: "51-80 Percent",
-                            value: posttest.CountEightyPercent,
-                            color: "#006634"
-                        }, {
-                            visibleInLegend: false,
-                            category: "81-100 Percent",
-                            value: posttest.Count100Percent,
-                            color: "#004d38"
-                        }
-                    ]
-                });
+            var growthRate = {
+                notDone: 0,
+                fiftyPercent: 0,
+                eightyPercent: 0,
+                oneHundredPercent: 0
+            };
+            if(pretest && posttest){
+                dataSource.push(
+                    {
+                        category: "ไม่ได้ทำ",
+                        pretest: pretest.NotDone,
+                        posttest: posttest.NotDone
+                    },{
+                        category: "0%-50%",
+                        pretest: pretest.CountFiftyPercent,
+                        posttest: posttest.CountFiftyPercent
+                    }, {
+                        category: "51%-80%",
+                        pretest: pretest.CountEightyPercent,
+                        posttest: posttest.CountEightyPercent
+                    }, {
+                        category: "81%-100%",
+                        pretest: pretest.Count100Percent,
+                        posttest: posttest.Count100Percent
+                    }
+                );
+                growthRate.notDone = ((posttest.NotDone - pretest.NotDone) / pretest.NotDone) * 100;
+                growthRate.fiftyPercent = ((posttest.CountFiftyPercent - pretest.CountFiftyPercent) / pretest.CountFiftyPercent) * 100;
+                growthRate.eightyPercent = ((posttest.CountEightyPercent - pretest.CountEightyPercent) / pretest.CountEightyPercent) * 100;
+                growthRate.oneHundredPercent = ((posttest.Count100Percent - pretest.Count100Percent) / pretest.Count100Percent) * 100;
             }
             arr.push({
                 subjectCode: subjectName,
                 unitId: i,
-                chartOptions: $scope.genPretestPosttestDonutChartOption(series),
-                noRecord: series.length > 0 ? false : true,
+                chartOptions: $scope.genPretestPosttestColumnChartOption(dataSource),
+                noRecord: dataSource.length > 0 ? false : true,
+                growthRate: growthRate
             });
         }
         $scope.chartDonutArr = arr;
     };
 
-    $scope.genPretestPosttestDonutChartOption = function (series) {
+    $scope.genPretestPosttestColumnChartOption = function (dataSource) {
         return {
+            dataSource: dataSource,
             legend: {
                 position: "top",
-                visible: true
-            },
-            chartArea: {
-                background: "",
-                height: 300
+                item: {
+                    visual: createLegendItem
+                }
             },
             seriesDefaults: {
-                type: "donut",
-                startAngle: 150
+                type: "column",
+                highlight: {
+                    toggle: function (e) {
+                        // Don't create a highlight overlay,
+                        // we'll modify the existing visual instead
+                        e.preventDefault();
+
+                        var visual = e.visual;
+                        var opacity = e.show ? 0.8 : 1;
+
+                        visual.opacity(opacity);
+                    }
+                },
+                visual: function (e) {
+                    return createColumn(e.rect, e.options.color);
+                }
             },
-            series: series,
+            series: [
+                {
+                    field: "pretest",
+                    name: "Pre Test",
+                    color: "#65c4e0"
+                },
+                {
+                    field: "posttest",
+                    name: "Post Test",
+                    color: "#428bca"
+                }
+            ],
+            panes: [{
+                clip: false
+            }],
+            chartArea: {
+                height: 300
+            },
+            categoryAxis: {
+                field: "category",
+                labels: {
+                    margin: {
+                        top: 20
+                    },
+                    // template: "หน่วยที่ #: value#",
+                    // rotation: -45
+                },
+                majorGridLines: {
+                    visible: false
+                }
+            },
+            valueAxis: {
+                labels: {
+                    template: "#: value# คน"
+                },
+                // majorUnit: 10,
+                line: {
+                    visible: false
+                },
+                title: {
+                    text: "จำนวนนิสิต"
+                }
+            },
             tooltip: {
                 visible: true,
-                template: "#= category # (#= series.name #): #= value # คน"
+                template: "#: value# คน"
             },
-            labels: {
-                visible: true,
-                background: "transparent",
-                position: "outsideEnd",
-                template: "#: category#: #: value# คน"
+            pannable: {
+                lock: "y"
+            },
+            zoomable: {
+                mousewheel: {
+                    lock: "y"
+                },
+                selection: {
+                    lock: "y"
+                }
             }
         };
     };
@@ -2571,7 +2583,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 subjectCode: subjectName,
                 unitId: i,
                 chartCompareOptions: $scope.genPretestPosttestCompareChartOption(seriesCompare),
-                chartDonutOptions: $scope.genPretestPosttestDonutChartOption(seriesDonut),
+                chartDonutOptions: $scope.genPretestPosttestColumnChartOption(seriesDonut),
                 noRecordCompare: noRecord,
                 noRecordDonut: seriesDonut.length > 0 ? false : true,
             });
@@ -2579,6 +2591,38 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         $scope.chartCompareArr = arr;
     };
 
+    $scope.genRadialGage = function (value) {
+        return {
+            pointer: {
+                value: value
+            },
+            scale: {
+                minorUnit: 5,
+                    startAngle: -30,
+                    endAngle: 210,
+                    max: 100,
+                    labels: {
+                    position: "inside",
+                        template: "#= value #%"
+                },
+                ranges: [
+                    {
+                        from: 40,
+                        to: 60,
+                        color: "#ffc700"
+                    }, {
+                        from: 60,
+                        to: 80,
+                        color: "#ff7a00"
+                    }, {
+                        from: 80,
+                        to: 100,
+                        color: "#c20000"
+                    }
+                ]
+            }
+        };
+    };
 
     var drawing = kendo.drawing;
 
