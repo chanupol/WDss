@@ -37,39 +37,39 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
         }
     });
 
-   /* $scope.$on('$viewContentLoaded', function (event) {
+    /* $scope.$on('$viewContentLoaded', function (event) {
 
-        console.log('On Load');
+     console.log('On Load');
 
-        //viewer = new $window.Stimulsoft.Viewer.StiViewer(options, "StiViewer", false);
-        //currentPeriodUniCode = reportService.getCurrentPeriod();
+     //viewer = new $window.Stimulsoft.Viewer.StiViewer(options, "StiViewer", false);
+     //currentPeriodUniCode = reportService.getCurrentPeriod();
 
 
-        reportService.getCurrentPeriod().then(function (response) {
-            console.log("getCurrentPeriod response " + response);
-            currentPeriod = response[0].CURRENTLEARNPERIOD;
-            $scope.CurrentPeriod = response[0].CURRENTLEARNPERIOD;
-            console.log("getCurrentPeriod currentPeriod = " + currentPeriod);
+     reportService.getCurrentPeriod().then(function (response) {
+     console.log("getCurrentPeriod response " + response);
+     currentPeriod = response[0].CURRENTLEARNPERIOD;
+     $scope.CurrentPeriod = response[0].CURRENTLEARNPERIOD;
+     console.log("getCurrentPeriod currentPeriod = " + currentPeriod);
 
-            var periodCodeSplit = currentPeriod.split('/');
-            console.log(periodCodeSplit);
-            if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
-                currentPeriod = periodCodeSplit[0] + "_" + periodCodeSplit[1];
-                //currentPeriodUniCode = periodCodeSplit[0] + "%2F" + periodCodeSplit[1];
-            }
-        }, function (err) {
-            if (err) {
-                console.log("getCurrentPeriod err " + err.message);
-            }
-        });
+     var periodCodeSplit = currentPeriod.split('/');
+     console.log(periodCodeSplit);
+     if (periodCodeSplit != undefined && periodCodeSplit.length > 0) {
+     currentPeriod = periodCodeSplit[0] + "_" + periodCodeSplit[1];
+     //currentPeriodUniCode = periodCodeSplit[0] + "%2F" + periodCodeSplit[1];
+     }
+     }, function (err) {
+     if (err) {
+     console.log("getCurrentPeriod err " + err.message);
+     }
+     });
 
-        //console.log('Initial viewer');
+     //console.log('Initial viewer');
 
-    });
+     });
 
-    $scope.$on('$destroy', function () {
+     $scope.$on('$destroy', function () {
 
-    });*/
+     });*/
 
 
     //------------------------------------------------
@@ -129,7 +129,8 @@ app.controller("reportSubjectByPeriodController", function ($scope, $uibModal, $
 
     $scope.grdSubjectByPeriodOptions = {
 
-        dataSource: reportService.getSubjectListByPeriodCodeDs('2%2F59'),
+        //dataSource: reportService.getSubjectListByPeriodCodeDs('2%2F59'),
+        dataSource: reportService.getSubjectListByPeriodCodeDs('1_60'),
         //dataSource: reportService.getSubjectListByPeriodCodeDs(currentPeriodUniCode),
         height: 500,
         sortable: true,
@@ -432,6 +433,21 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
         return $routeParams.periodCode;
     }
 
+    $scope.calc = function (val) {
+        // var hour = Math.floor(val / 60);
+        // var min = val % 60;
+        // val = hour + ":" + min + " hrs";
+        // return val;
+        console.log(val);
+        var d = Number(val);
+
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        var s = Math.floor(d % 3600 % 60);
+
+        return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+    }
+
     $scope.grdUnitOptions = {
         dataSource: reportService.getUnitBySubjectPeriodTeacherDs($routeParams.subjectCode, $routeParams.periodCode, $routeParams.tchCode),
         height: 500,
@@ -567,9 +583,10 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                format: "{0:n2}",
-                footerTemplate: "#: kendo.toString(sum, 'n2') #"
-
+                // format: "{0:n2}",
+                template: "#=kendo.toString( new Date(0,0,0,0,0,TOTALVIDEOINMINUTE), 'HH:mm:ss')#",
+                //footerTemplate: "#: kendo.toString(sum, 'n2') #"
+                footerTemplate: "<span ng-bind=calc(#: sum #)></span>"
             },
             {
                 field: "TotalVDOInMinuteForPercentage",
@@ -586,9 +603,10 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                format: "{0:n2}",
-                footerTemplate: "#: kendo.toString(sum, 'n2') #"
-
+                //format: "{0:n2}",
+                template: "#=kendo.toString( new Date(0,0,0,0,0,TotalVDODeficitInMinute), 'HH:mm:ss')#",
+                //footerTemplate: "#: kendo.toString(sum, 'n2') #"
+                footerTemplate: "<span ng-bind=calc(#: sum #)></span>"
             },
             {
                 field: "StandardTotalVideoInMinute",
@@ -596,9 +614,10 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
                 width: 150,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                format: "{0:n2}",
-                footerTemplate: "#: kendo.toString(sum, 'n2') #"
-
+                //format: "{0:n2}",
+                template: "#=kendo.toString( new Date(0,0,0,0,0,StandardTotalVideoInMinute), 'HH:mm:ss')#",
+                //footerTemplate: "#: kendo.toString(sum, 'n2') #"
+                footerTemplate: "<span ng-bind=calc(#: sum #)></span>"
             },
             /*{
              field: null,
@@ -652,6 +671,21 @@ app.controller("reportUnitBySubjectPeriodTchCodeController", function ($scope, $
 //
 // Topic
 app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($scope, $routeParams, $uibModal, $location, reportService) {
+
+    $scope.calc = function (val) {
+        // var hour = Math.floor(val / 60);
+        // var min = val % 60;
+        // val = hour + ":" + min + " hrs";
+        // return val;
+        console.log(val);
+        var d = Number(val);
+
+        var h = Math.floor(d / 3600);
+        var m = Math.floor(d % 3600 / 60);
+        var s = Math.floor(d % 3600 % 60);
+
+        return ('0' + h).slice(-2) + ":" + ('0' + m).slice(-2) + ":" + ('0' + s).slice(-2);
+    }
 
     console.log("subjectCode " + $routeParams.subjectCode);
     console.log("periodCode " + $routeParams.periodCode);
@@ -814,8 +848,10 @@ app.controller("reportTopicBySubjectPeriodTchCodeUnitController", function ($sco
                 width: 80,
                 headerAttributes: {style: "text-align:center"},
                 attributes: {"class": "text-center"},
-                format: "{0:n2}",
-                footerTemplate: "#: kendo.toString(sum, 'n2') #"
+                //format: "{0:n2}",
+                template: "#=kendo.toString( new Date(0,0,0,0,0,TotalVideoInMinute), 'HH:mm:ss')#",
+                //footerTemplate: "#: kendo.toString(sum, 'n2') #"
+                footerTemplate: "<span ng-bind=calc(#: sum #)></span>"
 
             },
             {
@@ -1961,7 +1997,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
             resultArr.push(
                 {
-                    studyOptions: $scope.genChartOption(sortedArr),
+                    studyOptions: $scope.genChartOption(sortedArr, sortedArr[0].SubjectCode),
                     subjectCode: sortedArr[0].SubjectCode
                 }
             );
@@ -1972,8 +2008,14 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         return $scope.periodCode.replace("%2F", "/");
     };
 
-    $scope.genChartOption = function (dataSource) {
+    $scope.genChartOption = function (dataSource, subjectName) {
         return {
+            // $scope.samepleChartOptions = {
+            // title: {
+            //     //
+            //     //teacher name
+            //     text: "จำนวนนักเรียนที่เข้าเรียนในรายวิชา: " + subjectName
+            // },
             dataSource: dataSource,
             legend: {
                 position: "top",
@@ -2123,7 +2165,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 result.preTestOptions = $scope.genPretestPosttestChartOption(arr["Pre-Test"], $scope.subjectCode, "#pretestChart");
                 result.postTestOptions = $scope.genPretestPosttestChartOption(arr["Post-Test"], $scope.subjectCode, "#posttestChart");
 
-                $scope.genDynamicPretestPosttestColumnChart(arr["Pre-Test"], arr["Post-Test"], $scope.subjectCode);
+                $scope.genDynamicPretestPosttestDonutChart(arr["Pre-Test"], arr["Post-Test"], $scope.subjectCode);
                 $scope.genDynamicCompareChart(arr["Pre-Test"], arr["Post-Test"], dataComparePrePost, $scope.subjectCode);
             }
         });
@@ -2131,6 +2173,12 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
 
     $scope.genPretestPosttestChartOption = function (dataSource, subjectName, prePostDiv) {
         return {
+            // $scope.samepleChartOptions = {
+            // title: {
+            //     //
+            //     //teacher name
+            //     text: "จำนวนนักเรียนที่เข้าเรียนในรายวิชา: " + subjectName
+            // },
             dataSource: dataSource,
             legend: {
                 position: "top",
@@ -2246,145 +2294,121 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         };
     };
 
-    $scope.genDynamicPretestPosttestColumnChart = function (dataPretest, dataPosttest, subjectName) {
+    $scope.genDynamicPretestPosttestDonutChart = function (dataPretest, dataPosttest, subjectName) {
         var arr = [];
         var maxUnit = 15;
 
         for (var i = 1; i <= maxUnit; i++) {
-            var dataSource = [];
+            var series = [];
             var pretest = _.find(dataPretest, ["UnitID", i]);
             var posttest = _.find(dataPosttest, ["UnitID", i]);
-            var growthRate = {
-                notDone: 0,
-                fiftyPercent: 0,
-                eightyPercent: 0,
-                oneHundredPercent: 0
-            };
-            if(pretest && posttest){
-                dataSource.push(
-                    {
-                        category: "ไม่ได้ทำ",
-                        pretest: pretest.NotDone,
-                        posttest: posttest.NotDone
-                    },{
-                        category: "0%-50%",
-                        pretest: pretest.CountFiftyPercent,
-                        posttest: posttest.CountFiftyPercent
-                    }, {
-                        category: "51%-80%",
-                        pretest: pretest.CountEightyPercent,
-                        posttest: posttest.CountEightyPercent
-                    }, {
-                        category: "81%-100%",
-                        pretest: pretest.Count100Percent,
-                        posttest: posttest.Count100Percent
-                    }
-                );
-                growthRate.notDone = ((posttest.NotDone - pretest.NotDone) / pretest.NotDone) * 100;
-                growthRate.fiftyPercent = ((posttest.CountFiftyPercent - pretest.CountFiftyPercent) / pretest.CountFiftyPercent) * 100;
-                growthRate.eightyPercent = ((posttest.CountEightyPercent - pretest.CountEightyPercent) / pretest.CountEightyPercent) * 100;
-                growthRate.oneHundredPercent = ((posttest.Count100Percent - pretest.Count100Percent) / pretest.Count100Percent) * 100;
+            if (pretest) {
+                series.push({
+                    overlay: {
+                        gradient: "none"
+                    },
+                    name: "Pretest",
+                    data: [
+                        {
+                            category: "ไม่ได้ทำ",
+                            value: pretest.NotDone,
+                            color: "#9de219"
+                        }, {
+                            category: "0 Percent",
+                            value: pretest.CountZeroScore,
+                            color: "#90cc38"
+                        }, {
+                            category: "1-50 Percent",
+                            value: pretest.CountFiftyPercent,
+                            color: "#068c35"
+                        }, {
+                            category: "51-80 Percent",
+                            value: pretest.CountEightyPercent,
+                            color: "#006634"
+                        }, {
+                            category: "81-100 Percent",
+                            value: pretest.Count100Percent,
+                            color: "#004d38"
+                        }
+                    ]
+                });
+            }
+            if (posttest) {
+                series.push({
+                    overlay: {
+                        gradient: "none"
+                    },
+                    name: "Posttest",
+                    visibleInLegend: false,
+                    data: [
+                        {
+                            visibleInLegend: false,
+                            category: "ไม่ได้ทำ",
+                            value: posttest.NotDone,
+                            color: "#9de219"
+                        }, {
+                            visibleInLegend: false,
+                            category: "0 Percent",
+                            value: posttest.CountZeroScore,
+                            color: "#90cc38"
+                        }, {
+                            visibleInLegend: false,
+                            category: "1-50 Percent",
+                            value: posttest.CountFiftyPercent,
+                            color: "#068c35"
+                        }, {
+                            visibleInLegend: false,
+                            category: "51-80 Percent",
+                            value: posttest.CountEightyPercent,
+                            color: "#006634"
+                        }, {
+                            visibleInLegend: false,
+                            category: "81-100 Percent",
+                            value: posttest.Count100Percent,
+                            color: "#004d38"
+                        }
+                    ]
+                });
             }
             arr.push({
                 subjectCode: subjectName,
                 unitId: i,
-                chartOptions: $scope.genPretestPosttestColumnChartOption(dataSource),
-                noRecord: dataSource.length > 0 ? false : true,
-                growthRate: growthRate
+                chartOptions: $scope.genPretestPosttestDonutChartOption(series),
+                noRecord: series.length > 0 ? false : true,
             });
         }
         $scope.chartDonutArr = arr;
     };
 
-    $scope.genPretestPosttestColumnChartOption = function (dataSource) {
+    $scope.genPretestPosttestDonutChartOption = function (series) {
         return {
-            dataSource: dataSource,
             legend: {
                 position: "top",
-                item: {
-                    visual: createLegendItem
-                }
+                visible: true
             },
-            seriesDefaults: {
-                type: "column",
-                highlight: {
-                    toggle: function (e) {
-                        // Don't create a highlight overlay,
-                        // we'll modify the existing visual instead
-                        e.preventDefault();
-
-                        var visual = e.visual;
-                        var opacity = e.show ? 0.8 : 1;
-
-                        visual.opacity(opacity);
-                    }
-                },
-                visual: function (e) {
-                    return createColumn(e.rect, e.options.color);
-                }
-            },
-            series: [
-                {
-                    field: "pretest",
-                    name: "Pre Test",
-                    color: "#65c4e0"
-                },
-                {
-                    field: "posttest",
-                    name: "Post Test",
-                    color: "#428bca"
-                }
-            ],
-            panes: [{
-                clip: false
-            }],
             chartArea: {
+                background: "",
                 height: 300
             },
-            categoryAxis: {
-                field: "category",
-                labels: {
-                    margin: {
-                        top: 20
-                    },
-                    // template: "หน่วยที่ #: value#",
-                    // rotation: -45
-                },
-                majorGridLines: {
-                    visible: false
-                }
+            seriesDefaults: {
+                type: "donut",
+                startAngle: 150
             },
-            valueAxis: {
-                labels: {
-                    template: "#: value# คน"
-                },
-                // majorUnit: 10,
-                line: {
-                    visible: false
-                },
-                title: {
-                    text: "จำนวนนิสิต"
-                }
-            },
+            series: series,
             tooltip: {
                 visible: true,
-                template: "#: value# คน"
+                template: "#= category # (#= series.name #): #= value # คน"
             },
-            pannable: {
-                lock: "y"
-            },
-            zoomable: {
-                mousewheel: {
-                    lock: "y"
-                },
-                selection: {
-                    lock: "y"
-                }
+            labels: {
+                visible: true,
+                background: "transparent",
+                position: "outsideEnd",
+                template: "#: category#: #: value# คน"
             }
         };
     };
 
-    $scope.genDynamicPretestPosttestCompareChart = function(dataComparePrePost, subjectName){
+    $scope.genDynamicPretestPosttestCompareChart = function (dataComparePrePost, subjectName) {
         console.dir(dataComparePrePost);
         var arr = [];
         var outerArr = [];
@@ -2410,7 +2434,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     name: "1-50 Percent",
                     data: [data.EightyPercentDiff],
                     color: "#428bca"
-                },{
+                }, {
                     overlay: {
                         gradient: "none"
                     },
@@ -2418,7 +2442,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     data: [data.HundredPercentDiff],
                     color: "#1045ca"
                 });
-            }else{
+            } else {
                 noRecord = true;
             }
 
@@ -2428,7 +2452,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 chartOptions: $scope.genPretestPosttestCompareChartOption(series),
                 noRecord: noRecord
             });
-            if(arr.length === 2){
+            if (arr.length === 2) {
                 outerArr.push(arr);
                 arr = [];
             }
@@ -2570,12 +2594,12 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                     name: "1-50 Percent",
                     data: [compare.EightyPercentDiff],
                     color: "#428bca"
-                },{
+                }, {
                     name: "81-100 Percent",
                     data: [compare.HundredPercentDiff],
                     color: "#1045ca"
                 });
-            }else{
+            } else {
                 noRecord = true;
             }
 
@@ -2583,7 +2607,7 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
                 subjectCode: subjectName,
                 unitId: i,
                 chartCompareOptions: $scope.genPretestPosttestCompareChartOption(seriesCompare),
-                chartDonutOptions: $scope.genPretestPosttestColumnChartOption(seriesDonut),
+                chartDonutOptions: $scope.genPretestPosttestDonutChartOption(seriesDonut),
                 noRecordCompare: noRecord,
                 noRecordDonut: seriesDonut.length > 0 ? false : true,
             });
@@ -2591,38 +2615,6 @@ app.controller('graphReportPercentOfSubjectController', function ($scope, $route
         $scope.chartCompareArr = arr;
     };
 
-    $scope.genRadialGage = function (value) {
-        return {
-            pointer: {
-                value: value
-            },
-            scale: {
-                minorUnit: 5,
-                    startAngle: -30,
-                    endAngle: 210,
-                    max: 100,
-                    labels: {
-                    position: "inside",
-                        template: "#= value #%"
-                },
-                ranges: [
-                    {
-                        from: 40,
-                        to: 60,
-                        color: "#ffc700"
-                    }, {
-                        from: 60,
-                        to: 80,
-                        color: "#ff7a00"
-                    }, {
-                        from: 80,
-                        to: 100,
-                        color: "#c20000"
-                    }
-                ]
-            }
-        };
-    };
 
     var drawing = kendo.drawing;
 

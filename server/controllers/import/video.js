@@ -15,7 +15,8 @@ function VideoController() {
 
 
 VideoController.prototype.GetVDOFromCyberU =function (request, reply) {
-    var importDate = request.params.importDate;
+    //var importDate = request.params.importDate;
+    var  importDate = "";
     videoModel.GetVDOFromCyberU(importDate,function (err,result) {
         if(err){
             reply(Boom.internal('Insert Error'));

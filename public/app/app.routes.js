@@ -59,6 +59,32 @@ app.config(function ($routeProvider) {
         templateUrl: "app/components/report/chooseTeacherForGraph.html"
     });
 
+    //------ student
+
+    $routeProvider.when("/" + routeAdmin + "/student/graphstudent", {
+        controller: "graphStudentController",
+        templateUrl: "app/components/student/graphStudent.html"
+    });
+
+    $routeProvider.when("/" + routeAdmin + "/student/graphstudentgroupbygraduate", {
+        controller: "graphStudentGroupByGraduateController",
+        templateUrl: "app/components/student/graphStudentgroupbygraduate.html"
+    });
+
+
+    $routeProvider.when("/" + routeAdmin + "/student/graphstudentcomparegroupbydivision", {
+        controller: "graphStudentCompareGroupByDivisionController",
+        templateUrl: "app/components/student/graphStudentgroupbycomparedivision.html"
+    });
+
+
+    //------ teacher
+    $routeProvider.when("/" + routeAdmin + "/teacher/graphteacher", {
+        controller: "graphTeacherController",
+        templateUrl: "app/components/teacher/graphTeacher.html"
+    });
+
+
     //==================================================
     //
     //  Report Page

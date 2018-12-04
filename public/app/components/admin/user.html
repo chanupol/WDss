@@ -1,18 +1,18 @@
 <div class="row">
     <br/>
     <div class="col-md-2">
-        <button class="btn btn-primary width-100p" ng-click="btnGenerateTokenClicked()">Generate Token</button>
+        <button class="btn btn-info width-100p" ng-click="btnGenerateTokenClicked()">Generate Token</button>
         <!--<button class="btn btn-primary" ng-click="btnCreateNewUserClicked()">Create New User</button>-->
     </div>
     <div class="col-md-2">
         <div ng-controller="teacherController">
-            <button class="btn btn-primary width-100p" type="button" ng-click="getNewTeacherData()">Get New Teacher Data</button>
+            <button class="btn btn-info width-100p" type="button" ng-click="getNewTeacherData()">Get New Teacher Data</button>
         </div>
     </div>
     <div class="col-md-2">
         <!--<a href="#/import">Import</a>-->
         <div ng-controller="videolengthController">
-            <button class="btn btn-primary width-100p" type="button" ng-click="getNewVideoData()">Get New VDO Data</button>
+            <button class="btn btn-info width-100p" type="button" ng-click="getNewVideoData()">Get New VDO Data</button>
         </div>
     </div>
 
@@ -24,8 +24,8 @@
     <form class="form-horizontal" role="form">
         <div class="form-group">
             <div class="row">
-                <label class="control-label col-sm-2" for="txtUsername">Username:</label>
-                <div class="col-sm-4">
+                <label class="control-label col-xl-4" for="txtUsername">Username:</label>
+                <div class="col-xl-8">
                     <input type="text" class="form-control" id="txtUsername" name="txtUsername" ng-model="NewUsername"
                            placeholder="Username" maxlength="10">
                 </div>
@@ -33,8 +33,8 @@
         </div>
         <div class="form-group">
             <div class="row">
-                <label class="control-label col-sm-2" for="txtPassword">Password:</label>
-                <div class="col-sm-4">
+                <label class="control-label col-xl-4" for="txtPassword">Password:</label>
+                <div class="col-xl-8">
                     <input type="password" class="form-control" id="txtPassword" name="txtPassword" ng-model="Password"
                            placeholder="Password">
                 </div>
@@ -42,8 +42,8 @@
         </div>
         <div class="form-group">
             <div class="row">
-                <label class="control-label col-sm-2" for="ddlRole">Password:</label>
-                <div class="col-sm-4">
+                <label class="control-label col-xl-4" for="ddlRole">Password:</label>
+                <div class="col-xl-8">
                     <select id="ddlRole" name="ddlRole" class="form-control">
                         <option value="5">Admin</option>
                         <option value="1">คณะบดี</option>
@@ -56,7 +56,7 @@
         <div class="form-group">
             <div class="row">
                 <div class="col-sm-offset-2 col-sm-4">
-                    <button class="btn btn-primary" ng-click="btnCreateNewUserClicked()">Create New User</button>
+                    <button class="btn btn-info" ng-click="btnCreateNewUserClicked()">Create New User</button>
                 </div>
             </div>
         </div>

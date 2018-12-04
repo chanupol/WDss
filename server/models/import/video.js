@@ -44,7 +44,7 @@ VideoLengthModel.prototype.GetVDOFromCyberU = function (clientImportDate, callba
         });
     }).on('error', function (e) {
         console.log("Got an error: ", e);
-        callback(err, null);
+        callback(e, null);
     });
     
 

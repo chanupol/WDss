@@ -178,6 +178,37 @@ exports.register = function (server, options, next) {
                 }
             }
         },
+        //--------------------------------
+        // WHAN Callcenter
+        //--------------------------------
+        {
+            method: "POST",
+            path: "/api/report/subject/listMedia",
+            config: {
+                auth: false,
+                handler: reportController.getSubjectByCallCenter,
+                validate: {
+                    payload: {
+                        data: Joi.array().optional()
+                    }
+                }
+            }
+        },
+        {
+            method: "GET",
+            path: "/api/report/unit/listUnitBySubjectMedia/{periodCode}/{subjectCode}/{tchCode}",
+            config: {
+                auth: false,
+                handler: reportController.getUnitByCallCenter,
+                validate: {
+                    params: {
+                        subjectCode: Joi.string().required(),
+                        tchCode: Joi.string().required(),
+                        periodCode: Joi.string().required(),
+                    }
+                }
+            }
+        }
     ]);
 
     next();

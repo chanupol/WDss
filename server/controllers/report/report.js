@@ -40,7 +40,8 @@ ReportController.prototype.getAllSubject = function (request, reply) {
 
 ReportController.prototype.getSubjectByPeriod = function (request, reply) {
 
-    var periodcode = decodeURIComponent(request.params.periodcode);
+    //var periodcode = decodeURIComponent(request.params.periodcode);
+    var periodcode = request.params.periodcode.toString().replace('_','/');
     var token = request.params.token;
     var roleId = request.params.roleId;
     var userName = request.params.userName;
@@ -203,6 +204,42 @@ ReportController.prototype.getDataForChart = function (request, reply) {
     reportModel.getDataForChart(tchCode, period, function (err, result) {
         if (err) {
             reply(Boom.internal("Cannot get unit list information", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
+//--------------------------------
+// WHAN Callcenter
+//--------------------------------
+ReportController.prototype.getSubjectByCallCenter = function (request, reply) {
+
+    var data = request.payload;
+	//console.log(data);
+
+    // var periodCode = decodeURIComponent(request.params.periodcode);
+    // var subjectCode = request.params.subjectCode;
+    // var tchCode = request.params.tchCode;
+
+    reportModel.getSubjectByCallCenter(data, function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get Data Percent Subject", err));
+        } else {
+            reply(result);
+        }
+    });
+};
+
+ReportController.prototype.getUnitByCallCenter = function (request, reply) {
+    var periodCode = decodeURIComponent(request.params.periodCode);
+    var subjectCode = request.params.subjectCode;
+    var tchCode = request.params.tchCode;
+
+
+    reportModel.getUnitByCallCenter(periodCode, subjectCode, tchCode, function (err, result) {
+        if (err) {
+            reply(Boom.internal("Cannot get Data Percent Subject", err));
         } else {
             reply(result);
         }

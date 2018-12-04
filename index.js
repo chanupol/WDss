@@ -43,6 +43,10 @@ var plugins = [
     },
     {
         register: require('./server/routes/teacher/anotherteacherfaculty.js')
+    }, {
+        register: require('./server/routes/student/graphStudent.js')
+    }, {
+        register: require('./server/routes/teacher/graphTeacher.js')
     }];
 
 server.register(plugins, function (err) {

@@ -28,7 +28,8 @@ app.factory("videolengthService", function ($http, $q, handlerService) {
     }*/
 
     function getVideoFromCyberU(importDate) {
-        var request = $http.get(uriCyberUVdoData+importDate);
+        //var request = $http.get(uriCyberUVdoData+importDate);
+        var request = $http.get(urlPath + "get/cyberu/videodata");
         return (request.then(handlerService.handlerSuccess, handlerService.handlerError));
     }
 

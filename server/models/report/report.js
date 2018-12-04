@@ -2,6 +2,7 @@
  * Created by chanupolphermpoon on 4/1/2016 AD.
  */
 "use strict";
+var async = require("async");
 var oracledb = require("oracledb");
 var Database = require("../../config/database");
 
@@ -787,39 +788,124 @@ ReportModel.prototype.getZeroVdoData = function (callback) {
 // Get Data for chart
 /*ReportModel.prototype.getZeroVdoData = function (tchCode, period, callback) {
 
+ var database = new Database();
+
+ //oracledb.outFormat = oracledb.OBJECT;
+
+ oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+ if (err) {
+ console.error(err.message);
+ database.DoRelease(connection);
+ callback(err, null);
+ } else {
+ //
+ //query go here
+ connection.execute("begin SP_GET_ZEROVDOSUBJECTDATA(:cursorZeroVdoSubject); end;",
+ {
+ cursorZeroVdoSubject: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
+ }, function (err, result) {
+ if (err) {
+ console.error(err.message);
+ database.DoRelease(connection);
+ callback(err, null);
+ } else {
+ var obj = result.outBinds;
+ database.FetchRow(obj.cursorZeroVdoSubject, [], function (err, cursorZeroVdoSubject) {
+ if (err) {
+ console.error(err);
+ }
+ database.DoRelease(connection);
+ callback(err, cursorZeroVdoSubject);
+ })
+ }
+ });
+ }
+ });
+
+ };*/
+//--------------------------------
+// WHAN Callcenter
+//--------------------------------
+ReportModel.prototype.getSubjectByCallCenter = function (obj, callback) {
     var database = new Database();
 
-    //oracledb.outFormat = oracledb.OBJECT;
+    oracledb.outFormat = oracledb.OBJECT;
+
+    var results = [];
 
     oracledb.getConnection(database.oracleConfig(), function (err, connection) {
         if (err) {
             console.error(err.message);
             database.DoRelease(connection);
             callback(err, null);
+        }
+
+        //console.log(obj.data);
+
+        async.eachSeries(obj.data, function (dataItem, callback) {
+
+		//console.log(dataItem.periodCode);
+		//console.log(dataItem.subjectCode);
+		//console.log(dataItem.tchCode);
+
+            ReportModel.prototype.getSubjectByCallCenterData(connection, dataItem.periodCode, dataItem.subjectCode, dataItem.tchCode, function (err, result) {
+                results.push(result[0]);
+                callback();
+            });
+
+        }, function success(err) {
+            database.DoRelease(connection);
+            callback(err, results);
+        });
+
+    });
+};
+
+ReportModel.prototype.getSubjectByCallCenterData = function (connection, periodCode, subjectCode, tchCode, callback) {
+
+    connection.execute("SELECT * FROM vSubject " +
+        "Where SubjectCode ='" + subjectCode + "'" +
+        " and TchCode =  '" + tchCode + "'" +
+        " and PeriodCode like '%" + periodCode + "%'  order by SubjectCode", function (err, result) {
+        if (err) {
+            console.error(err.message);
+            callback(err, null);
         } else {
-            //
-            //query go here
-            connection.execute("begin SP_GET_ZEROVDOSUBJECTDATA(:cursorZeroVdoSubject); end;",
-                {
-                    cursorZeroVdoSubject: {type: oracledb.CURSOR, dir: oracledb.BIND_OUT}
-                }, function (err, result) {
-                    if (err) {
-                        console.error(err.message);
-                        database.DoRelease(connection);
-                        callback(err, null);
-                    } else {
-                        var obj = result.outBinds;
-                        database.FetchRow(obj.cursorZeroVdoSubject, [], function (err, cursorZeroVdoSubject) {
-                            if (err) {
-                                console.error(err);
-                            }
-                            database.DoRelease(connection);
-                            callback(err, cursorZeroVdoSubject);
-                        })
-                    }
-                });
+		console.log(result.rows);
+            callback(err, result.rows);
         }
     });
 
-};*/
+};
+
+ReportModel.prototype.getUnitByCallCenter = function (periodCode, subjectCode, tchCode, callback) {
+    var database = new Database();
+
+    oracledb.outFormat = oracledb.OBJECT;
+
+    oracledb.getConnection(database.oracleConfig(), function (err, connection) {
+        if (err) {
+            console.error(err.message);
+            database.DoRelease(connection);
+            callback(err, null);
+        }
+
+        connection.execute("SELECT * FROM vUnit " +
+            "Where SubjectCode ='" + subjectCode + "'" +
+            " and TchCode =  '" + tchCode + "'" +
+            " and PeriodCode like '%" + periodCode + "%'  order by UnitId", function (err, result) {
+            if (err) {
+                console.error(err.message);
+                database.DoRelease(connection);
+                callback(err, null);
+            } else {
+                database.DoRelease(connection);
+		console.log(result.rows);
+                callback(err, result.rows);
+            }
+        });
+    });
+};
+
+
 module.exports = ReportModel;

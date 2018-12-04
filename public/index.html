@@ -10,13 +10,41 @@
 
     <title>Western Dss</title>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/webfont/1.6.16/webfont.js"></script>
+    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700%7CRoboto:300,400,500,600,700" media="all">
+    <!--<link rel="stylesheet" href="assets/libs/metronic/5.0.3/font/css/googleapis.css"/>-->
+    <!--<script src="assets/libs/metronic/5.0.3/font/js/webfont.js"></script>-->
+    <!--<link href="assets/libs/font-awesome/4.6.3/css/font-awesome.min.css" rel="stylesheet" type="text/css"/>-->
     <link rel="stylesheet" href="assets/libs/bootstrap/3.3.6/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="assets/libs/kendo/2016.1.112/Content/kendo.common-bootstrap.min.css"/>
-    <link rel="stylesheet" href="assets/libs/kendo/2016.1.112/Content/kendo.bootstrap.min.css"/>
-    <link rel="stylesheet" href="assets/libs/font-awesome/4.5.0/css/font-awesome.min.css">
+    <!--<link rel="stylesheet" href="assets/libs/kendo/2016.1.112/Content/kendo.common-bootstrap.min.css"/>-->
+    <!--<link rel="stylesheet" href="assets/libs/kendo/2016.1.112/Content/kendo.bootstrap.min.css"/>-->
+    <link rel="stylesheet" href="assets/libs/kendo/2017.2.621/styles/kendo.common-bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/libs/kendo/2017.2.621/styles/kendo.bootstrap.min.css"/>
+    <link rel="stylesheet" href="assets/libs/kendo/2017.2.621/styles/kendo.bootstrap.mobile.min.css"/>
+    <!--<link rel="stylesheet" href="assets/libs/font-awesome/4.5.0/css/font-awesome.min.css">-->
 
-    <link rel="stylesheet" href="assets/libs/sb-admin-2/1.0.8/css/sb-admin-2.css"/>
-    <link rel="stylesheet" href="assets/libs/metismenu/2.4.0/css/metisMenu.min.css">
+    <!--<link rel="stylesheet" href="assets/libs/sb-admin-2/1.0.8/css/sb-admin-2.css"/>-->
+    <!--<link rel="stylesheet" href="assets/libs/metismenu/2.4.0/css/metisMenu.min.css">-->
+
+    <!-- BEGIN THEME GLOBAL STYLES -->
+    <!--<link href="assets/libs/metronic/4.6/global/css/components.min.css" rel="stylesheet" id="style_components"-->
+    <!--type="text/css"/>-->
+    <!--<link href="assets/libs/metronic/4.6/global/css/plugins.min.css" rel="stylesheet" type="text/css"/>-->
+    <!--&lt;!&ndash; END THEME GLOBAL STYLES &ndash;&gt;-->
+    <!--&lt;!&ndash; BEGIN THEME LAYOUT STYLES &ndash;&gt;-->
+    <!--<link href="assets/libs/metronic/4.6/layout/css/layout.min.css" rel="stylesheet" type="text/css"/>-->
+    <!--<link href="assets/libs/metronic/4.6/layout/css/login-5.min.css" rel="stylesheet" type="text/css"/>-->
+    <!-- END THEME LAYOUT STYLES -->
+
+    <!-- BEGIN THEME GLOBAL Metronic 5.0.3 -->
+    <link href="assets/libs/metronic/5.0.3/vendors/custom/fullcalendar/fullcalendar.bundle.css" rel="stylesheet"
+          type="text/css">
+
+    <link href="assets/libs/metronic/5.0.3/vendors/base/vendors.bundle.css" rel="stylesheet" type="text/css">
+
+    <link href="assets/libs/metronic/5.0.3/demo/demo5/base/style.bundle.css" rel="stylesheet" type="text/css">
+    <!-- END BEGIN THEME GLOBAL Metronic 5.0.3 -->
+
 
     <link rel="stylesheet" href="assets/css/app.css"/>
 
@@ -32,10 +60,10 @@
         (function (i, s, o, g, r, a, m) {
             i['GoogleAnalyticsObject'] = r;
             i[r] = i[r] || function () {
-                        (i[r].q = i[r].q || []).push(arguments)
-                    }, i[r].l = 1 * new Date();
+                    (i[r].q = i[r].q || []).push(arguments)
+                }, i[r].l = 1 * new Date();
             a = s.createElement(o),
-                    m = s.getElementsByTagName(o)[0];
+                m = s.getElementsByTagName(o)[0];
             a.async = 1;
             a.src = g;
             m.parentNode.insertBefore(a, m)
@@ -46,87 +74,428 @@
 
     </script>
 </head>
-<body>
+<body class="m-page--wide m-header--fixed m-header--fixed-mobile m-footer--push m-aside--offcanvas-default m-header--minimize-off">
 
-<nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-    <div class="navbar-header">
-        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-            <span class="sr-only">Toggle navigation</span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-        </button>
-        <a class="navbar-brand">Western University DSS System</a>
-    </div>
-    <!-- /.navbar-header -->
+<div class="m-grid m-grid--hor m-grid--root m-page">
+    <!-- begin::Header -->
+    <header class="m-grid__item		m-header " data-minimize="minimize" data-minimize-offset="200"
+            data-minimize-mobile-offset="200">
+        <div class="m-header__top">
+            <div class="m-container m-container--responsive m-container--xxl m-container--full-height m-page__container">
+                <div class="m-stack m-stack--ver m-stack--desktop">
+                    <!-- begin::Brand -->
+                    <div class="m-stack__item m-brand" style="color:mediumpurple">
+                        <div class="m-stack m-stack--ver m-stack--general m-stack--inline">
+                            <div class="m-stack__item m-stack__item--middle m-brand__logo">
 
-    <!-- /.navbar-header -->
 
-    <ul class="nav navbar-top-links navbar-right" ng-controller="indexController">
-        Welcome : {{user.userName +', '+ user.tchFullName }} <span
-            ng-show="user.facName!=null">สังกัด {{user.facName}}</span> <span
-            ng-show="user.facName==null">สังกัด -</span> , {{user.roleName}}
-        <!--Welcome : {{user.userName +', '+ user.tchFullName +' สังกัด '+ user.facName}}, {{user.roleName}}-->
-        <!-- <li ng-repeat="menu in groupMenu">
+                                DSS
 
-             <a href="#/{{menu.path}}"> {{menu.name}}</a>
 
-         </li>-->
-        <li>
-            <a href="" ng-click="logOut()"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-        </li>
-    </ul>
-    <!-- /.navbar-top-links -->
-    <!-- /.navbar-top-links -->
-
-    <div class="navbar-default sidebar" role="navigation">
-        <div class="sidebar-nav navbar-collapse">
-
-            <ul class="nav" id="side-menu">
-                <li>
-                    <a id="navadmin" href="#/main">หน้าหลัก</a>
-                </li>
-                <!--<li class="sidebar-search">
-                    <div class="input-group custom-search-form">
-                        <input type="text" class="form-control" placeholder="Search...">
-                        <span class="input-group-btn">
-                            <button class="btn btn-default" type="button">
-                                <i class="fa fa-search"></i>
-                            </button>
-                        </span>
+                            </div>
+                            <div class="m-stack__item m-stack__item--middle m-brand__tools">
+                                <div class="m-dropdown m-dropdown--inline m-dropdown--arrow m-dropdown--align-left m-dropdown--align-push"
+                                     data-dropdown-toggle="click" aria-expanded="true">
+                                    <a href="#/main"
+                                       class="dropdown-toggle m-dropdown__toggle btn btn-outline-metal m-btn  m-btn--icon m-btn--pill">
+												<span>
+													Main
+												</span>
+                                    </a>
+                                    <div class="m-dropdown__wrapper">
+                                        <span class="m-dropdown__arrow m-dropdown__arrow--left m-dropdown__arrow--adjust"></span>
+                                        <div class="m-dropdown__inner">
+                                            <div class="m-dropdown__body">
+                                                <div class="m-dropdown__content">
+                                                    <ul class="m-nav">
+                                                        <li class="m-nav__section m-nav__section--first m--hide">
+																	<span class="m-nav__section-text">
+																		Quick Menu
+																	</span>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/import/report/subject" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-share"></i>
+                                                                <span class="m-nav__link-text">
+																			สื่อการเรียนการสอน
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/admin" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                                                <span class="m-nav__link-text">
+																			Admin
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/admin/teacher/another/faculty/list"
+                                                               class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-info"></i>
+                                                                <span class="m-nav__link-text">
+																			อาจารย์ที่มีสอนในคณะอื่น
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/admin/subject/graphadmin" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-lifebuoy"></i>
+                                                                <span class="m-nav__link-text">
+																			ผลการเข้าเรียนและผลสอบ
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__separator m-nav__separator--fit"></li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/admin/student/graphstudent" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-chat-1"></i>
+                                                                <span class="m-nav__link-text">
+																			ภาพรวมนิสิตปัจจุบัน
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/admin/student/graphstudentcomparegroupbydivision"
+                                                               class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-info"></i>
+                                                                <span class="m-nav__link-text">
+																			จำนวนนิสิตเปรียบเทียบ
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/admin/student/graphstudentgroupbygraduate"
+                                                               class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-info"></i>
+                                                                <span class="m-nav__link-text">
+																			อัตราการจบการศึกษา
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-nav__item">
+                                                            <a href="#/admin/teacher/graphteacher" class="m-nav__link">
+                                                                <i class="m-nav__link-icon flaticon-info"></i>
+                                                                <span class="m-nav__link-text">
+																			ภาพรวมอาจารย์ปัจจุบัน
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!-- begin::Responsive Header Menu Toggler-->
+                                <a id="m_aside_header_menu_mobile_toggle" href="javascript:;"
+                                   class="m-brand__icon m-brand__toggler m--visible-tablet-and-mobile-inline-block">
+                                    <span></span>
+                                </a>
+                                <!-- end::Responsive Header Menu Toggler-->
+                                <!-- begin::Topbar Toggler-->
+                                <a id="m_aside_header_topbar_mobile_toggle" href="javascript:;"
+                                   class="m-brand__icon m--visible-tablet-and-mobile-inline-block">
+                                    <i class="flaticon-more"></i>
+                                </a>
+                                <!--end::Topbar Toggler-->
+                            </div>
+                        </div>
                     </div>
-                </li>-->
-                <li>
+                    <!-- end::Brand -->
+                    <!-- begin::Topbar -->
+                    <div class="m-stack__item m-stack__item--fluid m-header-head" id="m_header_nav">
+                        <div id="m_header_topbar" class="m-topbar  m-stack m-stack--ver m-stack--general">
+                            <div class="m-stack__item m-topbar__nav-wrapper">
+                                <ul class="m-topbar__nav m-nav m-nav--inline" ng-controller="indexController">
+                                    <li class="m-nav__item m-topbar__user-profile m-topbar__user-profile--img  m-dropdown m-dropdown--medium m-dropdown--arrow m-dropdown--header-bg-fill m-dropdown--align-right m-dropdown--mobile-full-width m-dropdown--skin-light"
+                                        data-dropdown-toggle="click">
+                                        <a href="#" class="m-nav__link m-dropdown__toggle">
+                                            <!--<span class="m-topbar__welcome">-->
+                                            <!--Hello,&nbsp;-->
+                                            <!--</span>-->
+                                            <!--<span class="m-topbar__username">-->
+                                            <!--Nick-->
+                                            <!--</span>-->
+                                            <!--<span class="m-topbar__userpic">-->
+                                            <!--<img src="assets/app/media/img/users/user4.jpg" class="m&#45;&#45;img-rounded m&#45;&#45;marginless m&#45;&#45;img-centered" alt="">-->
+                                            <!--</span>-->
+                                            <span class="m-topbar__username"> Welcome : {{user.userName +', '+ user.tchFullName }} <span
+                                                    ng-show="user.facName!=null">สังกัด {{user.facName}}</span> <span
+                                                    ng-show="user.facName==null">สังกัด -</span> , {{user.roleName}}</span>
+                                        </a>
 
-                    <a href="#"><i class="fa fa-bar-chart-o fa-fw"></i> Menu<span class="fa arrow"></span></a>
-                    <ul class="nav nav-second-level">
+                                    </li>
+                                    <li id="m_quick_sidebar_toggle" class="m-nav__item">
 
-                        <li>
-
-                            <a id="navdefault" href="#/import/report/subject">ข้อมูลบริหารจัดการสื่อการเรียนการสอน</a>
-
-                            <a id="nav" class="disabled" href="#"><i class="glyphicon glyphicon-ban-circle">
-                                ข้อมูลติดตามการรับส่งข้อสอบ (อยู่ระหว่างดำเนินการ)</i></a>
-
-                            <a id="navadmin" href="#/admin">Admin</a>
-                            <a id="navanotchfac"
-                               href="#/admin/teacher/another/faculty/list">อาจารย์ที่มีสอนในคณะอื่น</a>
-                            <a id="navsubjectpercentgraph"
-                               href="#/admin/subject/graphadmin">สรุปผลการเข้าเรียนและผลสอบ</a>
-                        </li>
-                    </ul>
-                    <!-- /.nav-second-level -->
-                </li>
-            </ul>
+                                        <a href="#" ng-click="logOut()" class="m-nav__link m-dropdown__toggle">
+													<span class="m-nav__link-icon m-nav__link-icon--aside-toggle">
+														<span class="m-nav__link-icon-wrapper">
+															<i class="flaticon-menu-button"></i> <span
+                                                                style="font-size: 16px;">Logout</span>
+														</span>
+													</span>
+                                        </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- end::Topbar -->
+                </div>
+            </div>
         </div>
-        <!-- /.sidebar-collapse -->
+        <div class="m-header__bottom">
+            <div class="m-container m-container--responsive m-container--xxl m-container--full-height m-page__container">
+                <div class="m-stack m-stack--ver m-stack--desktop">
+                    <!-- begin::Horizontal Menu -->
+                    <div class="m-stack__item m-stack__item--middle m-stack__item--fluid">
+                        <button class="m-aside-header-menu-mobile-close  m-aside-header-menu-mobile-close--skin-light "
+                                id="m_aside_header_menu_mobile_close_btn">
+                            <i class="la la-close"></i>
+                        </button>
+                        <div id="m_header_menu"
+                             class="m-header-menu m-aside-header-menu-mobile m-aside-header-menu-mobile--offcanvas  m-header-menu--skin-dark m-header-menu--submenu-skin-light m-aside-header-menu-mobile--skin-light m-aside-header-menu-mobile--submenu-skin-light ">
+                            <ul class="m-menu__nav  m-menu__nav--submenu-arrow ">
+                                <li class="m-menu__item  m-menu__item--active" aria-haspopup="true">
+                                    <a id="navadmin2" href="#/main" class="m-menu__link ">
+                                        <span class="m-menu__item-here"></span>
+                                        <span class="m-menu__link-text">
+													Main
+												</span>
+                                    </a>
+                                </li>
+                                <li class="m-menu__item m-menu__item--submenu m-menu__item--rel"
+                                    data-menu-submenu-toggle="click" aria-haspopup="true">
+                                    <a href="#/main" class="m-menu__link m-menu__toggle">
+                                        <span class="m-menu__item-here"></span>
+                                        <span class="m-menu__link-text">
+													Menu
+												</span>
+                                        <i class="m-menu__hor-arrow la la-angle-down"></i>
+                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                    </a>
+                                    <div class="m-menu__submenu m-menu__submenu--classic m-menu__submenu--left">
+                                        <span class="m-menu__arrow m-menu__arrow--adjust" style="left: 58px;"></span>
+                                        <ul class="m-menu__subnav">
+                                            <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                <a href="#/import/report/subject" class="m-menu__link ">
+                                                    <!--<i class="m-menu__link-icon flaticon-users"></i>-->
+                                                    <span class="m-menu__link-text">
+																ข้อมูลบริหารจัดการสื่อการเรียนการสอน
+															</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                <a href="#" class="m-menu__link ">
+                                                    <!--<i class="m-menu__link-icon flaticon-users"></i>-->
+                                                    <span class="m-menu__link-text">
+																ข้อมูลติดตามการรับส่งข้อสอบ (อยู่ระหว่างดำเนินการ)
+															</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                <a href="#/admin" class="m-menu__link ">
+                                                    <!--<i class="m-menu__link-icon flaticon-users"></i>-->
+                                                    <span class="m-menu__link-text">
+																Admin
+															</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                <a href="#/admin/teacher/another/faculty/list" class="m-menu__link ">
+                                                    <!--<i class="m-menu__link-icon flaticon-users"></i>-->
+                                                    <span class="m-menu__link-text">
+																อาจารย์ที่มีสอนในคณะอื่น
+															</span>
+                                                </a>
+                                            </li>
+                                            <li class="m-menu__item " data-redirect="true" aria-haspopup="true">
+                                                <a href="#/admin/subject/graphadmin" class="m-menu__link ">
+                                                    <!--<i class="m-menu__link-icon flaticon-users"></i>-->
+                                                    <span class="m-menu__link-text">
+																สรุปผลการเข้าเรียนและผลสอบ
+															</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </li>
+                                <li class="m-menu__item m-menu__item--submenu m-menu__item--rel m-menu__item--open-dropdown"
+                                    data-menu-submenu-toggle="click" data-redirect="true" aria-haspopup="true">
+                                    <a href="#/main" class="m-menu__link m-menu__toggle">
+                                        <span class="m-menu__item-here"></span>
+                                        <span class="m-menu__link-text">
+													Reports
+												</span>
+                                        <i class="m-menu__hor-arrow la la-angle-down"></i>
+                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                    </a>
+                                    <div class="m-menu__submenu  m-menu__submenu--fixed m-menu__submenu--left"
+                                         style="width:700px">
+                                        <span class="m-menu__arrow m-menu__arrow--adjust" style="left: 58.5px;"></span>
+                                        <div class="m-menu__subnav">
+                                            <ul class="m-menu__content">
+                                                <li class="m-menu__item">
+                                                    <h3 class="m-menu__heading m-menu__toggle">
+																<span class="m-menu__link-text">
+																	Student
+																</span>
+                                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                    </h3>
+                                                    <ul class="m-menu__inner">
+                                                        <li class="m-menu__item " data-redirect="true"
+                                                            aria-haspopup="true">
+                                                            <a href="#/admin/student/graphstudent"
+                                                               class="m-menu__link ">
+                                                                <i class="m-menu__link-icon flaticon-graphic-2"></i>
+                                                                <span class="m-menu__link-text">
+																			ภาพรวมนิสิต
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-menu__item " data-redirect="true"
+                                                            aria-haspopup="true">
+                                                            <a href="#/admin/student/graphstudentcomparegroupbydivision"
+                                                               class="m-menu__link ">
+                                                                <i class="m-menu__link-icon flaticon-diagram"></i>
+                                                                <span class="m-menu__link-text">
+																			จำนวนนิสิตปัจจุบันเปรียบเทียบย้อนหลัง
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                        <li class="m-menu__item " data-redirect="true"
+                                                            aria-haspopup="true">
+                                                            <a href="#/admin/student/graphstudentgroupbygraduate"
+                                                               class="m-menu__link ">
+                                                                <i class="m-menu__link-icon flaticon-graphic-1"></i>
+                                                                <span class="m-menu__link-text">
+																			อัตราการจบการศึกษา
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                                <li class="m-menu__item">
+                                                    <h3 class="m-menu__heading m-menu__toggle">
+																<span class="m-menu__link-text">
+																	Teacher
+																</span>
+                                                        <i class="m-menu__ver-arrow la la-angle-right"></i>
+                                                    </h3>
+                                                    <ul class="m-menu__inner">
+                                                        <li class="m-menu__item " data-redirect="true"
+                                                            aria-haspopup="true">
+                                                            <a href="#/admin/teacher/graphteacher"
+                                                               class="m-menu__link ">
+                                                                <i class="m-menu__link-icon flaticon-graphic-2"></i>
+                                                                <span class="m-menu__link-text">
+																			ภาพรวมอาจารย์
+																		</span>
+                                                            </a>
+                                                        </li>
+                                                    </ul>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!-- end::Horizontal Menu -->
+                    <!--begin::Search-->
+                    <div class="m-stack__item m-stack__item--middle m-dropdown m-dropdown--arrow m-dropdown--large m-dropdown--mobile-full-width m-dropdown--align-right m-dropdown--skin-light m-header-search m-header-search--expandable m-header-search--skin-"
+                         id="m_quicksearch" data-search-type="default">
+                        <!--begin::Search Form -->
+                        <form class="m-header-search__form">
+                            <div class="m-header-search__wrapper">
+										<span class="m-header-search__icon-search" id="m_quicksearch_search">
+											<i class="la la-search"></i>
+										</span>
+                                <span class="m-header-search__input-wrapper">
+											<input autocomplete="off" type="text" name="q"
+                                                   class="m-header-search__input" value="" placeholder="Search..."
+                                                   id="m_quicksearch_input">
+										</span>
+                                <span class="m-header-search__icon-close" id="m_quicksearch_close">
+											<i class="la la-remove"></i>
+										</span>
+                                <span class="m-header-search__icon-cancel" id="m_quicksearch_cancel">
+											<i class="la la-times"></i>
+										</span>
+                            </div>
+                        </form>
+                        <!--end::Search Form -->
+                        <!--begin::Search Results -->
+                        <div class="m-dropdown__wrapper">
+                            <div class="m-dropdown__arrow m-dropdown__arrow--center"></div>
+                            <div class="m-dropdown__inner">
+                                <div class="m-dropdown__body">
+                                    <div class="m-dropdown__scrollable m-scrollable mCustomScrollbar _mCS_4 mCS-autoHide mCS_no_scrollbar"
+                                         data-scrollable="true" data-max-height="300" data-mobile-max-height="200"
+                                         style="max-height: 300px; height: 300px; position: relative; overflow: visible;">
+                                        <div id="mCSB_4"
+                                             class="mCustomScrollBox mCS-minimal-dark mCSB_vertical mCSB_outside"
+                                             tabindex="0" style="max-height: 300px;">
+                                            <div id="mCSB_4_container"
+                                                 class="mCSB_container mCS_y_hidden mCS_no_scrollbar_y"
+                                                 style="position:relative; top:0; left:0;" dir="ltr">
+                                                <div class="m-dropdown__content m-list-search m-list-search--skin-light"></div>
+                                            </div>
+                                        </div>
+                                        <div id="mCSB_4_scrollbar_vertical"
+                                             class="mCSB_scrollTools mCSB_4_scrollbar mCS-minimal-dark mCSB_scrollTools_vertical"
+                                             style="display: none;">
+                                            <div class="mCSB_draggerContainer">
+                                                <div id="mCSB_4_dragger_vertical" class="mCSB_dragger"
+                                                     style="position: absolute; min-height: 50px; top: 0px;">
+                                                    <div class="mCSB_dragger_bar" style="line-height: 50px;"></div>
+                                                </div>
+                                                <div class="mCSB_draggerRail"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--end::Search Results -->
+                    </div>
+                    <!--end::Search-->
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- end::Header -->
+    <!-- begin::Body -->
+    <div class="m-grid__item m-grid__item--fluid m-grid m-grid--hor-desktop m-grid--desktop m-body">
+        <div class="m-grid__item m-grid__item--fluid  m-grid m-grid--ver	m-container m-container--responsive m-container--xxl m-page__container">
+            <div class="m-grid__item m-grid__item--fluid m-wrapper">
+                <div class="m-content">
+                    <div ng-view="">
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <!-- /.navbar-static-side -->
-</nav>
-<div id="page-wrapper">
-    <div ng-view="">
-    </div>
+    <!-- end::Body -->
+    <!-- begin::Footer -->
+    <footer class="m-grid__item m-footer ">
+        <div class="m-container m-container--responsive m-container--xxl m-container--full-height m-page__container">
+            <div class="m-footer__wrapper">
+                <div class="m-stack m-stack--flex-tablet-and-mobile m-stack--ver m-stack--desktop">
+                    <div class="m-stack__item m-stack__item--left m-stack__item--middle m-stack__item--last">
+								<span class="m-footer__copyright">
+									2017 © Western University DSS System
+								</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <!-- end::Footer -->
 </div>
+
 
 <!-- jQuery -->
 <script src="assets/libs/jquery/2.2.0/jquery-2.2.0.min.js"></script>
@@ -134,11 +503,16 @@
 <!-- Bootstrap -->
 <script src="assets/libs/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
-<!-- SB Admin 2 -->
-<script src="assets/libs/sb-admin-2/1.0.8/js/sb-admin-2.js"></script>
+
+<!--SB Admin 2-->
+<!--<script src="assets/libs/sb-admin-2/1.0.8/js/sb-admin-2.js"></script>-->
 
 <!-- metis Menu -->
-<script src="assets/libs/metismenu/2.4.0/js/metisMenu.min.js"></script>
+<!--<script src="assets/libs/metismenu/2.4.0/js/metisMenu.min.js"></script>-->
+
+<!-- BEGIN THEME GLOBAL SCRIPTS -->
+<script src="assets/libs/metronic/5.0.3/vendors/base/vendors.bundle.js" type="text/javascript"></script>
+<script src="assets/libs/metronic/5.0.3/demo/demo5/base/scripts.bundle.js" type="text/javascript"></script>
 
 
 <!-- Angular JS -->
@@ -148,16 +522,34 @@
 <script src="assets/libs/angular/1.4.9/angular-sanitize.min.js"></script>
 <script src="assets/libs/angular-local-storage/0.2.3/angular-local-storage.min.js"></script>
 
+
 <script src="assets/libs/angular-ui/ui-bootstrap-tpls.min.js"></script>
 
 <script src="assets/libs/async/async.min.js"></script>
 
+<!--&lt;!&ndash; Kendo Ui &ndash;&gt;-->
+<!--<script src="assets/libs/kendo/2016.1.112/Scripts/jszip.min.js"></script>-->
+<!--<script src="assets/libs/kendo/2016.1.112/Scripts/kendo.all.min.js"></script>-->
+
 <!-- Kendo Ui -->
-<script src="assets/libs/kendo/2016.1.112/Scripts/jszip.min.js"></script>
-<script src="assets/libs/kendo/2016.1.112/Scripts/kendo.all.min.js"></script>
+<script src="assets/libs/kendo/2017.2.621/js/jszip.min.js"></script>
+<script src="assets/libs/kendo/2017.2.621/js/kendo.all.min.js"></script>
+
 
 <!-- Lodash -->
 <script src="assets/libs/lodash/4.15.0/lodash.min.js"></script>
+
+<!--&lt;!&ndash; BEGIN THEME GLOBAL SCRIPTS &ndash;&gt;-->
+<!--<script src="assets/libs/metronic/4.6/global/js/app.min.js" type="text/javascript"></script>-->
+<!--&lt;!&ndash; END THEME GLOBAL SCRIPTS &ndash;&gt;-->
+<!--&lt;!&ndash; BEGIN THEME LAYOUT SCRIPTS &ndash;&gt;-->
+<!--<script src="assets/libs/metronic/4.6/layout/js/layout.min.js" type="text/javascript"></script>-->
+<!--<script src="assets/libs/metronic/4.6/global/js/quick-sidebar.min.js" type="text/javascript"></script>-->
+<!--&lt;!&ndash; END THEME LAYOUT SCRIPTS &ndash;&gt;-->
+
+
+<!-- END THEME GLOBAL SCRIPTS -->
+
 
 <!-- Angular JS App, Route-->
 <script src="app/app.js"></script>
@@ -184,6 +576,10 @@
 <script src="app/shared/utility/commonStatusService.js"></script>
 <script src="app/shared/teacher/anotherteacherfacultyService.js"></script>
 
+<!-- whan -->
+<script src="app/shared/student/studentService.js"></script>
+<script src="app/shared/teacher/teacherService.js"></script>
+
 
 <!-- App Controller Lib -->
 
@@ -201,6 +597,10 @@
 <script src="app/components/main/mainController.js"></script>
 
 <script src="app/components/admin/anotherteacherfacultyController.js"></script>
+
+<!-- whan -->
+<script src="app/components/student/graphStudentController.js"></script>
+<script src="app/components/teacher/graphTeacherController.js"></script>
 
 </body>
 </html>

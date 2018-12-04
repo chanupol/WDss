@@ -145,6 +145,8 @@ app.factory("reportService", function ($http, $q, $rootScope, localStorageServic
 
     function getSubjectListByPeriodCodeDs(periodcode) {
 
+        console.log(uri + "/subject/list/" + periodcode + "/" + localStorageService.get("Token") + "/" + localStorageService.get("RoleId") + "/" + localStorageService.get("UserName"))
+
         return new kendo.data.DataSource({
             batch: true,
             transport: {

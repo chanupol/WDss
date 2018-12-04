@@ -1,7 +1,7 @@
 <script type="text/ng-template" id="loginModalDialog">
     <form id="login" class="horizontal">
-        <div class="modal-header bg-primary">
-            <h3 class="modal-title">Login</h3>
+        <div class="modal-header btn-info" style="padding: 15px;!important;">
+            <h5 class="">Login</h5>
         </div>
         <div class="modal-body">
             <div class="row">
@@ -23,8 +23,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <button class="btn btn-primary" id="btnLogin" type="submit" ng-click="ok()" autofocus>OK</button>
-            <button class="btn btn-warning" type="button" ng-click="cancel()">Cancel</button>
+            <button class="btn btn-info" id="btnLogin" type="submit" ng-click="ok()" autofocus>OK</button>
+            <button class="btn btn-metal" type="button" ng-click="cancel()">Cancel</button>
         </div>
         <span kendo-notification="notificationCenter" k-options="notificationCenterOptions"></span>
     </form>

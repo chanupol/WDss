@@ -40,14 +40,15 @@ exports.register = function (server, options, next) {
     server.route([
         {
             method: 'GET',
-            path: '/api/get/cyberu/videodata/{importDate}',
+            //path: '/api/get/cyberu/videodata/{importDate}',
+            path: '/api/get/cyberu/videodata',
             config: {
                 handler: videoController.GetVDOFromCyberU,
-                validate: {
+                /*validate: {
                     params: {
                         importDate: Joi.optional()
                     }
-                }
+                }*/
             }
 
             /*handler: function(request, reply) {
